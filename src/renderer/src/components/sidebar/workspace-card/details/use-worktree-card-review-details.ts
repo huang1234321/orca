@@ -104,6 +104,7 @@ export function useWorktreeCardReviewDetails({
     linkedBitbucketPR,
     linkedAzureDevOpsPR,
     linkedGiteaPR,
+    linkedCodeupMR,
     cachedBranchFallbackGitHubPRNumber,
     prDisplay
   } = resolveWorktreeCardReview(worktree, hostedReviewEntry, prCacheEntry, t)
@@ -130,6 +131,7 @@ export function useWorktreeCardReviewDetails({
     linkedBitbucketPR,
     linkedAzureDevOpsPR,
     linkedGiteaPR,
+    linkedCodeupMR,
     cachedBranchFallbackGitHubPRNumber,
     prDisplay
   }

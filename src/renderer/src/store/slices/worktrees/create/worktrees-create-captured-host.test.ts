@@ -31,7 +31,7 @@ describe('background creation host capture', () => {
     })
     const createWorktree = store.getState().createWorktree
     const args: Parameters<typeof createWorktree> = ['repo1', 'feature']
-    args[25] = { executionHostId: 'runtime:env-1' }
+    args[26] = { executionHostId: 'runtime:env-1' }
     const creating = createWorktree(...args)
     await vi.waitFor(() => expect(runtimeEnvironmentCall).toHaveBeenCalled())
     store.setState({

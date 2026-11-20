@@ -2,6 +2,7 @@ import {
   AzureDevOpsIntegrationCard,
   GiteaIntegrationCard
 } from '../../integrations/source-control/token-source-control-integration-cards'
+import { CodeupIntegrationCard } from '../../integrations/source-control/codeup-integration-card'
 import { BitbucketIntegrationCard } from '../../integrations/source-control/bitbucket-integration-card'
 import {
   GitHubIntegrationCard,
@@ -59,6 +60,9 @@ export function IntegrationsPane(): React.JSX.Element {
           </ProviderRow>
           <ProviderRow id={INTEGRATION_SETTING_TARGET_IDS.gitea}>
             <GiteaIntegrationCard />
+          </ProviderRow>
+          <ProviderRow id={INTEGRATION_SETTING_TARGET_IDS.codeup}>
+            <CodeupIntegrationCard />
           </ProviderRow>
         </SettingsGroup>
 

@@ -24,6 +24,7 @@ type ChecksPanelEntryRefreshAndTitleActionsInput = Pick<
   | 'isGitLabReviewContext'
   | 'linkedAzureDevOpsPR'
   | 'linkedBitbucketPR'
+  | 'linkedCodeupMR'
   | 'linkedGiteaPR'
   | 'linkedGitLabMR'
   | 'linkedPR'
@@ -82,6 +83,7 @@ export function useChecksPanelEntryRefreshAndTitleActions(
     isPanelVisible,
     linkedAzureDevOpsPR,
     linkedBitbucketPR,
+    linkedCodeupMR,
     linkedGiteaPR,
     linkedGitLabMR,
     linkedPR,
@@ -119,7 +121,8 @@ export function useChecksPanelEntryRefreshAndTitleActions(
           linkedGitLabMR,
           linkedBitbucketPR,
           linkedAzureDevOpsPR,
-          linkedGiteaPR
+          linkedGiteaPR,
+          linkedCodeupMR
         })
         // Entering the tab is a user act: it may start a stopped WSL distro (E9).
         if (activeGitLabReview) {
@@ -149,6 +152,7 @@ export function useChecksPanelEntryRefreshAndTitleActions(
       isGitLabReviewContext,
       linkedAzureDevOpsPR,
       linkedBitbucketPR,
+      linkedCodeupMR,
       linkedGiteaPR,
       linkedGitLabMR,
       linkedPR,
@@ -226,7 +230,8 @@ export function useChecksPanelEntryRefreshAndTitleActions(
         linkedGitLabMR,
         linkedBitbucketPR,
         linkedAzureDevOpsPR,
-        linkedGiteaPR
+        linkedGiteaPR,
+        linkedCodeupMR
       }).catch(() => null)
       const refreshedGitLabReview =
         refreshedReview?.provider === 'gitlab' ? refreshedReview : activeGitLabReview
@@ -261,7 +266,8 @@ export function useChecksPanelEntryRefreshAndTitleActions(
       linkedGitLabMR,
       linkedBitbucketPR,
       linkedAzureDevOpsPR,
-      linkedGiteaPR
+      linkedGiteaPR,
+      linkedCodeupMR
     }).catch(() => null)
   }, [
     activeGitLabReview,
@@ -274,6 +280,7 @@ export function useChecksPanelEntryRefreshAndTitleActions(
     fetchPRForBranch,
     linkedAzureDevOpsPR,
     linkedBitbucketPR,
+    linkedCodeupMR,
     linkedGiteaPR,
     linkedGitLabMR,
     linkedPR,

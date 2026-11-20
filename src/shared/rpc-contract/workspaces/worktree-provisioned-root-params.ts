@@ -24,6 +24,7 @@ export const WorktreeAdoptProvisionedRoot = z.object({
   linkedBitbucketPR: create.linkedBitbucketPR,
   linkedAzureDevOpsPR: create.linkedAzureDevOpsPR,
   linkedGiteaPR: create.linkedGiteaPR,
+  linkedCodeupMR: create.linkedCodeupMR,
   linkedWorkItem: create.linkedWorkItem,
   linkedItems: create.linkedItems,
   linkedTaskSourceContext: create.linkedTaskSourceContext,

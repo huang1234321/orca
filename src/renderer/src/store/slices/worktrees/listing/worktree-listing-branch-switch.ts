@@ -24,6 +24,7 @@ function branchScopedReviewContextMatches(left: Worktree, right: Worktree): bool
     left.linkedBitbucketPR === right.linkedBitbucketPR &&
     left.linkedAzureDevOpsPR === right.linkedAzureDevOpsPR &&
     left.linkedGiteaPR === right.linkedGiteaPR &&
+    left.linkedCodeupMR === right.linkedCodeupMR &&
     left.pushTarget?.remoteName === right.pushTarget?.remoteName &&
     left.pushTarget?.branchName === right.pushTarget?.branchName
   )

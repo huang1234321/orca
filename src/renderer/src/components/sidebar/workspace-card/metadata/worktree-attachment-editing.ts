@@ -46,7 +46,8 @@ export const ATTACHMENT_INPUT_KINDS = [
     value: 'azure-devops-pr',
     label: () => translate('workspace.links.kind.azure_devops_pr', 'Azure DevOps PR')
   },
-  { value: 'gitea-pr', label: () => translate('workspace.links.kind.gitea_pr', 'Gitea PR') }
+  { value: 'gitea-pr', label: () => translate('workspace.links.kind.gitea_pr', 'Gitea PR') },
+  { value: 'codeup-mr', label: () => translate('workspace.links.kind.codeup_mr', 'Codeup MR') }
 ] as const
 export type AttachmentInputKind = (typeof ATTACHMENT_INPUT_KINDS)[number]['value']
 
@@ -62,7 +63,8 @@ export function workspaceAttachmentProviderLabel(item: WorkspaceAttachment): str
     jira: 'Jira',
     bitbucket: 'Bitbucket',
     'azure-devops': 'Azure DevOps',
-    gitea: 'Gitea'
+    gitea: 'Gitea',
+    codeup: 'Codeup'
   }
   return labels[item.provider]
 }
@@ -142,6 +144,9 @@ export function parseWorkspaceAttachmentInput(
   if (kind === 'gitlab-mr' || kind === 'gitlab-issue') {
     return { provider: 'gitlab', type: kind === 'gitlab-mr' ? 'mr' : 'issue', number }
   }
+  if (kind === 'codeup-mr') {
+    return { provider: 'codeup', type: 'mr', number }
+  }
   if (kind === 'bitbucket-pr' || kind === 'azure-devops-pr' || kind === 'gitea-pr') {
     const provider =
       kind === 'bitbucket-pr' ? 'bitbucket' : kind === 'gitea-pr' ? 'gitea' : 'azure-devops'
@@ -177,7 +182,9 @@ export function getActiveWorkspaceReviewKey(worktree: Worktree | undefined): str
             ? worktree.linkedAzureDevOpsPR === item.number
             : item.provider === 'gitea'
               ? worktree.linkedGiteaPR === item.number
-              : false
+              : item.provider === 'codeup'
+                ? worktree.linkedCodeupMR === item.number
+                : false
   )
   return active ? getWorkspaceAttachmentKey(active) : null
 }
@@ -232,7 +239,9 @@ export function canUseWorkspaceReviewForChecks(
             ? 'azure-devops'
             : host === 'codeberg.org'
               ? 'gitea'
-              : undefined)
+              : host === 'codeup.aliyun.com'
+                ? 'codeup'
+                : undefined)
   if (provider && item.provider !== provider) {
     return false
   }

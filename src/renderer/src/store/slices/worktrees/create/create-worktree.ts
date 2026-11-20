@@ -27,6 +27,7 @@ import {
 } from '../../../../../../shared/remote-runtime/protocol/worktree-runtime-capabilities'
 import { showCreatedWorktreeBaseRefNotices } from './created-worktree-base-ref-notices'
 import { applyCreatedWorktree } from './created-worktree-state-merge'
+import { applyWorktreeCreateBranchIntent } from './create-worktree-branch-intent'
 import type { WorktreeCreateRequest } from './worktree-create-payload'
 import { holdCreatedSidebarWorkspace } from '@/components/sidebar/sidebar-feed/sidebar-pending-layer'
 import { resolveCreateCrossStoreParent } from './worktree-create-cross-store-parent'
@@ -68,6 +69,7 @@ export function createCreateWorktree(
     linkedBitbucketPR,
     linkedAzureDevOpsPR,
     linkedGiteaPR,
+    linkedCodeupMR,
     compareBaseRef,
     options
   ) => {
@@ -96,6 +98,7 @@ export function createCreateWorktree(
       linkedBitbucketPR,
       linkedAzureDevOpsPR,
       linkedGiteaPR,
+      linkedCodeupMR,
       compareBaseRef,
       options
     }
@@ -118,26 +121,7 @@ export function createCreateWorktree(
         requestedHostId: options?.executionHostId,
         resolveOwnHostId: () => repoHostId(get(), repoId)
       })
-      if (options?.branchIntent === 'create-exact') {
-        if (options.provisionedRoot) {
-          throw new Error('An exact-name create cannot adopt a provisioned root.')
-        }
-        // The caller checked this host's capability; another await here would let the active parent drift.
-        request.branchIntent = 'create-exact'
-      } else if (options?.branchIntent) {
-        const capability =
-          options.branchIntent === 'open-existing-v2'
-            ? WORKTREE_OPEN_EXISTING_BRANCH_V2_REQUEST_RUNTIME_CAPABILITY
-            : options.branchIntent === 'create-new'
-              ? WORKTREE_OPEN_EXISTING_BRANCH_V2_RUNTIME_CAPABILITY
-              : WORKTREE_OPEN_EXISTING_BRANCH_RUNTIME_CAPABILITY
-        if (!(await runtimeTargetSupportsCapability(target, capability))) {
-          throw new Error(
-            'Update Orca on the workspace host to reuse a branch or explicitly create a separate branch.'
-          )
-        }
-        request.branchIntent = options.branchIntent
-      }
+      await applyWorktreeCreateBranchIntent(request, options, target)
       // Why outside the retry loop: a branch-name conflict retry must not re-warn about the same dropped pick.
       const parent = resolveWorktreeCreateParent(get(), options?.parentWorktreeId, creationHostId)
       let warnedParentDropped = false

@@ -259,7 +259,8 @@ export function hostedReviewBranchLookupArgs(
     linkedGitLabMR: options?.linkedGitLabMR ?? null,
     linkedBitbucketPR: options?.linkedBitbucketPR ?? null,
     linkedAzureDevOpsPR: options?.linkedAzureDevOpsPR ?? null,
-    linkedGiteaPR: options?.linkedGiteaPR ?? null
+    linkedGiteaPR: options?.linkedGiteaPR ?? null,
+    linkedCodeupMR: options?.linkedCodeupMR ?? null
   }
 }
 

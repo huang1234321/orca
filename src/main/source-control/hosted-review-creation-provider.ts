@@ -3,6 +3,7 @@ import type { HostedReviewProvider } from '../../shared/source-control/hosted-re
 import type { HostedReviewCreationProvider } from '../../shared/source-control/hosted-review/hosted-review-creation-providers'
 import { isAzureDevOpsReviewCreationAuthenticated } from '../azure-devops/pull-request-creation'
 import { isBitbucketReviewCreationAuthenticated } from '../bitbucket/pull-request-creation'
+import { isCodeupReviewCreationAuthenticated } from '../codeup/merge-request-creation'
 import { isGiteaReviewCreationAuthenticated } from '../gitea/pull-request-creation'
 import { getEnterpriseGitHubRepoSlug } from '../github/repositories/github-enterprise-repository'
 import { acquire, release } from '../github/execution/github-operation-slots'
@@ -99,6 +100,14 @@ export function reviewCopy(provider: HostedReviewProvider): {
       authInstruction: 'Set ORCA_GITEA_TOKEN'
     }
   }
+  if (provider === 'codeup') {
+    return {
+      shortLabel: 'MR',
+      reviewLabel: 'merge request',
+      providerName: 'Codeup',
+      authInstruction: 'Set ORCA_CODEUP_TOKEN'
+    }
+  }
   if (provider === 'bitbucket') {
     return {
       shortLabel: 'PR',
@@ -126,6 +135,9 @@ export async function isProviderAuthenticated(
   }
   if (provider === 'gitea') {
     return isGiteaReviewCreationAuthenticated()
+  }
+  if (provider === 'codeup') {
+    return isCodeupReviewCreationAuthenticated()
   }
   if (provider === 'bitbucket') {
     // Bitbucket authentication must not fall through to GitHub login requirements.

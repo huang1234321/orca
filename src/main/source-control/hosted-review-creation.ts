@@ -142,6 +142,7 @@ export async function getHostedReviewCreationEligibility(
       linkedBitbucketPR: args.linkedBitbucketPR ?? null,
       linkedAzureDevOpsPR: args.linkedAzureDevOpsPR ?? null,
       linkedGiteaPR: args.linkedGiteaPR ?? null,
+      linkedCodeupMR: args.linkedCodeupMR ?? null,
       currentHeadOid: args.currentHeadOid ?? null,
       executionHostId: args.executionHostId,
       // The acted-on worktree earns active pacing so external review creation promptly blocks duplicates (#11532).

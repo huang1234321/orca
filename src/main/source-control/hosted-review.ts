@@ -37,6 +37,8 @@ function reviewLinkForProvider(
       return { linkedReviewNumber: input.linkedAzureDevOpsPR ?? null }
     case 'gitea':
       return { linkedReviewNumber: input.linkedGiteaPR ?? null }
+    case 'codeup':
+      return { linkedReviewNumber: input.linkedCodeupMR ?? null }
   }
 }
 
@@ -57,6 +59,7 @@ export async function readHostedReviewForBranch(
     linkedBitbucketPR?: number | null
     linkedAzureDevOpsPR?: number | null
     linkedGiteaPR?: number | null
+    linkedCodeupMR?: number | null
     currentHeadOid?: string | null
     /** Selected-worktree surfaces earn per-minute pacing (#11532). */
     active?: boolean
@@ -73,7 +76,8 @@ export async function readHostedReviewForBranch(
     input.linkedGitLabMR == null &&
     input.linkedBitbucketPR == null &&
     input.linkedAzureDevOpsPR == null &&
-    input.linkedGiteaPR == null
+    input.linkedGiteaPR == null &&
+    input.linkedCodeupMR == null
   ) {
     return cachedHostedReviewOutcome(null)
   }

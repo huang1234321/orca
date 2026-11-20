@@ -136,6 +136,7 @@ export function registerHostedReviewHandlers(store: Store, stats: StatsCollector
           linkedBitbucketPR: args.linkedBitbucketPR ?? null,
           linkedAzureDevOpsPR: args.linkedAzureDevOpsPR ?? null,
           linkedGiteaPR: args.linkedGiteaPR ?? null,
+          linkedCodeupMR: args.linkedCodeupMR ?? null,
           currentHeadOid: args.currentHeadOid ?? null,
           ...(args.active === true ? { active: true } : {}),
           ...(args.force === true ? { force: true } : {}),

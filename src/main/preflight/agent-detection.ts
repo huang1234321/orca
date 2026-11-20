@@ -9,6 +9,7 @@ import {
 } from '../startup/shell-environment/hydrate-shell-path'
 import { getAzureDevOpsAuthStatus } from '../azure-devops/client'
 import { getBitbucketAuthStatus } from '../bitbucket/client'
+import { getCodeupAuthStatus } from '../codeup/codeup-auth-status'
 import { getGiteaAuthStatus } from '../gitea/client'
 import { _resetKnownHostsCache } from '../gitlab/projects/gitlab-known-host-probe'
 import { mergePersistedWindowsPathAsync } from '../pty/environment/windows-environment-path'
@@ -60,6 +61,13 @@ export type PreflightStatus = {
     tokenConfigured: boolean
   }
   gitea?: {
+    configured: boolean
+    authenticated: boolean
+    account: string | null
+    baseUrl: string | null
+    tokenConfigured: boolean
+  }
+  codeup?: {
     configured: boolean
     authenticated: boolean
     account: string | null
@@ -285,13 +293,15 @@ async function executePreflightCheck(
     detectCommandRuntime('glab', context)
   ])
 
-  const [ghAuthenticated, glabAuthenticated, bitbucket, azureDevOps, gitea] = await Promise.all([
-    ghProbe.installed ? isGhAuthenticated(ghProbe) : Promise.resolve(false),
-    glabProbe.installed ? isGlabAuthenticated(glabProbe) : Promise.resolve(false),
-    getBitbucketAuthStatus(),
-    getAzureDevOpsAuthStatus(),
-    getGiteaAuthStatus()
-  ])
+  const [ghAuthenticated, glabAuthenticated, bitbucket, azureDevOps, gitea, codeup] =
+    await Promise.all([
+      ghProbe.installed ? isGhAuthenticated(ghProbe) : Promise.resolve(false),
+      glabProbe.installed ? isGlabAuthenticated(glabProbe) : Promise.resolve(false),
+      getBitbucketAuthStatus(),
+      getAzureDevOpsAuthStatus(),
+      getGiteaAuthStatus(),
+      getCodeupAuthStatus()
+    ])
 
   return {
     git: { installed: gitProbe.installed },
@@ -299,6 +309,7 @@ async function executePreflightCheck(
     glab: { installed: glabProbe.installed, authenticated: glabAuthenticated },
     bitbucket,
     azureDevOps,
-    gitea
+    gitea,
+    codeup
   }
 }

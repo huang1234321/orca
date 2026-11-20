@@ -5,7 +5,14 @@ export type GlabStatus = GhStatus
 export type BitbucketStatus = 'checking' | 'connected' | 'not-configured' | 'not-authenticated'
 export type AzureDevOpsStatus = 'checking' | 'configured' | 'not-configured' | 'not-authenticated'
 export type GiteaStatus = 'checking' | 'configured' | 'not-configured' | 'not-authenticated'
-export type PreflightRefreshProvider = 'gh' | 'glab' | 'bitbucket' | 'azureDevOps' | 'gitea'
+export type CodeupStatus = GiteaStatus
+export type PreflightRefreshProvider =
+  | 'gh'
+  | 'glab'
+  | 'bitbucket'
+  | 'azureDevOps'
+  | 'gitea'
+  | 'codeup'
 
 export type PreflightIntegrationStatuses = {
   ghStatus: GhStatus
@@ -18,6 +25,9 @@ export type PreflightIntegrationStatuses = {
   giteaStatus: GiteaStatus
   giteaAccount: string | null
   giteaBaseUrl: string | null
+  codeupStatus: CodeupStatus
+  codeupAccount: string | null
+  codeupBaseUrl: string | null
 }
 
 type TokenApiPreflightStatus = {
@@ -105,13 +115,17 @@ export function getPreflightIntegrationStatuses(
       azureDevOpsBaseUrl: null,
       giteaStatus: 'checking',
       giteaAccount: null,
-      giteaBaseUrl: null
+      giteaBaseUrl: null,
+      codeupStatus: 'checking',
+      codeupAccount: null,
+      codeupBaseUrl: null
     }
   }
 
   const bitbucket = preflightStatus.bitbucket
   const azureDevOps = preflightStatus.azureDevOps
   const gitea = preflightStatus.gitea
+  const codeup = preflightStatus.codeup
   return {
     ghStatus: maybeChecking('gh', refreshingProviders, ghStatusFromPreflight(preflightStatus.gh)),
     glabStatus: maybeChecking(
@@ -134,6 +148,9 @@ export function getPreflightIntegrationStatuses(
     azureDevOpsBaseUrl: azureDevOps?.baseUrl ?? null,
     giteaStatus: maybeChecking('gitea', refreshingProviders, giteaStatusFromPreflight(gitea)),
     giteaAccount: gitea?.account ?? null,
-    giteaBaseUrl: gitea?.baseUrl ?? null
+    giteaBaseUrl: gitea?.baseUrl ?? null,
+    codeupStatus: maybeChecking('codeup', refreshingProviders, giteaStatusFromPreflight(codeup)),
+    codeupAccount: codeup?.account ?? null,
+    codeupBaseUrl: codeup?.baseUrl ?? null
   }
 }

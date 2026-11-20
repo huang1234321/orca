@@ -29,6 +29,7 @@ export function useWorktreeCardLifecycleEffects({
   linkedBitbucketPR,
   linkedAzureDevOpsPR,
   linkedGiteaPR,
+  linkedCodeupMR,
   branch,
   fetchHostedReviewForBranch,
   shouldRefreshHostedReview,
@@ -51,6 +52,7 @@ export function useWorktreeCardLifecycleEffects({
     | 'linkedBitbucketPR'
     | 'linkedAzureDevOpsPR'
     | 'linkedGiteaPR'
+    | 'linkedCodeupMR'
     | 'branch'
     | 'issueCacheKey'
     | 'linearSourceContext'
@@ -102,6 +104,7 @@ export function useWorktreeCardLifecycleEffects({
       linkedBitbucketPR,
       linkedAzureDevOpsPR,
       linkedGiteaPR,
+      linkedCodeupMR,
       staleWhileRevalidate: true
     })
   }, [
@@ -118,6 +121,7 @@ export function useWorktreeCardLifecycleEffects({
     linkedBitbucketPR,
     linkedAzureDevOpsPR,
     linkedGiteaPR,
+    linkedCodeupMR,
     fetchHostedReviewForBranch,
     branch,
     hostedReviewCacheKey,

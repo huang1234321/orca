@@ -17,7 +17,8 @@ export const HostedReviewForBranch = z.object({
   linkedGitLabMR: z.number().int().positive().nullable().optional(),
   linkedBitbucketPR: z.number().int().positive().nullable().optional(),
   linkedAzureDevOpsPR: z.number().int().positive().nullable().optional(),
-  linkedGiteaPR: z.number().int().positive().nullable().optional()
+  linkedGiteaPR: z.number().int().positive().nullable().optional(),
+  linkedCodeupMR: z.number().int().positive().nullable().optional()
 })
 
 export const HostedReviewCreationEligibility = z.object({
@@ -35,6 +36,7 @@ export const HostedReviewCreationEligibility = z.object({
   linkedBitbucketPR: z.number().int().positive().nullable().optional(),
   linkedAzureDevOpsPR: z.number().int().positive().nullable().optional(),
   linkedGiteaPR: z.number().int().positive().nullable().optional(),
+  linkedCodeupMR: z.number().int().positive().nullable().optional(),
   currentHeadOid: z.string().nullable().optional(),
   /** The user's Create PR; older hosts drop it. */
   wakeWslDistro: OptionalBoolean

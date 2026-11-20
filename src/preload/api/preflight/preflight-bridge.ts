@@ -26,6 +26,13 @@ export const preflightApi = {
       baseUrl: string | null
       tokenConfigured: boolean
     }
+    codeup?: {
+      configured: boolean
+      authenticated: boolean
+      account: string | null
+      baseUrl: string | null
+      tokenConfigured: boolean
+    }
     linear: { connected: boolean }
   }> => ipcRenderer.invoke('preflight:check', args),
   detectAgents: (

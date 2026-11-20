@@ -78,6 +78,7 @@ export function createWorktreesApi(): NonNullable<Partial<PreloadApi>['worktrees
         linkedBitbucketPR: args.linkedBitbucketPR,
         linkedAzureDevOpsPR: args.linkedAzureDevOpsPR,
         linkedGiteaPR: args.linkedGiteaPR,
+        linkedCodeupMR: args.linkedCodeupMR,
         displayName: args.displayName,
         sparseCheckout: args.sparseCheckout,
         pushTarget: args.pushTarget,

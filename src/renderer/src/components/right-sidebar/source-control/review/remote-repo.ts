@@ -65,6 +65,9 @@ function providerForHost(host: string): ManualReviewProvider | null {
   ) {
     return 'azure-devops'
   }
+  if (host === 'codeup.aliyun.com') {
+    return 'codeup'
+  }
   return null
 }
 

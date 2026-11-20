@@ -10,6 +10,7 @@ export type ChecksPanelReviewStateInput = Pick<
   | 'linkedAzureDevOpsPR'
   | 'linkedBitbucketPR'
   | 'linkedGiteaPR'
+  | 'linkedCodeupMR'
   | 'linkedGitLabMR'
   | 'linkedPR'
   | 'linkedReviewNumber'

@@ -1,6 +1,6 @@
 import { foldWwwHostAlias, normalizeForgeWebHost } from './git-remote-host-alias'
 
-type PublicForgeProvider = 'github' | 'gitlab' | 'bitbucket' | 'azure-devops' | 'gitea'
+type PublicForgeProvider = 'github' | 'gitlab' | 'bitbucket' | 'azure-devops' | 'gitea' | 'codeup'
 
 /** Ownership only: callers retain their original endpoint and persisted host identity. */
 export function getPublicForgeProviderForHost(host: string): PublicForgeProvider | null {
@@ -20,6 +20,9 @@ export function getPublicForgeProviderForHost(host: string): PublicForgeProvider
     hostname.endsWith('.visualstudio.com')
   ) {
     return 'azure-devops'
+  }
+  if (hostname === 'codeup.aliyun.com') {
+    return 'codeup'
   }
   return hostname === 'codeberg.org' ? 'gitea' : null
 }

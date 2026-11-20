@@ -115,6 +115,7 @@ function buildParentPrChecksRow(
     args.worktree.linkedBitbucketPR ?? null,
     args.worktree.linkedAzureDevOpsPR ?? null,
     args.worktree.linkedGiteaPR ?? null,
+    args.worktree.linkedCodeupMR ?? null,
     { suppressedGitHubPR: args.worktree.suppressedGitHubPR ?? null }
   )
   const review = reviewSnapshot.review
@@ -298,6 +299,7 @@ function hasLinkedReview(worktree: Worktree): boolean {
     worktree.linkedBitbucketPR ??
     worktree.linkedAzureDevOpsPR ??
     worktree.linkedGiteaPR ??
+    worktree.linkedCodeupMR ??
     null
   )
 }
@@ -308,6 +310,7 @@ function getLinkedReviewHints(worktree: Worktree): Parameters<typeof linkedRevie
     linkedGitLabMR: worktree.linkedGitLabMR ?? null,
     linkedBitbucketPR: worktree.linkedBitbucketPR ?? null,
     linkedAzureDevOpsPR: worktree.linkedAzureDevOpsPR ?? null,
-    linkedGiteaPR: worktree.linkedGiteaPR ?? null
+    linkedGiteaPR: worktree.linkedGiteaPR ?? null,
+    linkedCodeupMR: worktree.linkedCodeupMR ?? null
   }
 }

@@ -28,6 +28,7 @@ export function useSourceControlHostedReviewProviderHint({
   isFolder,
   linkedAzureDevOpsPR,
   linkedBitbucketPR,
+  linkedCodeupMR,
   linkedGitHubPR,
   linkedGitLabMR,
   linkedGiteaPR
@@ -48,6 +49,7 @@ export function useSourceControlHostedReviewProviderHint({
   linkedGitHubPR: SourceControlLinkedReviews['linkedGitHubPR']
   linkedGitLabMR: SourceControlLinkedReviews['linkedGitLabMR']
   linkedGiteaPR: SourceControlLinkedReviews['linkedGiteaPR']
+  linkedCodeupMR: SourceControlLinkedReviews['linkedCodeupMR']
 }) {
   const shouldResolveHostedReviewCreation =
     isBranchVisible &&
@@ -87,6 +89,7 @@ export function useSourceControlHostedReviewProviderHint({
         linkedBitbucketPR,
         linkedAzureDevOpsPR,
         linkedGiteaPR,
+        linkedCodeupMR,
         remoteInferredProvider: remoteInferredHostedReviewProvider
       }),
     [
@@ -96,6 +99,7 @@ export function useSourceControlHostedReviewProviderHint({
       hostedReviewCreation,
       linkedAzureDevOpsPR,
       linkedBitbucketPR,
+      linkedCodeupMR,
       linkedGitHubPR,
       linkedGitLabMR,
       linkedGiteaPR,
@@ -110,7 +114,8 @@ export function useSourceControlHostedReviewProviderHint({
       fallbackGitHubPRNumber !== null ||
       linkedGitLabMR !== null ||
       linkedAzureDevOpsPR !== null ||
-      linkedGiteaPR !== null
+      linkedGiteaPR !== null ||
+      linkedCodeupMR !== null
 
     if (!hasConcreteProviderHint) {
       return
@@ -131,6 +136,7 @@ export function useSourceControlHostedReviewProviderHint({
     hostedReviewCreation,
     hostedReviewCreationProviderHintRef,
     linkedAzureDevOpsPR,
+    linkedCodeupMR,
     linkedGiteaPR,
     linkedGitHubPR,
     linkedGitLabMR,

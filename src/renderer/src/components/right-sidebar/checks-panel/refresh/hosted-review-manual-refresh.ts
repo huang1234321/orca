@@ -21,7 +21,9 @@ export function checksPanelManualRefreshProvider(
           ? 'azure-devops'
           : model.linkedGiteaPR != null
             ? 'gitea'
-            : model.hostedReviewCreateProvider)
+            : model.linkedCodeupMR != null
+              ? 'codeup'
+              : model.hostedReviewCreateProvider)
   )
 }
 
@@ -82,7 +84,8 @@ export function refreshHostedReviewForClick(
     linkedGitLabMR: model.linkedGitLabMR,
     linkedBitbucketPR: model.linkedBitbucketPR,
     linkedAzureDevOpsPR: model.linkedAzureDevOpsPR,
-    linkedGiteaPR: model.linkedGiteaPR
+    linkedGiteaPR: model.linkedGiteaPR,
+    linkedCodeupMR: model.linkedCodeupMR
   })
 }
 

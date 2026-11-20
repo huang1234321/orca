@@ -139,6 +139,7 @@ function sharedCreateFields(
       ? { linkedAzureDevOpsPR: request.linkedAzureDevOpsPR }
       : {}),
     ...(request.linkedGiteaPR !== undefined ? { linkedGiteaPR: request.linkedGiteaPR } : {}),
+    ...(request.linkedCodeupMR !== undefined ? { linkedCodeupMR: request.linkedCodeupMR } : {}),
     ...(options?.linkedWorkItem !== undefined ? { linkedWorkItem: options.linkedWorkItem } : {}),
     ...(options?.linkedTaskSourceContext !== undefined
       ? { linkedTaskSourceContext: options.linkedTaskSourceContext }

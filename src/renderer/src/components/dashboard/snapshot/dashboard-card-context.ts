@@ -31,7 +31,8 @@ function hasLinkedReview(worktree: Worktree): boolean {
     worktree.linkedGitLabMR,
     worktree.linkedBitbucketPR,
     worktree.linkedAzureDevOpsPR,
-    worktree.linkedGiteaPR
+    worktree.linkedGiteaPR,
+    worktree.linkedCodeupMR
   ].some(isPositiveHostedReviewNumber)
 }
 

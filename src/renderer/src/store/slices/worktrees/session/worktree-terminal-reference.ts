@@ -236,7 +236,8 @@ export function createObserveTerminalGitHubPullRequestLink(
         linkedGitLabMR: null,
         linkedBitbucketPR: null,
         linkedAzureDevOpsPR: null,
-        linkedGiteaPR: null
+        linkedGiteaPR: null,
+        linkedCodeupMR: null
       })
       return (
         observationIsCurrent() &&

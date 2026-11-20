@@ -27,6 +27,9 @@ export function getProviderName(review: WorktreeCardPrDisplay): string {
   if (review.provider === 'gitea') {
     return 'Gitea'
   }
+  if (review.provider === 'codeup') {
+    return 'Codeup'
+  }
   return 'GitHub'
 }
 

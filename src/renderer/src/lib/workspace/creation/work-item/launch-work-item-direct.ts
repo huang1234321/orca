@@ -188,6 +188,7 @@ export async function launchWorkItemDirect(
       undefined,
       undefined,
       undefined,
+      undefined,
       prStart?.compareBaseRef,
       {
         executionHostId: context.executionHostId,

@@ -57,6 +57,7 @@ export function buildManagedWorktreeCreateArgs(
     linkedBitbucketPR: params.linkedBitbucketPR,
     linkedAzureDevOpsPR: params.linkedAzureDevOpsPR,
     linkedGiteaPR: params.linkedGiteaPR,
+    linkedCodeupMR: params.linkedCodeupMR,
     linkedWorkItem: params.linkedWorkItem,
     linkedItems: params.linkedItems,
     linkedTaskSourceContext: params.linkedTaskSourceContext,

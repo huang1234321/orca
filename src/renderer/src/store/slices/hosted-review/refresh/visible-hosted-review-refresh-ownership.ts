@@ -46,7 +46,8 @@ export function hasNonGitHubReview(
     worktree.linkedGitLabMR != null ||
     worktree.linkedBitbucketPR != null ||
     worktree.linkedAzureDevOpsPR != null ||
-    worktree.linkedGiteaPR != null
+    worktree.linkedGiteaPR != null ||
+    worktree.linkedCodeupMR != null
   ) {
     return true
   }

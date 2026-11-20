@@ -38,6 +38,7 @@ export function useSourceControlLinkedReviews({
   const linkedBitbucketPR = activeWorktree?.linkedBitbucketPR ?? null
   const linkedAzureDevOpsPR = activeWorktree?.linkedAzureDevOpsPR ?? null
   const linkedGiteaPR = activeWorktree?.linkedGiteaPR ?? null
+  const linkedCodeupMR = activeWorktree?.linkedCodeupMR ?? null
   const manualReviewUrl = useMemo(
     () =>
       buildSourceControlManualReviewUrlFromContext({
@@ -49,6 +50,7 @@ export function useSourceControlLinkedReviews({
         linkedBitbucketPR,
         linkedAzureDevOpsPR,
         linkedGiteaPR,
+        linkedCodeupMR,
         baseRef: compareBaseRef,
         branchName,
         repoRemoteName: activeRepo?.gitRemoteIdentity?.remoteName ?? null,
@@ -70,6 +72,7 @@ export function useSourceControlLinkedReviews({
       linkedGitHubPR,
       linkedGitLabMR,
       linkedGiteaPR,
+      linkedCodeupMR,
       remoteStatus?.upstreamName
     ]
   )
@@ -79,7 +82,8 @@ export function useSourceControlLinkedReviews({
     linkedGitLabMR,
     linkedBitbucketPR,
     linkedAzureDevOpsPR,
-    linkedGiteaPR
+    linkedGiteaPR,
+    linkedCodeupMR
   })
   // SSH repos never fetch live reviews; treating them as loading would permanently block Publish Branch.
   const isHostedReviewStateLoading =
@@ -124,6 +128,7 @@ export function useSourceControlLinkedReviews({
     isHostedReviewStateLoading,
     linkedAzureDevOpsPR,
     linkedBitbucketPR,
+    linkedCodeupMR,
     linkedGitHubPR,
     linkedGitLabMR,
     linkedGiteaPR,

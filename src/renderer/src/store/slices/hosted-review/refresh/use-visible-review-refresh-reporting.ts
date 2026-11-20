@@ -53,6 +53,7 @@ function reportIdentity(state: AppState): string {
         worktree.linkedBitbucketPR,
         worktree.linkedAzureDevOpsPR,
         worktree.linkedGiteaPR,
+        worktree.linkedCodeupMR,
         candidate.connectionState,
         candidate.executionHostId,
         candidate.cacheKey,

@@ -22,6 +22,7 @@ export function resolveWorktreeCardReview(
     linkedBitbucketPR: worktree.linkedBitbucketPR ?? null,
     linkedAzureDevOpsPR: worktree.linkedAzureDevOpsPR ?? null,
     linkedGiteaPR: worktree.linkedGiteaPR ?? null,
+    linkedCodeupMR: worktree.linkedCodeupMR ?? null,
     ...deriveWorktreeCardPrDisplay(worktree, hostedReviewEntry, prCacheEntry, t)
   }
 }
