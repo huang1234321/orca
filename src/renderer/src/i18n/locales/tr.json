@@ -15217,7 +15217,6 @@
           "agentNotOnPath": "<agent>{{agent}}</agent> henüz PATH'inizde yok. Orca bunu varsayılan olarak ayarlayacak; istediğiniz zaman kurabilirsiniz."
         },
         "IntegrationsStep": {
-          "277f30eb34": "Linear, GitLab, Bitbucket, Azure DevOps, Gitea ve Jira, Ayarlar > Entegrasyonlar'da bulunur.",
           "3a3e360289": "Diğer görev kaynakları",
           "80e3ce0bc9": "Yeniden kontrol et",
           "04ef416712": "Linear erişimi ekle",

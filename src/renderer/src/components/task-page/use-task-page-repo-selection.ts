@@ -39,7 +39,8 @@ export function useTaskPageRepoSelection(model: TaskPageStoreBindingsModel) {
     preflightStatus,
     jiraStatus,
     preflightStatusCurrent,
-    linearConnected
+    linearConnected,
+    feishuStatus
   } = model
   const eligibleRepos = useMemo(() => getTaskEligibleRepos(repos), [repos])
 
@@ -133,13 +134,15 @@ export function useTaskPageRepoSelection(model: TaskPageStoreBindingsModel) {
         preferredVisibleTaskProviders,
         {
           gitlabInstalled: preflightStatusCurrent && preflightStatus?.glab?.installed === true,
-          linearConnected: linearConnected === true
+          linearConnected: linearConnected === true,
+          feishuConnected: feishuStatus?.connected === true
         },
         defaultTaskSource
       ),
     [
       defaultTaskSource,
       linearConnected,
+      feishuStatus?.connected,
       preferredVisibleTaskProviders,
       preflightStatusCurrent,
       preflightStatus?.glab?.installed

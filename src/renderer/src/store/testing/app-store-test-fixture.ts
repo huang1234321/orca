@@ -12,6 +12,7 @@ import { createSettingsSlice } from '../slices/settings/create-settings-slice'
 import { createKeybindingsSlice } from '../slices/keybindings/keybindings'
 import { createGitHubSlice } from '../github/github'
 import { createHostedReviewSlice } from '../slices/hosted-review/hosted-review'
+import { createFeishuSlice } from '../slices/feishu/feishu'
 import { createLinearSlice } from '../slices/linear/linear'
 import { createPreflightSlice } from '../slices/preflight/preflight'
 import { createJiraSlice } from '../slices/jira/jira'
@@ -87,6 +88,7 @@ export function createTestStore(
         ...createGitHubSlice(...a),
         ...createHostedReviewSlice(...a),
         ...createLinearSlice(...a),
+        ...createFeishuSlice(...a),
         ...createPreflightSlice(...a),
         ...createJiraSlice(...a),
         ...createEditorSlice(...a),

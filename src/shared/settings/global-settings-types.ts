@@ -1,4 +1,5 @@
 import type { AgentLaunchChoices } from '../agent-launch/choices/agent-launch-choices'
+import type { FeishuTaskSourceBinding } from '../feishu/feishu-types'
 import type { TelemetrySettings } from '../telemetry/telemetry-settings-types'
 import type { BrowserProfileScope } from '../browser/profiles/browser-profile-scope'
 import type { GlobalSettingsBase } from './global-settings-base'
@@ -352,6 +353,8 @@ export type GlobalSettings = GlobalSettingsBase & {
   visibleTaskProviders: TaskProvider[]
   /** Why: one-shot guard to make Jira visible for existing profiles once, without re-adding after a later opt-out. */
   visibleTaskProvidersDefaultedForJira: boolean
+  /** Feishu Bitable binding: which base/table Tasks reads and how columns map onto the task contract. */
+  feishuTaskSource?: FeishuTaskSourceBinding | null
   /** Repo selection: null includes all present/future repos; arrays freeze a subset, dropping ineligible ids on load and treating empty as null. */
   defaultRepoSelection: string[] | null
   /** Linear team selection: null includes all; arrays freeze selected team IDs, matching defaultRepoSelection. */

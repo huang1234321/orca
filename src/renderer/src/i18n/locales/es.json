@@ -14761,7 +14761,6 @@
           "showMoreAgents": "Mostrar {{value0}} agentes más →"
         },
         "IntegrationsStep": {
-          "277f30eb34": "Linear, GitLab, Bitbucket, Azure DevOps, Gitea y Jira se encuentran en Configuración > Integraciones.",
           "3a3e360289": "Más fuentes de tareas",
           "80e3ce0bc9": "Volver a comprobar",
           "04ef416712": "Agregar acceso Linear",

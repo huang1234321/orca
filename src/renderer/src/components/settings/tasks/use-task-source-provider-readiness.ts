@@ -59,6 +59,12 @@ export function useTaskSourceProviderReadiness(
     preflightStatus.glab.authenticated === true
   const jiraChecking = jiraStatusContextKey !== providerRuntimeContextKey || !jiraStatusChecked
   const jiraConnected = !jiraChecking && jiraStatus.connected === true
+  const feishuStatus = useAppStore((s) => s.feishuStatus)
+  const feishuStatusChecked = useAppStore((s) => s.feishuStatusChecked)
+  const feishuStatusContextKey = useAppStore((s) => s.feishuStatusContextKey)
+  const feishuChecking =
+    feishuStatusContextKey !== providerRuntimeContextKey || !feishuStatusChecked
+  const feishuConnected = !feishuChecking && feishuStatus?.connected === true
   const linearChecking =
     linearStatusContextKey !== providerRuntimeContextKey || !linearStatusChecked
   // Normalization returns a new array, so memoize by provider contents.
@@ -91,6 +97,11 @@ export function useTaskSourceProviderReadiness(
         connected: jiraConnected,
         checking: jiraChecking,
         visible: visible.has('jira')
+      },
+      feishu: {
+        connected: feishuConnected,
+        checking: feishuChecking,
+        visible: visible.has('feishu')
       }
     }
   }, [
@@ -98,6 +109,8 @@ export function useTaskSourceProviderReadiness(
     gitlabConnected,
     jiraChecking,
     jiraConnected,
+    feishuChecking,
+    feishuConnected,
     linearChecking,
     linearConnected,
     linearSkillInstalled,

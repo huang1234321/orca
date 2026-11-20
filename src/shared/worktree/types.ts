@@ -21,7 +21,16 @@ export type WorkspaceAttachmentOrigin = {
 }
 
 export type WorkspaceAttachment = {
-  provider: 'github' | 'gitlab' | 'linear' | 'jira' | 'bitbucket' | 'azure-devops' | 'gitea'
+  provider:
+    | 'github'
+    | 'gitlab'
+    | 'linear'
+    | 'jira'
+    | 'bitbucket'
+    | 'azure-devops'
+    | 'gitea'
+    | 'codeup'
+    | 'feishu'
   type: 'issue' | 'pr' | 'mr'
   number: number
   identifier?: string
@@ -37,7 +46,7 @@ export type WorkspaceAttachment = {
 }
 
 export type WorkspaceLinkedItem = {
-  provider: 'github' | 'gitlab' | 'linear' | 'jira'
+  provider: 'github' | 'gitlab' | 'linear' | 'jira' | 'feishu'
   type: 'issue' | 'pr' | 'mr'
   number: number
   title: string
@@ -126,6 +135,7 @@ export type Worktree = {
   linkedBitbucketPR?: number | null
   linkedAzureDevOpsPR?: number | null
   linkedGiteaPR?: number | null
+  linkedCodeupMR?: number | null
   linkedWorkItem?: WorkspaceLinkedItem | null
   /** All attachments; singular fields select the active review/task for older readers. */
   linkedItems?: WorkspaceAttachment[]

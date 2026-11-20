@@ -29,11 +29,19 @@ export type JiraTaskProviderIdentity = {
   projectKey?: string | null
 }
 
+export type FeishuTaskProviderIdentity = {
+  provider: 'feishu'
+  appId?: string | null
+  appToken?: string | null
+  tableId?: string | null
+}
+
 export type TaskProviderIdentity =
   | GitHubTaskProviderIdentity
   | GitLabTaskProviderIdentity
   | LinearTaskProviderIdentity
   | JiraTaskProviderIdentity
+  | FeishuTaskProviderIdentity
 
 export function normalizeTaskProviderIdentity(
   provider: TaskProvider,
@@ -79,6 +87,13 @@ export function normalizeTaskProviderIdentity(
         siteUrl: normalizeNonEmptyString(raw.siteUrl),
         projectKey: normalizeNonEmptyString(raw.projectKey)
       }
+    case 'feishu':
+      return {
+        provider,
+        appId: normalizeNonEmptyString(raw.appId),
+        appToken: normalizeNonEmptyString(raw.appToken),
+        tableId: normalizeNonEmptyString(raw.tableId)
+      }
   }
 }
 
@@ -112,6 +127,8 @@ export function isStoredTaskProviderIdentity(provider: TaskProvider, identity: u
       )
     case 'jira':
       return ['siteId', 'siteUrl', 'projectKey'].every((key) => isNullableOptionalString(raw[key]))
+    case 'feishu':
+      return ['appId', 'appToken', 'tableId'].every((key) => isNullableOptionalString(raw[key]))
   }
 }
 
@@ -119,7 +136,8 @@ const TASK_PROVIDER_IDENTITY_FIELDS: Record<TaskProvider, readonly string[]> = {
   github: ['owner', 'repo', 'host'],
   gitlab: ['projectId', 'namespace', 'project', 'webUrl'],
   linear: ['workspaceId', 'workspaceName', 'teamId', 'teamKey'],
-  jira: ['siteId', 'siteUrl', 'projectKey']
+  jira: ['siteId', 'siteUrl', 'projectKey'],
+  feishu: ['appId', 'appToken', 'tableId']
 }
 
 export function areTaskProviderIdentitiesEqual(
@@ -157,6 +175,8 @@ export function taskProviderIdentityCachePart(
       return [identity.workspaceId, identity.teamId ?? identity.teamKey].filter(Boolean).join('/')
     case 'jira':
       return [identity.siteId ?? identity.siteUrl, identity.projectKey].filter(Boolean).join('/')
+    case 'feishu':
+      return [identity.appId, identity.appToken, identity.tableId].filter(Boolean).join('/')
   }
 }
 

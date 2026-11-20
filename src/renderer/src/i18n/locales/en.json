@@ -4268,7 +4268,8 @@
           "linearViewNotFound": "Saved Linear view was not found.",
           "linearViewRestoreFailed": "Failed to restore saved Linear view."
         },
-        "shownCount_one": "{{count}} shown"
+        "shownCount_one": "{{count}} shown",
+        "feishu": "Feishu"
       },
       "Terminal": {
         "73768427cf": "Close",
@@ -10443,7 +10444,9 @@
           "integrationsLink": "Integrations",
           "skillHint": ". After Linear is connected, usage examples stay under Settings → Linear.",
           "incompleteBannerBodyWithLinear": "Hide providers you do not use, or expand a card and finish its steps. For Linear: API access, the agent skill, and Show in Tasks.",
-          "30255b39dc": "Task providers"
+          "30255b39dc": "Task providers",
+          "feishu": "Feishu",
+          "feishuDescription": "Connect a Feishu Bitable table and show its records in Tasks."
         },
         "TerminalAppearanceSection": {
           "a14a427ae4": "Thickness of the pane divider line.",
@@ -11745,7 +11748,10 @@
             "86a08aa60c": "Gitea integration",
             "cd74b2f587": "GitLab integration",
             "d905b3ecee": "Linear integration",
-            "b3efe7ab71": "Azure DevOps integration"
+            "b3efe7ab71": "Azure DevOps integration",
+            "codeupTitle": "Codeup integration",
+            "codeupDescription": "Aliyun Codeup merge requests via personal access token environment variables.",
+            "codeupKeyword": "codeup"
           }
         },
         "jira": {
@@ -12712,6 +12718,18 @@
                   "fcbe0469fd": "Public repositories are detected from their git remote. Set",
                   "0613928cb3": "Gitea status is not available in this runtime yet.",
                   "05863d2599": "Pull requests and commit statuses via the Gitea REST API.",
+                  "8ae786d652": "{{value0}} · Merge requests and status",
+                  "f7de222239": "Merge requests for detected repositories",
+                  "b7c3f537ea": "Merge requests via the Aliyun Codeup OpenAPI.",
+                  "0f18013726": "Codeup status is not available in this runtime yet.",
+                  "a782a83520": "Public repositories are detected from their git remote. Set",
+                  "0662796c5d": "ORCA_CODEUP_TOKEN",
+                  "9f6bc3fae8": "for private repositories, and set",
+                  "9347782103": "ORCA_CODEUP_API_BASE_URL",
+                  "46927f98c8": "only when using a non-default endpoint; set ORCA_CODEUP_ORGANIZATION_ID to override the organization derived from the remote.",
+                  "f70f0053eb": "Codeup credentials are configured but could not authenticate. Check the personal access token, organization ID, and repository permissions, then restart Orca if environment variables changed.",
+                  "8efd23fbc9": "Learn more",
+                  "a827d1cad8": "Re-check",
                   "52f75876be": "Pull requests and commit statuses for detected repositories",
                   "0b5242f8a2": "{{value0}} · Pull requests and commit statuses",
                   "40f678df73": "Azure DevOps credentials are configured but could not authenticate. Check the token, API base URL, and repository permissions, then restart Orca if environment variables changed.",
@@ -16488,7 +16506,7 @@
           "showMoreAgents": "Show {{value0}} more agents →"
         },
         "IntegrationsStep": {
-          "277f30eb34": "Linear, GitLab, Bitbucket, Azure DevOps, Gitea, and Jira live in Settings > Integrations.",
+          "84766a3d39": "Linear, GitLab, Bitbucket, Azure DevOps, Gitea, Codeup, and Jira live in Settings > Integrations.",
           "3a3e360289": "More task sources",
           "80e3ce0bc9": "Re-check",
           "04ef416712": "Add Linear access",
@@ -25308,7 +25326,8 @@
         "jira_task_url": "Jira task (URL)",
         "bitbucket_pr": "Bitbucket PR",
         "azure_devops_pr": "Azure DevOps PR",
-        "gitea_pr": "Gitea PR"
+        "gitea_pr": "Gitea PR",
+        "codeup_mr": "Codeup MR"
       },
       "mrReference": "MR !{{number}}",
       "prReference": "PR #{{number}}",
@@ -25598,6 +25617,62 @@
       "truncated": "Some favourites could not be listed. Manage your favourites in Jira to narrow the list.",
       "clear": "Clear Jira favourite",
       "activeLabel": "Jira favourites: {{name}}"
+    }
+  },
+  "feishu": {
+    "detail": {
+      "close": "Close",
+      "commentPlaceholder": "Add a comment",
+      "comments": "Comments",
+      "noBody": "No description",
+      "noComments": "No comments yet",
+      "noCommentsTable": "No comments table is bound in the Feishu setup",
+      "send": "Send",
+      "sending": "Sending…",
+      "state": "State",
+      "unknownAuthor": "App"
+    },
+    "empty": {
+      "title": "Connect Feishu and bind a table",
+      "body": "Browse Bitable records, update their state, and start workspaces from them.",
+      "setup": "Open Feishu setup",
+      "hide": "Hide Feishu"
+    },
+    "list": {
+      "emptyTitle": "No matching records",
+      "emptyBody": "Try different search terms or state filters.",
+      "openInBrowser": "Open in Feishu",
+      "refresh": "Refresh",
+      "searchPlaceholder": "Search or filter, e.g. is:open label:bug",
+      "title": "Feishu records"
+    },
+    "mapping": {
+      "title": "Title",
+      "state": "State",
+      "labels": "Labels",
+      "assignee": "Assignee",
+      "body": "Description",
+      "number": "Number",
+      "repo": "Repository link"
+    },
+    "setup": {
+      "appIdLabel": "App ID",
+      "appSecretLabel": "App secret",
+      "bind": "Bind table",
+      "bindDescription": "Paste the Bitable URL of your task table; the field mapping is inferred from its columns.",
+      "bindingHint": "Paste a Bitable URL (with table=…) or \"appToken tableId\".",
+      "bindTitle": "Bind a Bitable table",
+      "connect": "Connect app",
+      "connectDescription": "Create a custom app with Bitable scopes, then paste its app ID and secret.",
+      "connecting": "Connecting…",
+      "connectTitle": "Connect Feishu",
+      "inferring": "Reading fields…",
+      "mappingTitle": "Field mapping",
+      "reconnect": "Reconnect",
+      "save": "Save and connect",
+      "stateMissing": "No single-select column found for state; records stay \"open\" until mapped.",
+      "appIdPlaceholder": "cli_xxxxxxxxxxxxxxxx",
+      "bindingPlaceholder": "https://xxx.feishu.cn/base/bascn…?table=tbl…&view=…"
     }
   },
   "workspaceSpace": {
@@ -26422,6 +26497,19 @@
         "incompleteProjectPage": "Jira returned an incomplete project page.",
         "projectListLimit": "Jira project list exceeded the page limit. Select a project with JQL instead.",
         "invalidCloudId": "The site did not report a valid Atlassian cloud ID."
+      },
+      "feishu": {
+        "notConnected": "Not connected to Feishu Bitable.",
+        "credentialsRequired": "Feishu app ID and app secret are required.",
+        "appTokenRequired": "A Bitable app token is required.",
+        "tableRequired": "A Bitable table ID is required.",
+        "fieldMappingRequired": "The Bitable field mapping is incomplete. Configure it in Settings > Tasks.",
+        "recordsLoadFailed": "Failed to load Bitable records.",
+        "recordNotFound": "Bitable record not found.",
+        "updateFailed": "Failed to update the Bitable record.",
+        "commentFailed": "Failed to add comment.",
+        "commentBodyRequired": "Comment body is required.",
+        "connectionFailed": "Could not connect to Feishu. Check the app secret and scopes."
       }
     }
   },

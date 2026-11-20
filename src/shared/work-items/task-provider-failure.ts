@@ -41,6 +41,17 @@ export type TaskProviderErrorCode =
   | 'jira.incompleteProjectPage'
   | 'jira.projectListLimit'
   | 'jira.invalidCloudId'
+  | 'feishu.notConnected'
+  | 'feishu.credentialsRequired'
+  | 'feishu.appTokenRequired'
+  | 'feishu.tableRequired'
+  | 'feishu.fieldMappingRequired'
+  | 'feishu.recordsLoadFailed'
+  | 'feishu.recordNotFound'
+  | 'feishu.updateFailed'
+  | 'feishu.commentFailed'
+  | 'feishu.commentBodyRequired'
+  | 'feishu.connectionFailed'
 
 export function taskProviderFailure(
   errorCode: TaskProviderErrorCode,

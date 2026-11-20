@@ -3164,7 +3164,8 @@
           "linearProjectRestoreFailed": "無法還原已儲存的 Linear 專案。",
           "linearViewNotFound": "找不到已儲存的 Linear 檢視。",
           "linearViewRestoreFailed": "無法還原已儲存的 Linear 檢視。"
-        }
+        },
+        "feishu": "飛書"
       },
       "Terminal": {
         "73768427cf": "關閉",
@@ -9038,7 +9039,9 @@
           "integrationsLink": "整合",
           "skillHint": "。連線 Linear 後，可在設定 → Linear 中檢視使用示例。",
           "incompleteBannerBodyWithLinear": "隱藏不使用的供應商，或展開卡片並完成其中的步驟。Linear 需要 API 存取權限、代理程式技能以及在任務中顯示。",
-          "30255b39dc": "任務提供者"
+          "30255b39dc": "任務提供者",
+          "feishu": "飛書",
+          "feishuDescription": "連接飛書多維表格,在工作頁顯示其記錄。"
         },
         "TerminalAppearanceSection": {
           "a14a427ae4": "窗格分隔線的厚度。",
@@ -10310,7 +10313,10 @@
             "86a08aa60c": "Gitea 整合",
             "cd74b2f587": "GitLab 整合",
             "d905b3ecee": "Linear 整合",
-            "b3efe7ab71": "Azure DevOps 整合"
+            "b3efe7ab71": "Azure DevOps 整合",
+            "codeupTitle": "Codeup 整合",
+            "codeupDescription": "透過個人存取權杖環境變數使用阿里雲 Codeup 合併請求。",
+            "codeupKeyword": "codeup"
           }
         },
         "jira": {
@@ -11267,6 +11273,18 @@
                   "fcbe0469fd": "公開存放庫會從其 git remote 偵測。設定",
                   "0613928cb3": "此執行環境尚無法提供 Gitea 狀態。",
                   "05863d2599": "透過 Gitea REST API 取得 PR 和提交狀態。",
+                  "8ae786d652": "{{value0}} · 合併請求與狀態",
+                  "f7de222239": "偵測到的儲存庫的合併請求",
+                  "b7c3f537ea": "透過阿里雲 Codeup OpenAPI 使用合併請求。",
+                  "0f18013726": "此執行環境暫不支援 Codeup 狀態。",
+                  "a782a83520": "公開儲存庫會從 git 遠端自動識別。設定",
+                  "0662796c5d": "ORCA_CODEUP_TOKEN",
+                  "9f6bc3fae8": "以存取私有儲存庫,並設定",
+                  "9347782103": "ORCA_CODEUP_API_BASE_URL",
+                  "46927f98c8": "僅在使用非預設端點時需要;設定 ORCA_CODEUP_ORGANIZATION_ID 可覆蓋從遠端推斷的組織 ID。",
+                  "f70f0053eb": "Codeup 憑證已設定但認證失敗。檢查個人存取權杖、組織 ID 和儲存庫權限;環境變數變更後請重新啟動 Orca。",
+                  "8efd23fbc9": "瞭解更多",
+                  "a827d1cad8": "重新檢查",
                   "52f75876be": "已偵測存放庫的 PR 和提交狀態",
                   "0b5242f8a2": "{{value0}} · PR 和提交狀態",
                   "40f678df73": "Azure DevOps 憑證已設定但無法通過身分驗證。請檢查權杖、API 基礎 URL 和存放庫權限；如果環境變數已變更，請重新啟動 Orca。",
@@ -14857,7 +14875,7 @@
           "agentNotOnPath": "<agent>{{agent}}</agent> 尚未加入 PATH。Orca 會將其設為預設，你可以隨時安裝。"
         },
         "IntegrationsStep": {
-          "277f30eb34": "Linear、GitLab、Bitbucket、Azure DevOps、Gitea 和 Jira 位於「設定」>「整合」中。",
+          "84766a3d39": "Linear、GitLab、Bitbucket、Azure DevOps、Gitea、Codeup 和 Jira 請前往 設定 > 整合。",
           "3a3e360289": "更多任務來源",
           "80e3ce0bc9": "重新檢查",
           "04ef416712": "新增 Linear 存取",
@@ -21861,7 +21879,8 @@
         "jira_task_url": "Jira 任務（URL）",
         "bitbucket_pr": "Bitbucket PR",
         "azure_devops_pr": "Azure DevOps PR",
-        "gitea_pr": "Gitea PR"
+        "gitea_pr": "Gitea PR",
+        "codeup_mr": "Codeup MR"
       },
       "mrReference": "MR !{{number}}",
       "prReference": "PR #{{number}}",
@@ -22108,6 +22127,62 @@
       "truncated": "部分最愛項目無法列出。請在 Jira 中管理最愛項目以縮小清單。",
       "clear": "清除 Jira 最愛項目",
       "activeLabel": "Jira 我的最愛：{{name}}"
+    }
+  },
+  "feishu": {
+    "detail": {
+      "close": "關閉",
+      "commentPlaceholder": "新增留言",
+      "comments": "留言",
+      "noBody": "暫無描述",
+      "noComments": "暫無留言",
+      "noCommentsTable": "飛書設定中未綁定留言表",
+      "send": "傳送",
+      "sending": "傳送中…",
+      "state": "狀態",
+      "unknownAuthor": "應用"
+    },
+    "empty": {
+      "title": "連接飛書並綁定表格",
+      "body": "瀏覽多維表格記錄、更新狀態,並從中啟動工作區。",
+      "setup": "開啟飛書設定",
+      "hide": "隱藏飛書"
+    },
+    "list": {
+      "emptyTitle": "沒有符合的記錄",
+      "emptyBody": "換個搜尋詞或狀態篩選試試。",
+      "openInBrowser": "在飛書中開啟",
+      "refresh": "重新整理",
+      "searchPlaceholder": "搜尋或篩選,如 is:open label:bug",
+      "title": "飛書記錄"
+    },
+    "mapping": {
+      "title": "標題",
+      "state": "狀態",
+      "labels": "標籤",
+      "assignee": "負責人",
+      "body": "描述",
+      "number": "編號",
+      "repo": "倉庫連結"
+    },
+    "setup": {
+      "appIdLabel": "應用 ID",
+      "appSecretLabel": "應用密鑰",
+      "bind": "綁定表格",
+      "bindDescription": "貼上任務表的多維表格連結,欄位映射會依表格欄位自動推斷。",
+      "bindingHint": "貼上多維表格連結(含 table=…)或「appToken tableId」。",
+      "bindTitle": "綁定多維表格",
+      "connect": "連接應用",
+      "connectDescription": "先建立一個開通多維表格權限的自建應用,再貼上應用 ID 和密鑰。",
+      "connecting": "連線中…",
+      "connectTitle": "連接飛書",
+      "inferring": "正在讀取欄位…",
+      "mappingTitle": "欄位映射",
+      "reconnect": "重新連接",
+      "save": "儲存並連接",
+      "stateMissing": "未找到可作為狀態的單選欄位;映射前記錄全部視為「進行中」。",
+      "appIdPlaceholder": "cli_xxxxxxxxxxxxxxxx",
+      "bindingPlaceholder": "https://xxx.feishu.cn/base/bascn…?table=tbl…&view=…"
     }
   },
   "workspaceSpace": {
@@ -22646,6 +22721,19 @@
         "titleRequired": "必須填寫標題。",
         "updateFailed": "無法更新議題。",
         "updatesRequired": "必須提供更新物件。"
+      },
+      "feishu": {
+        "notConnected": "未連接飛書多維表格。",
+        "credentialsRequired": "需要飛書應用 ID 和應用密鑰。",
+        "appTokenRequired": "需要多維表格 app token。",
+        "tableRequired": "需要多維表格資料表 ID。",
+        "fieldMappingRequired": "多維表格欄位映射不完整,請在 設定 > 工作 中配置。",
+        "recordsLoadFailed": "載入多維表格記錄失敗。",
+        "recordNotFound": "未找到該多維表格記錄。",
+        "updateFailed": "更新多維表格記錄失敗。",
+        "commentFailed": "新增留言失敗。",
+        "commentBodyRequired": "留言內容不能為空。",
+        "connectionFailed": "連接飛書失敗,請檢查應用密鑰和權限。"
       },
       "linear": {
         "commentFailed": "建立評論失敗",
