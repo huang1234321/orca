@@ -41,6 +41,14 @@ export function localizedHostedReviewCopy(
       providerName: 'Azure DevOps'
     }
   }
+  if (provider === 'codeup') {
+    return {
+      shortLabel: t('auto.i18n.hostedReview.copy.c4e8f1a2b9', 'MR'),
+      reviewLabel: t('auto.i18n.hostedReview.copy.b3d7e0f1a8', 'merge request'),
+      titleLabel: t('auto.i18n.hostedReview.copy.a2c6d9e0f7', 'Merge Request'),
+      providerName: 'Codeup'
+    }
+  }
   if (provider === 'gitea') {
     return {
       shortLabel: t('auto.i18n.hostedReview.copy.f0a4b8c2d1', 'PR'),

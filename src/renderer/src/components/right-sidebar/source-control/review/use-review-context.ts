@@ -100,7 +100,8 @@ export function useSourceControlReviewContext(panelState: SourceControlPanelStat
     linkedBitbucketPR,
     linkedGitHubPR,
     linkedGitLabMR,
-    linkedGiteaPR
+    linkedGiteaPR,
+    linkedCodeupMR
   } = linkedReviews
   const providerHint = useSourceControlHostedReviewProviderHint({
     activeRepo,
@@ -118,7 +119,8 @@ export function useSourceControlReviewContext(panelState: SourceControlPanelStat
     linkedBitbucketPR,
     linkedGitHubPR,
     linkedGitLabMR,
-    linkedGiteaPR
+    linkedGiteaPR,
+    linkedCodeupMR
   })
   useSourceControlReviewPushTarget({
     activeWorktree,

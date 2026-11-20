@@ -23,6 +23,7 @@ export type ChecksPanelCreatedReviewInput = Pick<
     | 'fallbackGitHubPRNumber'
     | 'linkedAzureDevOpsPR'
     | 'linkedBitbucketPR'
+    | 'linkedCodeupMR'
     | 'linkedGiteaPR'
     | 'linkedGitLabMR'
     | 'linkedPR'
@@ -39,6 +40,7 @@ export function useChecksPanelCreatedReview(model: ChecksPanelCreatedReviewInput
     fetchHostedReviewForBranch,
     linkedAzureDevOpsPR,
     linkedBitbucketPR,
+    linkedCodeupMR,
     linkedGiteaPR,
     linkedGitLabMR,
     linkedPR,
@@ -77,6 +79,7 @@ export function useChecksPanelCreatedReview(model: ChecksPanelCreatedReviewInput
           linkedBitbucketPR,
           linkedAzureDevOpsPR,
           linkedGiteaPR,
+          linkedCodeupMR,
           ...createdLink.lookup
         }
         if (result.provider === 'gitlab') {
@@ -120,6 +123,7 @@ export function useChecksPanelCreatedReview(model: ChecksPanelCreatedReviewInput
       fetchHostedReviewForBranch,
       linkedAzureDevOpsPR,
       linkedBitbucketPR,
+      linkedCodeupMR,
       linkedGiteaPR,
       linkedGitLabMR,
       linkedPR,

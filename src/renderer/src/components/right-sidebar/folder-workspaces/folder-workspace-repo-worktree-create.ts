@@ -133,6 +133,7 @@ async function createWhileStillInFolder(
       undefined,
       undefined,
       undefined,
+      undefined,
       { executionHostId: hostId, branchIntent: 'create-exact' }
     )
     toast.success(

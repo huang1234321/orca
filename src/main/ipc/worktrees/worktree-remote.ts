@@ -573,6 +573,7 @@ type SelectedReviewBranchInput = Pick<
   | 'linkedBitbucketPR'
   | 'linkedAzureDevOpsPR'
   | 'linkedGiteaPR'
+  | 'linkedCodeupMR'
   | 'pushTarget'
 >
 
@@ -596,6 +597,9 @@ function getSelectedReviewBranch(args: SelectedReviewBranchInput): SelectedRevie
   }
   if (typeof args.linkedGiteaPR === 'number') {
     return { provider: 'gitea', number: args.linkedGiteaPR }
+  }
+  if (typeof args.linkedCodeupMR === 'number') {
+    return { provider: 'codeup', number: args.linkedCodeupMR }
   }
   return null
 }
@@ -644,13 +648,15 @@ function getSelectedReviewLookupHints(args: SelectedReviewBranchInput): {
   linkedBitbucketPR?: number | null
   linkedAzureDevOpsPR?: number | null
   linkedGiteaPR?: number | null
+  linkedCodeupMR?: number | null
 } {
   return {
     linkedGitHubPR: args.linkedPR ?? null,
     linkedGitLabMR: args.linkedGitLabMR ?? null,
     linkedBitbucketPR: args.linkedBitbucketPR ?? null,
     linkedAzureDevOpsPR: args.linkedAzureDevOpsPR ?? null,
-    linkedGiteaPR: args.linkedGiteaPR ?? null
+    linkedGiteaPR: args.linkedGiteaPR ?? null,
+    linkedCodeupMR: args.linkedCodeupMR ?? null
   }
 }
 
@@ -1750,6 +1756,7 @@ async function performLocalWorktreeCreate(
       ? { linkedAzureDevOpsPR: args.linkedAzureDevOpsPR }
       : {}),
     ...(args.linkedGiteaPR !== undefined ? { linkedGiteaPR: args.linkedGiteaPR } : {}),
+    ...(args.linkedCodeupMR !== undefined ? { linkedCodeupMR: args.linkedCodeupMR } : {}),
     ...(args.linkedWorkItem !== undefined ? { linkedWorkItem: args.linkedWorkItem } : {}),
     ...(args.linkedItems !== undefined ? { linkedItems: args.linkedItems } : {}),
     ...(args.linkedTaskSourceContext !== undefined

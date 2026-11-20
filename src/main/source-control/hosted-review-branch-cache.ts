@@ -75,6 +75,7 @@ export function hostedReviewBranchCacheKey(identity: HostedReviewBranchCacheIden
     identity.linkedBitbucketPR ?? '',
     identity.linkedAzureDevOpsPR ?? '',
     identity.linkedGiteaPR ?? '',
+    identity.linkedCodeupMR ?? '',
     identity.localGitExecOptions ? JSON.stringify(identity.localGitExecOptions) : ''
   ].join(KEY_SEPARATOR)
 }

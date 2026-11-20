@@ -13,6 +13,7 @@ export const INTEGRATION_SETTING_TARGET_IDS = {
   bitbucket: 'integrations-bitbucket',
   azuredevops: 'integrations-azure-devops',
   gitea: 'integrations-gitea',
+  codeup: 'integrations-codeup',
   jira: JIRA_INTEGRATION_SECTION_ID,
   linear: LINEAR_INTEGRATION_SECTION_ID
 } as const
@@ -143,6 +144,31 @@ export const getIntegrationsPaneSearchEntries = createLocalizedCatalog(() => [
       ...translateSearchKeyword(
         'auto.components.settings.integrations.search.2ec2bd328c',
         'api token'
+      )
+    ]
+  },
+  {
+    targetSectionId: INTEGRATION_SETTING_TARGET_IDS.codeup,
+    title: translate(
+      'auto.components.settings.integrations.search.codeupTitle',
+      'Codeup integration'
+    ),
+    description: translate(
+      'auto.components.settings.integrations.search.codeupDescription',
+      'Aliyun Codeup merge requests via personal access token environment variables.'
+    ),
+    keywords: [
+      ...translateSearchKeyword(
+        'auto.components.settings.integrations.search.codeupKeyword',
+        'codeup'
+      ),
+      ...translateSearchKeyword(
+        'auto.components.settings.integrations.search.33180e8c10',
+        'self-hosted'
+      ),
+      ...translateSearchKeyword(
+        'auto.components.settings.integrations.search.c450244ad7',
+        'integration'
       )
     ]
   },

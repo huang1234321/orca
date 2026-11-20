@@ -25,7 +25,12 @@ export type WorktreeCardSecondaryDetailsInputs = Pick<
   Pick<LinkedDetails, 'issueDisplay' | 'linearIssue' | 'linearIssueDisplay' | 'jiraIssueDisplay'> &
   Pick<
     ReviewDetails,
-    'prDisplay' | 'linkedGitLabMR' | 'linkedBitbucketPR' | 'linkedAzureDevOpsPR' | 'linkedGiteaPR'
+    | 'prDisplay'
+    | 'linkedGitLabMR'
+    | 'linkedBitbucketPR'
+    | 'linkedAzureDevOpsPR'
+    | 'linkedGiteaPR'
+    | 'linkedCodeupMR'
   > & {
     showStatus: boolean
     showIssue: boolean

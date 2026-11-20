@@ -123,6 +123,7 @@ export async function materializeRuntimeLocalWorktree<T>(args: {
         ? { linkedAzureDevOpsPR: request.linkedAzureDevOpsPR }
         : {}),
       ...(request.linkedGiteaPR !== undefined ? { linkedGiteaPR: request.linkedGiteaPR } : {}),
+      ...(request.linkedCodeupMR !== undefined ? { linkedCodeupMR: request.linkedCodeupMR } : {}),
       ...(request.linkedWorkItem !== undefined ? { linkedWorkItem: request.linkedWorkItem } : {}),
       ...(request.linkedItems !== undefined ? { linkedItems: request.linkedItems } : {}),
       ...(request.linkedTaskSourceContext !== undefined

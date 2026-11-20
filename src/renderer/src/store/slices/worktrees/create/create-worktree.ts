@@ -21,15 +21,9 @@ import {
   isRetryableWorktreeCreateConflict
 } from '../../../../../../shared/new-workspace/worktree-create-retry-policy'
 import { assertRuntimeEnvironmentCapability } from '../../../../runtime/rpc/compatibility/runtime-capability-proof'
-import { runtimeTargetSupportsCapability } from '../../../../runtime/rpc/compatibility/runtime-target-capability'
 import type { RuntimeClientTarget } from '../../../../../../shared/remote-runtime/host-catalog/runtime-client-target'
 import { runtimeTargetForRepoOwner } from '@/lib/workspace/ownership/repo-runtime-owner'
-import {
-  WORKTREE_LINKED_WORK_ITEM_CONTEXT_RUNTIME_CAPABILITY,
-  WORKTREE_OPEN_EXISTING_BRANCH_RUNTIME_CAPABILITY,
-  WORKTREE_OPEN_EXISTING_BRANCH_V2_RUNTIME_CAPABILITY,
-  WORKTREE_OPEN_EXISTING_BRANCH_V2_REQUEST_RUNTIME_CAPABILITY
-} from '../../../../../../shared/remote-runtime/protocol/worktree-runtime-capabilities'
+import { WORKTREE_LINKED_WORK_ITEM_CONTEXT_RUNTIME_CAPABILITY } from '../../../../../../shared/remote-runtime/protocol/worktree-runtime-capabilities'
 import { showLocalBaseRefUpdateSuggestionToast } from '@/components/sidebar/workspace-creation/base-ref-update/local-base-ref-suggestion-toast'
 import { requestWorktreeBaseFallbackNotice } from '@/components/sidebar/workspace-creation/base-ref-update/worktree-base-fallback-notice'
 import { showLocalBaseRefRefreshToast } from './local-base-ref-refresh-toast'
@@ -42,6 +36,7 @@ import {
   type WorktreeCreateAttempt,
   type WorktreeCreateRequest
 } from './worktree-create-payload'
+import { applyWorktreeCreateBranchIntent } from './create-worktree-branch-intent'
 import { holdCreatedSidebarWorkspace } from '@/components/sidebar/sidebar-feed/sidebar-pending-layer'
 import {
   resolveCreateCrossStoreParent,
@@ -130,6 +125,7 @@ export function createCreateWorktree(
     linkedBitbucketPR,
     linkedAzureDevOpsPR,
     linkedGiteaPR,
+    linkedCodeupMR,
     compareBaseRef,
     options
   ) => {
@@ -158,6 +154,7 @@ export function createCreateWorktree(
       linkedBitbucketPR,
       linkedAzureDevOpsPR,
       linkedGiteaPR,
+      linkedCodeupMR,
       compareBaseRef,
       options
     }
@@ -180,26 +177,7 @@ export function createCreateWorktree(
         requestedHostId: options?.executionHostId,
         resolveOwnHostId: () => repoHostId(get(), repoId)
       })
-      if (options?.branchIntent === 'create-exact') {
-        if (options.provisionedRoot) {
-          throw new Error('An exact-name create cannot adopt a provisioned root.')
-        }
-        // The caller checked this host's capability; another await here would let the active parent drift.
-        request.branchIntent = 'create-exact'
-      } else if (options?.branchIntent) {
-        const capability =
-          options.branchIntent === 'open-existing-v2'
-            ? WORKTREE_OPEN_EXISTING_BRANCH_V2_REQUEST_RUNTIME_CAPABILITY
-            : options.branchIntent === 'create-new'
-              ? WORKTREE_OPEN_EXISTING_BRANCH_V2_RUNTIME_CAPABILITY
-              : WORKTREE_OPEN_EXISTING_BRANCH_RUNTIME_CAPABILITY
-        if (!(await runtimeTargetSupportsCapability(target, capability))) {
-          throw new Error(
-            'Update Orca on the workspace host to reuse a branch or explicitly create a separate branch.'
-          )
-        }
-        request.branchIntent = options.branchIntent
-      }
+      await applyWorktreeCreateBranchIntent(request, options, target)
       // Why outside the retry loop: a branch-name conflict retry must not re-warn about the same dropped pick.
       const parent = resolveWorktreeCreateParent(get(), options?.parentWorktreeId, creationHostId)
       let warnedParentDropped = false

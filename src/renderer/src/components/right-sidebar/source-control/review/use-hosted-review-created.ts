@@ -29,6 +29,7 @@ export function useSourceControlHostedReviewCreated({
   linkedGitHubPR,
   linkedGitLabMR,
   linkedGiteaPR,
+  linkedCodeupMR,
   refreshActiveGitStatusAfterMutation,
   setRightSidebarOpen,
   setRightSidebarTab,
@@ -45,6 +46,7 @@ export function useSourceControlHostedReviewCreated({
   linkedGitHubPR: SourceControlLinkedReviews['linkedGitHubPR']
   linkedGitLabMR: SourceControlLinkedReviews['linkedGitLabMR']
   linkedGiteaPR: SourceControlLinkedReviews['linkedGiteaPR']
+  linkedCodeupMR: SourceControlLinkedReviews['linkedCodeupMR']
   refreshActiveGitStatusAfterMutation: SourceControlStatusRefresh['refreshActiveGitStatusAfterMutation']
   setRightSidebarOpen: SourceControlStoreActions['setRightSidebarOpen']
   setRightSidebarTab: SourceControlStoreActions['setRightSidebarTab']
@@ -81,6 +83,7 @@ export function useSourceControlHostedReviewCreated({
           linkedBitbucketPR,
           linkedAzureDevOpsPR,
           linkedGiteaPR,
+          linkedCodeupMR,
           ...createdLink.lookup
         }
         if (result.provider === 'gitlab') {
@@ -143,6 +146,7 @@ export function useSourceControlHostedReviewCreated({
       fetchPRForBranch,
       linkedAzureDevOpsPR,
       linkedBitbucketPR,
+      linkedCodeupMR,
       linkedGiteaPR,
       linkedGitHubPR,
       linkedGitLabMR,

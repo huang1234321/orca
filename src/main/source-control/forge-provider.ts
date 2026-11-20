@@ -17,12 +17,6 @@ import {
   getBitbucketRepoSlug
 } from '../bitbucket/client'
 import { createBitbucketPullRequest } from '../bitbucket/pull-request-creation'
-import {
-  getGiteaPullRequest,
-  getGiteaPullRequestForBranchOrThrow,
-  getGiteaRepoSlug
-} from '../gitea/client'
-import { createGiteaPullRequest } from '../gitea/pull-request-creation'
 import { createGitHubPullRequest } from '../github/client/create/create-github-pull-request'
 import { getGitHubPRLookupRateLimitBlock } from '../github/client/lookup/pr-lookup-rate-limit'
 import { getPRForBranchOutcome } from '../github/client/lookup/pr-for-branch-outcome'
@@ -36,24 +30,22 @@ import { createGitLabMergeRequest } from '../gitlab/merge-requests/merge-request
 import {
   mapAzureDevOpsReview,
   mapBitbucketReview,
-  mapGiteaReview,
   mapGitHubReview,
   mapGitLabReview
 } from './forge-review-mappers'
-import { hostedReviewSshConnectionId } from './hosted-review-execution-host'
+import { codeupForgeProvider } from '../codeup/codeup-forge-provider'
+import { giteaForgeProvider } from '../gitea/gitea-forge-provider'
 import {
-  hasHostedReviewLocalGitOptions,
   getHostedReviewLocalGitOptions,
   type HostedReviewExecutionOptions
 } from './hosted-review-git-options'
+import { forgeConnectionId, hostedReviewExecutionArgs } from './forge-provider-helpers'
+import type { ForgeProviderRepositoryContext } from './forge-provider-inputs'
 
 export type ForgeProviderId = Exclude<HostedReviewProvider, 'unsupported'>
 
-export type ForgeProviderRepositoryContext = HostedReviewExecutionOptions & {
-  repoPath: string
-  /** Resolved, never null: `local` and "unresolved" are no longer the same value. */
-  executionHostId: ExecutionHostId
-}
+export { forgeConnectionId, hostedReviewExecutionArgs } from './forge-provider-helpers'
+export type { ForgeProviderRepositoryContext } from './forge-provider-inputs'
 
 export type ForgeReviewForBranchInput = ForgeProviderRepositoryContext & {
   branch: string
@@ -80,19 +72,6 @@ export type ForgeProvider = {
     executionHostId: ExecutionHostId,
     options?: HostedReviewExecutionOptions
   ): Promise<CreateHostedReviewResult>
-}
-
-/** Forge CLIs/API clients run here; only their Git reads route to SSH. */
-function forgeConnectionId(context: ForgeProviderRepositoryContext): string | null {
-  return hostedReviewSshConnectionId(context.executionHostId)
-}
-
-function hostedReviewExecutionArgs(
-  options: HostedReviewExecutionOptions
-): [] | [HostedReviewExecutionOptions] {
-  return hasHostedReviewLocalGitOptions(options)
-    ? [{ localGitExecOptions: getHostedReviewLocalGitOptions(options) }]
-    : []
 }
 
 const gitLabForgeProvider = {
@@ -268,45 +247,14 @@ const azureDevOpsForgeProvider = {
   createReview: createAzureDevOpsPullRequest
 } satisfies ForgeProvider
 
-const giteaForgeProvider = {
-  id: 'gitea',
-  supportsReviewCreation: true,
-  resolveRepository: (context) =>
-    getGiteaRepoSlug(
-      context.repoPath,
-      forgeConnectionId(context),
-      ...hostedReviewExecutionArgs(context)
-    ),
-  async getReviewForBranch(input) {
-    // Lookup failure is unavailable, never proof no review exists.
-    const pr = await getGiteaPullRequestForBranchOrThrow(
-      input.repoPath,
-      input.branch,
-      input.linkedReviewNumber ?? null,
-      forgeConnectionId(input),
-      ...hostedReviewExecutionArgs(input)
-    )
-    return pr ? mapGiteaReview(pr) : null
-  },
-  async getReviewByNumber(input) {
-    const pr = await getGiteaPullRequest(
-      input.repoPath,
-      input.number,
-      forgeConnectionId(input),
-      ...hostedReviewExecutionArgs(input)
-    )
-    return pr ? mapGiteaReview(pr) : null
-  },
-  createReview: createGiteaPullRequest
-} satisfies ForgeProvider
-
 // Preserve precedence when multiple providers can interpret a remote.
 export const FORGE_PROVIDERS = [
   gitLabForgeProvider,
   gitHubForgeProvider,
   bitbucketForgeProvider,
   azureDevOpsForgeProvider,
-  giteaForgeProvider
+  giteaForgeProvider,
+  codeupForgeProvider
 ] as const satisfies readonly ForgeProvider[]
 
 export function getForgeProviderById(id: ForgeProviderId): ForgeProvider {

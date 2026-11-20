@@ -39,6 +39,7 @@ export function useChecksPanelCheckAndReviewActions(model: ChecksPanelCheckAndRe
     isFixingChecksWithAI,
     linkedAzureDevOpsPR,
     linkedBitbucketPR,
+    linkedCodeupMR,
     linkedGiteaPR,
     linkedGitLabMR,
     panelContextKey,
@@ -200,7 +201,8 @@ export function useChecksPanelCheckAndReviewActions(model: ChecksPanelCheckAndRe
           linkedGitLabMR,
           linkedBitbucketPR,
           linkedAzureDevOpsPR,
-          linkedGiteaPR
+          linkedGiteaPR,
+          linkedCodeupMR
         }).catch(() => null)
         if (!isCurrentRequestContext()) {
           return
@@ -311,6 +313,7 @@ export function useChecksPanelCheckAndReviewActions(model: ChecksPanelCheckAndRe
       isCurrentAsyncResult,
       linkedAzureDevOpsPR,
       linkedBitbucketPR,
+      linkedCodeupMR,
       linkedGiteaPR,
       linkedGitLabMR,
       panelContextKey,

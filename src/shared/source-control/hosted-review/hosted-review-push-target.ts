@@ -48,13 +48,15 @@ export function hasPositiveHostedReviewNumberLink(args: {
   linkedBitbucketPR?: number | null
   linkedAzureDevOpsPR?: number | null
   linkedGiteaPR?: number | null
+  linkedCodeupMR?: number | null
 }): boolean {
   // Build on resolvable links so every resolvable provider also blocks unsafe pushes.
   return (
     hasResolvableHostedReviewPushTargetLink(args) ||
     isPositiveHostedReviewNumber(args.linkedBitbucketPR) ||
     isPositiveHostedReviewNumber(args.linkedAzureDevOpsPR) ||
-    isPositiveHostedReviewNumber(args.linkedGiteaPR)
+    isPositiveHostedReviewNumber(args.linkedGiteaPR) ||
+    isPositiveHostedReviewNumber(args.linkedCodeupMR)
   )
 }
 

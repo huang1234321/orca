@@ -49,6 +49,7 @@ export function useChecksPanelReviewState(model: ChecksPanelReviewStateInput) {
     isFolder,
     linkedAzureDevOpsPR,
     linkedBitbucketPR,
+    linkedCodeupMR,
     linkedGiteaPR,
     linkedGitLabMR,
     linkedPR,
@@ -136,7 +137,8 @@ export function useChecksPanelReviewState(model: ChecksPanelReviewStateInput) {
           linkedGitLabMR,
           linkedBitbucketPR,
           linkedAzureDevOpsPR,
-          linkedGiteaPR
+          linkedGiteaPR,
+          linkedCodeupMR
         })
       : ''
   const gitStatusInputs = readChecksPanelGitStatusSnapshot(gitStatusSnapshot, panelContextKey)
@@ -185,7 +187,8 @@ export function useChecksPanelReviewState(model: ChecksPanelReviewStateInput) {
     activeWorktree?.linkedGitLabMR != null ||
     activeWorktree?.linkedBitbucketPR != null ||
     activeWorktree?.linkedAzureDevOpsPR != null ||
-    activeWorktree?.linkedGiteaPR != null
+    activeWorktree?.linkedGiteaPR != null ||
+    activeWorktree?.linkedCodeupMR != null
   const isGitHubReviewContext = hostedReviewCreation
     ? hostedReviewCreation.provider === 'github'
     : !hasNonGitHubLinkedReview

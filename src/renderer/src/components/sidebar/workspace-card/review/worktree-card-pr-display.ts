@@ -23,6 +23,7 @@ export function isCachedMergedBranchPRCurrentForWorktree(
 }
 
 type LinkedReviewNumbers = {
+  linkedCodeupMR: number | null
   linkedPR: number | null
   linkedGitLabMR: number | null
   linkedBitbucketPR: number | null
@@ -64,6 +65,8 @@ function getLinkedReviewNumber(
       return links.linkedAzureDevOpsPR
     case 'gitea':
       return links.linkedGiteaPR
+    case 'codeup':
+      return links.linkedCodeupMR
   }
 }
 
@@ -101,6 +104,7 @@ export function getWorktreeCardPrDisplay(
   linkedBitbucketPR: number | null = null,
   linkedAzureDevOpsPR: number | null = null,
   linkedGiteaPR: number | null = null,
+  linkedCodeupMR: number | null = null,
   options: WorktreeCardPrDisplayOptions = {},
   t?: Translate
 ): WorktreeCardPrDisplay | null {
@@ -109,14 +113,16 @@ export function getWorktreeCardPrDisplay(
     linkedGitLabMR,
     linkedBitbucketPR,
     linkedAzureDevOpsPR,
-    linkedGiteaPR
+    linkedGiteaPR,
+    linkedCodeupMR
   }
   const hasLinkedReview =
     linkedPR !== null ||
     linkedGitLabMR !== null ||
     linkedBitbucketPR !== null ||
     linkedAzureDevOpsPR !== null ||
-    linkedGiteaPR !== null
+    linkedGiteaPR !== null ||
+    linkedCodeupMR !== null
   if (
     review?.provider === 'github' &&
     isGitHubPRSuppressed(
@@ -171,6 +177,10 @@ export function getWorktreeCardPrDisplay(
 
   if (linkedGiteaPR !== null) {
     return makeLinkedReviewFallback('gitea', linkedGiteaPR, review, t)
+  }
+
+  if (linkedCodeupMR !== null) {
+    return makeLinkedReviewFallback('codeup', linkedCodeupMR, review, t)
   }
 
   return null

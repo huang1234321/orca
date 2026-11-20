@@ -109,7 +109,8 @@ function computeActiveChecksStatus(state: ActiveChecksStatusState): CheckStatus 
     (activeWorktree.linkedGitLabMR ?? null) !== null ||
     (activeWorktree.linkedBitbucketPR ?? null) !== null ||
     (activeWorktree.linkedAzureDevOpsPR ?? null) !== null ||
-    (activeWorktree.linkedGiteaPR ?? null) !== null
+    (activeWorktree.linkedGiteaPR ?? null) !== null ||
+    (activeWorktree.linkedCodeupMR ?? null) !== null
   ) {
     return null
   }

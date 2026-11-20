@@ -31,6 +31,7 @@ export function useSourceControlHostedReviewEligibility({
   linkedGitHubPR,
   linkedGitLabMR,
   linkedGiteaPR,
+  linkedCodeupMR,
   prGenerating,
   provisionalHostedReviewProvider,
   remoteStatus,
@@ -59,6 +60,7 @@ export function useSourceControlHostedReviewEligibility({
   linkedGitHubPR: SourceControlLinkedReviews['linkedGitHubPR']
   linkedGitLabMR: SourceControlLinkedReviews['linkedGitLabMR']
   linkedGiteaPR: SourceControlLinkedReviews['linkedGiteaPR']
+  linkedCodeupMR: SourceControlLinkedReviews['linkedCodeupMR']
   prGenerating: boolean
   provisionalHostedReviewProvider: SourceControlHostedReviewProviderHint['provisionalHostedReviewProvider']
   remoteStatus: SourceControlWorktreeContext['remoteStatus']
@@ -126,6 +128,7 @@ export function useSourceControlHostedReviewEligibility({
       linkedBitbucketPR,
       linkedAzureDevOpsPR,
       linkedGiteaPR,
+      linkedCodeupMR,
       currentHeadOid: currentHeadOidRef.current
     })
       .then((result) => {
@@ -199,6 +202,7 @@ export function useSourceControlHostedReviewEligibility({
     linkedBitbucketPR,
     linkedAzureDevOpsPR,
     linkedGiteaPR,
+    linkedCodeupMR,
     prGenerating,
     remoteStatus?.ahead,
     remoteStatus?.behind,

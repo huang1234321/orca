@@ -6,13 +6,15 @@ export type HostedReviewLinkKey =
   | 'linkedBitbucketPR'
   | 'linkedAzureDevOpsPR'
   | 'linkedGiteaPR'
+  | 'linkedCodeupMR'
 
 export const HOSTED_REVIEW_LINK_KEYS: readonly HostedReviewLinkKey[] = [
   'linkedPR',
   'linkedGitLabMR',
   'linkedBitbucketPR',
   'linkedAzureDevOpsPR',
-  'linkedGiteaPR'
+  'linkedGiteaPR',
+  'linkedCodeupMR'
 ]
 
 export const CLEARED_HOSTED_REVIEW_SELECTION_UPDATES: Pick<WorktreeMeta, HostedReviewLinkKey> = {
@@ -20,7 +22,8 @@ export const CLEARED_HOSTED_REVIEW_SELECTION_UPDATES: Pick<WorktreeMeta, HostedR
   linkedGitLabMR: null,
   linkedBitbucketPR: null,
   linkedAzureDevOpsPR: null,
-  linkedGiteaPR: null
+  linkedGiteaPR: null,
+  linkedCodeupMR: null
 }
 
 /** Branch switches clear the active review and push target, preserving workspace references. */

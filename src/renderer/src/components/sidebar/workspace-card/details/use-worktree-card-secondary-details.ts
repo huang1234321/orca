@@ -39,6 +39,7 @@ export function useWorktreeCardSecondaryDetails({
   linkedBitbucketPR,
   linkedAzureDevOpsPR,
   linkedGiteaPR,
+  linkedCodeupMR,
   newCardStyle,
   compactCards,
   cardDetails,
@@ -143,13 +144,15 @@ export function useWorktreeCardSecondaryDetails({
     (hoverReviewProvider === 'gitlab' && linkedGitLabMR !== null) ||
     (hoverReviewProvider === 'bitbucket' && linkedBitbucketPR !== null) ||
     (hoverReviewProvider === 'azure-devops' && linkedAzureDevOpsPR !== null) ||
-    (hoverReviewProvider === 'gitea' && linkedGiteaPR !== null)
+    (hoverReviewProvider === 'gitea' && linkedGiteaPR !== null) ||
+    (hoverReviewProvider === 'codeup' && linkedCodeupMR !== null)
   const hasExplicitLinkedReview =
     (hoverReviewProvider === 'github' && worktree.linkedPR !== null) ||
     (hoverReviewProvider === 'gitlab' && linkedGitLabMR !== null) ||
     (hoverReviewProvider === 'bitbucket' && linkedBitbucketPR !== null) ||
     (hoverReviewProvider === 'azure-devops' && linkedAzureDevOpsPR !== null) ||
-    (hoverReviewProvider === 'gitea' && linkedGiteaPR !== null)
+    (hoverReviewProvider === 'gitea' && linkedGiteaPR !== null) ||
+    (hoverReviewProvider === 'codeup' && linkedCodeupMR !== null)
   const handleUnlinkReview = useCallback(
     async (item?: WorkspaceAttachment) => {
       const options = { executionHostId: worktree.hostId ?? 'local' }
@@ -199,6 +202,9 @@ export function useWorktreeCardSecondaryDetails({
           return
         case 'gitea':
           void updateWorktreeMeta(worktree.id, { linkedGiteaPR: null }, options)
+          break
+        case 'codeup':
+          void updateWorktreeMeta(worktree.id, { linkedCodeupMR: null }, options)
           break
         case 'unsupported':
         case undefined:

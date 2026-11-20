@@ -27,6 +27,7 @@ export function useSourceControlCreatePrIntentProbes({
   linkedGitHubPR,
   linkedGitLabMR,
   linkedGiteaPR,
+  linkedCodeupMR,
   setGitBranchCompareResult,
   setGitStatus,
   setHostedReviewCreationState,
@@ -44,6 +45,7 @@ export function useSourceControlCreatePrIntentProbes({
   linkedGitHubPR: SourceControlLinkedReviews['linkedGitHubPR']
   linkedGitLabMR: SourceControlLinkedReviews['linkedGitLabMR']
   linkedGiteaPR: SourceControlLinkedReviews['linkedGiteaPR']
+  linkedCodeupMR: SourceControlLinkedReviews['linkedCodeupMR']
   setGitBranchCompareResult: SourceControlStoreActions['setGitBranchCompareResult']
   setGitStatus: SourceControlStoreActions['setGitStatus']
   setHostedReviewCreationState: SourceControlHostedReviewState['setHostedReviewCreationState']
@@ -102,6 +104,7 @@ export function useSourceControlCreatePrIntentProbes({
           linkedBitbucketPR,
           linkedAzureDevOpsPR,
           linkedGiteaPR,
+          linkedCodeupMR,
           // Read after the run's git refresh so a merged review from before the new commits cannot block.
           currentHeadOid:
             findWorktreeById(
@@ -140,6 +143,7 @@ export function useSourceControlCreatePrIntentProbes({
       getHostedReviewCreationEligibility,
       linkedAzureDevOpsPR,
       linkedBitbucketPR,
+      linkedCodeupMR,
       linkedGiteaPR,
       linkedGitHubPR,
       linkedGitLabMR,

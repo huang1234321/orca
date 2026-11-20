@@ -252,6 +252,7 @@ export function useChecksPanelControllerState() {
     linkedBitbucketPR: activeWorktree?.linkedBitbucketPR ?? null,
     linkedAzureDevOpsPR: activeWorktree?.linkedAzureDevOpsPR ?? null,
     linkedGiteaPR: activeWorktree?.linkedGiteaPR ?? null,
+    linkedCodeupMR: activeWorktree?.linkedCodeupMR ?? null,
     runtimeEnvironmentId,
     repoConnectionId,
     localExecutionScope,

@@ -89,6 +89,7 @@ export async function executeWorktreeCreation(
         preparedRequest.linkedBitbucketPR,
         preparedRequest.linkedAzureDevOpsPR,
         preparedRequest.linkedGiteaPR,
+        preparedRequest.linkedCodeupMR,
         preparedRequest.compareBaseRef,
         {
           ...setupCreateArgs(preparedRequest),

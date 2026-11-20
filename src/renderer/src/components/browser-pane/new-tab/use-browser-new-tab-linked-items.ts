@@ -43,6 +43,7 @@ export function useBrowserNewTabLinkedItems(
     linkedBitbucketPR: review.linkedBitbucketPR,
     linkedAzureDevOpsPR: review.linkedAzureDevOpsPR,
     linkedGiteaPR: review.linkedGiteaPR,
+    linkedCodeupMR: review.linkedCodeupMR,
     branch: review.branch,
     fetchHostedReviewForBranch: foundation.fetchHostedReviewForBranch,
     shouldRefreshHostedReview: false,

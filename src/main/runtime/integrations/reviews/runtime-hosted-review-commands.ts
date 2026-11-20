@@ -180,6 +180,7 @@ export class RuntimeHostedReviewCommands {
     linkedBitbucketPR?: number | null
     linkedAzureDevOpsPR?: number | null
     linkedGiteaPR?: number | null
+    linkedCodeupMR?: number | null
   }): Promise<HostedReviewForBranchReply> {
     const repo = await this.deps.resolveRepo(args.repoSelector)
     const executionOptions = this.deps.getExecutionOptions(repo, args.admissionTier ?? 'background')
@@ -197,6 +198,7 @@ export class RuntimeHostedReviewCommands {
       linkedBitbucketPR: args.linkedBitbucketPR ?? null,
       linkedAzureDevOpsPR: args.linkedAzureDevOpsPR ?? null,
       linkedGiteaPR: args.linkedGiteaPR ?? null,
+      linkedCodeupMR: args.linkedCodeupMR ?? null,
       ...executionOptions
     })
     const review = read.review
@@ -230,6 +232,7 @@ export class RuntimeHostedReviewCommands {
           linkedBitbucketPR: args.linkedBitbucketPR ?? null,
           linkedAzureDevOpsPR: args.linkedAzureDevOpsPR ?? null,
           linkedGiteaPR: args.linkedGiteaPR ?? null,
+          linkedCodeupMR: args.linkedCodeupMR ?? null,
           currentHeadOid: args.currentHeadOid ?? null,
           ...executionOptions
         }),

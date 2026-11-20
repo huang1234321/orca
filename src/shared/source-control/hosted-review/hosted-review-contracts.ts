@@ -14,13 +14,14 @@ export type HostedReviewProvider =
   | 'bitbucket'
   | 'azure-devops'
   | 'gitea'
+  | 'codeup'
   | 'unsupported'
 
 export type HostedReviewState = 'open' | 'closed' | 'merged' | 'draft'
 
-// Bitbucket Cloud has no draft API; offering the toggle would publish live or fail.
+// Bitbucket Cloud has no draft API; Codeup drafts are unverified. Offering the toggle would publish live or fail.
 export function hostedReviewProviderSupportsDraft(provider: HostedReviewProvider): boolean {
-  return provider !== 'bitbucket'
+  return provider !== 'bitbucket' && provider !== 'codeup'
 }
 
 /** A linked review is identified by a positive integer PR/MR number. */
@@ -69,6 +70,7 @@ export type HostedReviewForBranchArgs = {
   linkedBitbucketPR?: number | null
   linkedAzureDevOpsPR?: number | null
   linkedGiteaPR?: number | null
+  linkedCodeupMR?: number | null
   // The worktree's checked-out HEAD oid (GitHub merged-at-head visibility).
   currentHeadOid?: string | null
   /** Only selected-worktree surfaces set active: O(1) checks refresh per minute; O(N) lists refresh more slowly within the shared API budget (#11532). */
@@ -258,6 +260,7 @@ export type HostedReviewCreationEligibilityArgs = {
   linkedBitbucketPR?: number | null
   linkedAzureDevOpsPR?: number | null
   linkedGiteaPR?: number | null
+  linkedCodeupMR?: number | null
   /** Worktree HEAD; a merged review whose head differs is not the branch's review. */
   currentHeadOid?: string | null
   /** The user's Create PR: it may start the repo's stopped WSL distro (E9). */

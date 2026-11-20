@@ -156,7 +156,8 @@ export function useChecksPanelReviewLinkActions(
           linkedGitLabMR: nextMR,
           linkedBitbucketPR: null,
           linkedAzureDevOpsPR: null,
-          linkedGiteaPR: null
+          linkedGiteaPR: null,
+          linkedCodeupMR: null
         })
       }
     })

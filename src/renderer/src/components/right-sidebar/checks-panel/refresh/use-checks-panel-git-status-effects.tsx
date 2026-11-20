@@ -57,6 +57,7 @@ type ChecksPanelGitStatusEffectsInput = Pick<
     | 'isFolder'
     | 'linkedAzureDevOpsPR'
     | 'linkedBitbucketPR'
+    | 'linkedCodeupMR'
     | 'linkedGiteaPR'
     | 'linkedGitLabMR'
     | 'linkedPR'
@@ -91,6 +92,7 @@ export function useChecksPanelGitStatusEffects(model: ChecksPanelGitStatusEffect
     isPanelVisible,
     linkedAzureDevOpsPR,
     linkedBitbucketPR,
+    linkedCodeupMR,
     linkedGiteaPR,
     linkedGitLabMR,
     linkedPR,
@@ -328,6 +330,7 @@ export function useChecksPanelGitStatusEffects(model: ChecksPanelGitStatusEffect
       linkedBitbucketPR,
       linkedAzureDevOpsPR,
       linkedGiteaPR,
+      linkedCodeupMR,
       currentHeadOid: eligibilityHeadOidRef.current
     })
       .then((result) => {
@@ -372,6 +375,7 @@ export function useChecksPanelGitStatusEffects(model: ChecksPanelGitStatusEffect
     linkedBitbucketPR,
     linkedAzureDevOpsPR,
     linkedGiteaPR,
+    linkedCodeupMR,
     remoteStatus?.ahead,
     remoteStatus?.behind,
     remoteStatus?.hasUpstream,

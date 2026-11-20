@@ -8,7 +8,8 @@ const REVIEW_SLOTS = [
   'linkedGitLabMR',
   'linkedBitbucketPR',
   'linkedAzureDevOpsPR',
-  'linkedGiteaPR'
+  'linkedGiteaPR',
+  'linkedCodeupMR'
 ] as const
 
 export function hasExplicitWorkspaceReviewSelection(updates: Partial<WorktreeMeta>): boolean {
@@ -31,7 +32,8 @@ export function getWorkspaceReviewRefreshHints(
       workspace,
       'linkedAzureDevOpsPR'
     ),
-    linkedGiteaPR: getHostedReviewLinkForMetaRefresh(updates, workspace, 'linkedGiteaPR')
+    linkedGiteaPR: getHostedReviewLinkForMetaRefresh(updates, workspace, 'linkedGiteaPR'),
+    linkedCodeupMR: getHostedReviewLinkForMetaRefresh(updates, workspace, 'linkedCodeupMR')
   }
 }
 

@@ -28,6 +28,7 @@ export type SourceControlManualReviewContext = ManualReviewUrlInput & {
   linkedBitbucketPR?: number | null
   linkedAzureDevOpsPR?: number | null
   linkedGiteaPR?: number | null
+  linkedCodeupMR?: number | null
 }
 
 export function resolveSourceControlManualReviewProvider(input: {
@@ -39,6 +40,7 @@ export function resolveSourceControlManualReviewProvider(input: {
   linkedBitbucketPR?: number | null
   linkedAzureDevOpsPR?: number | null
   linkedGiteaPR?: number | null
+  linkedCodeupMR?: number | null
 }): HostedReviewProvider | null {
   return (
     input.hostedReviewProvider ??
@@ -51,9 +53,11 @@ export function resolveSourceControlManualReviewProvider(input: {
           ? 'azure-devops'
           : input.linkedGiteaPR != null
             ? 'gitea'
-            : input.linkedGitHubPR != null || input.fallbackGitHubPRNumber != null
-              ? 'github'
-              : null)
+            : input.linkedCodeupMR != null
+              ? 'codeup'
+              : input.linkedGitHubPR != null || input.fallbackGitHubPRNumber != null
+                ? 'github'
+                : null)
   )
 }
 
@@ -69,6 +73,7 @@ export function buildSourceControlManualReviewUrlFromContext(
     linkedBitbucketPR,
     linkedAzureDevOpsPR,
     linkedGiteaPR,
+    linkedCodeupMR,
     ...urlInput
   } = input
   return buildSourceControlManualReviewUrl({
@@ -81,7 +86,8 @@ export function buildSourceControlManualReviewUrlFromContext(
       linkedGitLabMR,
       linkedBitbucketPR,
       linkedAzureDevOpsPR,
-      linkedGiteaPR
+      linkedGiteaPR,
+      linkedCodeupMR
     })
   })
 }
@@ -178,5 +184,11 @@ export function buildSourceControlManualReviewUrl(input: ManualReviewUrlInput): 
       })
     case 'gitea':
       return `${baseRepo.webBaseUrl}/compare/${encodeCompareRef(baseBranch)}...${encodeCompareRef(headBranch)}`
+    case 'codeup':
+      // Web create-form path pending real-account verification; params are best-effort.
+      return appendQuery(`${baseRepo.webBaseUrl}/change/merge_request_create`, {
+        srcBranch: headBranch,
+        tarBranch: baseBranch
+      })
   }
 }

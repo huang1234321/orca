@@ -71,6 +71,7 @@ type ProviderStatusFacts = {
     bitbucket?: BitbucketStatus
     azureDevOps?: TokenReviewStatus
     gitea?: TokenReviewStatus
+    codeup?: TokenReviewStatus
   } | null
   preflightStatusChecked: boolean
   preflightStatusContextKey: string | null
@@ -88,7 +89,7 @@ type ProviderStatusFacts = {
 
 export type IntegrationConnectionStatus = {
   reviewConnected: boolean
-  reviewProviderName: 'GitHub' | 'GitLab' | 'Bitbucket' | 'Azure DevOps' | 'Gitea' | null
+  reviewProviderName: 'GitHub' | 'GitLab' | 'Bitbucket' | 'Azure DevOps' | 'Gitea' | 'Codeup' | null
   // GitHub/GitLab issues can double as tasks; token/env review providers do not.
   codeHostTaskProviderName: 'GitHub' | 'GitLab' | null
   // Any usable task source, including code-host issues, satisfies this legacy-named field.
@@ -149,6 +150,8 @@ export function deriveIntegrationConnectionStatus(
     reviewReadyForConnection && isAzureDevOpsReviewConfigured(facts.preflightStatus?.azureDevOps)
   const giteaConnected =
     reviewReadyForConnection && isGiteaReviewConfigured(facts.preflightStatus?.gitea)
+  const codeupConnected =
+    reviewReadyForConnection && isGiteaReviewConfigured(facts.preflightStatus?.codeup)
 
   const linearStatusCurrent = facts.linearStatusContextKey === facts.providerRuntimeContextKey
   const jiraStatusCurrent = facts.jiraStatusContextKey === facts.providerRuntimeContextKey
@@ -168,7 +171,9 @@ export function deriveIntegrationConnectionStatus(
           ? 'Azure DevOps'
           : giteaConnected
             ? 'Gitea'
-            : null
+            : codeupConnected
+              ? 'Codeup'
+              : null
   const codeHostTaskProviderName = githubConnected ? 'GitHub' : gitlabConnected ? 'GitLab' : null
   const trackerProviderName = linearConnected ? 'Linear' : jiraConnected ? 'Jira' : null
   const taskSourceNames: IntegrationConnectionStatus['taskSourceNames'] = [
@@ -187,7 +192,8 @@ export function deriveIntegrationConnectionStatus(
       gitlabConnected ||
       bitbucketConnected ||
       azureDevOpsConnected ||
-      giteaConnected,
+      giteaConnected ||
+      codeupConnected,
     reviewProviderName,
     codeHostTaskProviderName,
     trackerConnected: hasUsableTaskSource,

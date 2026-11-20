@@ -66,7 +66,8 @@ export function buildWorktreeChecksReviewIndex({
       linkedGitLabMR: worktree.linkedGitLabMR ?? null,
       linkedBitbucketPR: worktree.linkedBitbucketPR ?? null,
       linkedAzureDevOpsPR: worktree.linkedAzureDevOpsPR ?? null,
-      linkedGiteaPR: worktree.linkedGiteaPR ?? null
+      linkedGiteaPR: worktree.linkedGiteaPR ?? null,
+      linkedCodeupMR: worktree.linkedCodeupMR ?? null
     })
     if (review) {
       // Persisted IDs repeat across hosts; search preserves these object references during sorting/filtering.
@@ -76,7 +77,8 @@ export function buildWorktreeChecksReviewIndex({
       worktree.linkedGitLabMR != null ||
       worktree.linkedBitbucketPR != null ||
       worktree.linkedAzureDevOpsPR != null ||
-      worktree.linkedGiteaPR != null
+      worktree.linkedGiteaPR != null ||
+      worktree.linkedCodeupMR != null
     ) {
       // Suppressed/non-GitHub selections are authoritative; explicit null prevents fallback to stale GitHub data.
       reviews.set(worktree, null)

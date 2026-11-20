@@ -20,6 +20,7 @@ type RefreshHostedReviewCardArgs = {
   linkedBitbucketPR?: number | null
   linkedAzureDevOpsPR?: number | null
   linkedGiteaPR?: number | null
+  linkedCodeupMR?: number | null
   repoOwnerExecutionHostId?: string
 }
 
@@ -41,6 +42,7 @@ export function refreshHostedReviewCard(
     linkedGitLabMR: args.linkedGitLabMR ?? null,
     linkedBitbucketPR: args.linkedBitbucketPR ?? null,
     linkedAzureDevOpsPR: args.linkedAzureDevOpsPR ?? null,
-    linkedGiteaPR: args.linkedGiteaPR ?? null
+    linkedGiteaPR: args.linkedGiteaPR ?? null,
+    linkedCodeupMR: args.linkedCodeupMR ?? null
   })
 }

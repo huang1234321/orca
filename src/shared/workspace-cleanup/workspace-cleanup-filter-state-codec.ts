@@ -26,6 +26,7 @@ const REVIEW_PROVIDER_VALUES: HostedReviewProvider[] = [
   'bitbucket',
   'azure-devops',
   'gitea',
+  'codeup',
   'unsupported'
 ]
 

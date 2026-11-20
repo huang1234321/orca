@@ -69,7 +69,8 @@ export function getWorkspaceReferenceLookup(request: WorkspaceReferenceRequest, 
           linkedGitLabMR: item.provider === 'gitlab' ? item.number : null,
           linkedBitbucketPR: item.provider === 'bitbucket' ? item.number : null,
           linkedAzureDevOpsPR: item.provider === 'azure-devops' ? item.number : null,
-          linkedGiteaPR: item.provider === 'gitea' ? item.number : null
+          linkedGiteaPR: item.provider === 'gitea' ? item.number : null,
+          linkedCodeupMR: item.provider === 'codeup' ? item.number : null
         }),
       (review) =>
         matchWorkspaceReferenceReview(item, review)
