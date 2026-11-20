@@ -1,0 +1,239 @@
+import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
+import { ExternalLink, LoaderCircle, X } from 'lucide-react'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select'
+import CommentMarkdown from '@/components/comment-markdown/CommentMarkdown'
+import { useTranslate } from '@/i18n/use-translate'
+import { openAppHttpLink } from '@/lib/browser/navigation/app-http-link-open'
+import { formatRelativeTime } from '../task-page-source-context'
+import type {
+  FeishuComment,
+  FeishuTableMapping,
+  FeishuTaskSourceBinding,
+  FeishuWorkItem
+} from '../../../../../shared/feishu/feishu-types'
+import {
+  feishuAddCommentForTarget,
+  feishuListCommentsForTarget,
+  feishuUpdateRecordStateForTarget
+} from '@/runtime/feishu/runtime-feishu-client'
+import type { RuntimeClientTarget } from '../../../../../shared/remote-runtime/host-catalog/runtime-client-target'
+
+export function FeishuRecordDetail({
+  record,
+  binding,
+  target,
+  onClose,
+  onRecordChanged
+}: {
+  record: FeishuWorkItem
+  binding: FeishuTaskSourceBinding
+  target: RuntimeClientTarget
+  onClose: () => void
+  onRecordChanged: (record: FeishuWorkItem) => void
+}): React.JSX.Element {
+  const t = useTranslate()
+  const [comments, setComments] = useState<FeishuComment[]>([])
+  const [commentsLoading, setCommentsLoading] = useState(true)
+  const [commentBody, setCommentBody] = useState('')
+  const [sending, setSending] = useState(false)
+  const mapping: FeishuTableMapping = binding.mapping
+  const stateOptions = Object.keys(mapping.stateCategories ?? {})
+
+  useEffect(() => {
+    let cancelled = false
+    setCommentsLoading(true)
+    if (!mapping.comments) {
+      setComments([])
+      setCommentsLoading(false)
+      return
+    }
+    feishuListCommentsForTarget(target, {
+      appToken: binding.appToken,
+      mapping,
+      recordId: record.id
+    })
+      .then((result) => {
+        if (!cancelled) {
+          setComments(result.ok ? result.comments : [])
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setComments([])
+        }
+      })
+      .finally(() => {
+        if (!cancelled) {
+          setCommentsLoading(false)
+        }
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [binding.appToken, mapping, record.id, target])
+
+  const submitComment = async (): Promise<void> => {
+    const body = commentBody.trim()
+    if (!body) {
+      return
+    }
+    setSending(true)
+    try {
+      const result = await feishuAddCommentForTarget(target, {
+        appToken: binding.appToken,
+        mapping,
+        recordId: record.id,
+        body
+      })
+      if (!result.ok) {
+        toast.error(result.error)
+        return
+      }
+      setComments((current) => [...current, result.comment])
+      setCommentBody('')
+    } finally {
+      setSending(false)
+    }
+  }
+
+  const changeState = async (stateOption: string): Promise<void> => {
+    const result = await feishuUpdateRecordStateForTarget(target, {
+      appToken: binding.appToken,
+      tableId: binding.tableId,
+      recordId: record.id,
+      mapping,
+      stateOption
+    })
+    if (!result.ok) {
+      toast.error(result.error)
+      return
+    }
+    onRecordChanged({
+      ...record,
+      stateLabel: stateOption,
+      state: mapping.stateCategories?.[stateOption] === 'closed' ? 'closed' : 'open'
+    })
+  }
+
+  return (
+    <div className="flex min-h-0 flex-col">
+      <div className="flex flex-none items-start justify-between gap-3 border-b border-border/50 px-4 py-3">
+        <div className="min-w-0">
+          <div className="flex items-center gap-2">
+            <span className="font-mono text-2xs text-muted-foreground">{record.key}</span>
+            {record.stateLabel ? <Badge variant="secondary">{record.stateLabel}</Badge> : null}
+          </div>
+          <h2 className="mt-1 truncate text-sm font-medium text-foreground">{record.title}</h2>
+        </div>
+        <div className="flex shrink-0 items-center gap-2">
+          {stateOptions.length > 0 && record.stateLabel ? (
+            <Select value={record.stateLabel} onValueChange={(value) => void changeState(value)}>
+              <SelectTrigger className="h-7 w-32" aria-label={t('feishu.detail.state', 'State')}>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {stateOptions.map((option) => (
+                  <SelectItem key={option} value={option}>
+                    {option}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          ) : null}
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            onClick={() => void openAppHttpLink(record.url)}
+          >
+            <ExternalLink className="size-4" />
+            <span className="sr-only">{t('feishu.list.openInBrowser', 'Open in Feishu')}</span>
+          </Button>
+          <Button type="button" variant="ghost" size="icon" onClick={onClose}>
+            <X className="size-4" />
+            <span className="sr-only">{t('feishu.detail.close', 'Close')}</span>
+          </Button>
+        </div>
+      </div>
+      <div className="min-h-0 flex-1 space-y-4 overflow-auto scrollbar-sleek px-4 py-4">
+        {record.body ? (
+          <CommentMarkdown content={record.body} variant="document" expandImages />
+        ) : (
+          <p className="text-sm text-muted-foreground">
+            {t('feishu.detail.noBody', 'No description')}
+          </p>
+        )}
+        <div className="space-y-3">
+          <p className="text-xs font-medium uppercase tracking-[0.12em] text-muted-foreground">
+            {t('feishu.detail.comments', 'Comments')}
+          </p>
+          {commentsLoading ? (
+            <div className="flex justify-center py-4">
+              <LoaderCircle className="size-4 animate-spin text-muted-foreground" />
+            </div>
+          ) : comments.length === 0 ? (
+            <p className="text-sm text-muted-foreground">
+              {mapping.comments
+                ? t('feishu.detail.noComments', 'No comments yet')
+                : t(
+                    'feishu.detail.noCommentsTable',
+                    'No comments table is bound in the Feishu setup'
+                  )}
+            </p>
+          ) : (
+            <ul className="space-y-3">
+              {comments.map((comment) => (
+                <li
+                  key={comment.id}
+                  className="rounded-md border border-border/50 bg-muted/30 px-3 py-2"
+                >
+                  <div className="flex items-center justify-between gap-2 text-2xs text-muted-foreground">
+                    <span>{comment.authorName ?? t('feishu.detail.unknownAuthor', 'App')}</span>
+                    <span>{comment.createdAt ? formatRelativeTime(comment.createdAt) : ''}</span>
+                  </div>
+                  <div className="mt-1 text-sm">
+                    <CommentMarkdown content={comment.body} variant="compact" />
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+          {mapping.comments ? (
+            <div className="flex gap-2">
+              <Input
+                value={commentBody}
+                onChange={(event) => setCommentBody(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' && !event.nativeEvent.isComposing) {
+                    event.preventDefault()
+                    void submitComment()
+                  }
+                }}
+                placeholder={t('feishu.detail.commentPlaceholder', 'Add a comment')}
+                aria-label={t('feishu.detail.commentPlaceholder', 'Add a comment')}
+              />
+              <Button
+                type="button"
+                size="sm"
+                disabled={sending || !commentBody.trim()}
+                onClick={() => void submitComment()}
+              >
+                {sending ? t('feishu.detail.sending', 'Sending…') : t('feishu.detail.send', 'Send')}
+              </Button>
+            </div>
+          ) : null}
+        </div>
+      </div>
+    </div>
+  )
+}

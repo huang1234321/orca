@@ -15079,7 +15079,6 @@
           "agentNotOnPath": "<agent>{{agent}}</agent> ist noch nicht im PATH. Orca legt ihn als Standard fest; die Installation ist jederzeit möglich."
         },
         "IntegrationsStep": {
-          "277f30eb34": "Linear, GitLab, Bitbucket, Azure DevOps, Gitea und Jira sind unter Einstellungen > Integrationen zu finden.",
           "3a3e360289": "Weitere Aufgabenquellen",
           "80e3ce0bc9": "Erneut prüfen",
           "04ef416712": "Linear-Zugriff hinzufügen",

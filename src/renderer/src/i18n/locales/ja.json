@@ -15204,7 +15204,6 @@
           "showMoreAgents": "{{value0}} 件の Agent をさらに表示 →"
         },
         "IntegrationsStep": {
-          "277f30eb34": "Linear、GitLab、Bitbucket、Azure DevOps、Gitea、Jira は [設定] > [連携] にあります。",
           "3a3e360289": "その他のタスクソース",
           "80e3ce0bc9": "再確認",
           "04ef416712": "Linear アクセスを追加",

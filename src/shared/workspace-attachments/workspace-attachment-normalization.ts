@@ -28,7 +28,9 @@ export function normalizeWorkspaceAttachment(value: unknown): WorkspaceAttachmen
     provider !== 'jira' &&
     provider !== 'bitbucket' &&
     provider !== 'azure-devops' &&
-    provider !== 'gitea'
+    provider !== 'gitea' &&
+    provider !== 'codeup' &&
+    provider !== 'feishu'
   ) {
     return null
   }

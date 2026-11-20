@@ -370,6 +370,14 @@ import {
   TypeParams
 } from './emulator/emulator-params'
 import {
+  FeishuCommentBody,
+  FeishuConnect,
+  FeishuInferMapping,
+  FeishuListRecords,
+  FeishuRecord,
+  FeishuUpdateState
+} from './feishu/feishu-params'
+import {
   FileCommitUpload,
   FileCopy,
   FileDelete,
@@ -1489,6 +1497,15 @@ export const RPC_PARAMS_BY_METHOD = {
   'emulator.type': TypeParams,
   'emulator.unregisterActive': EmulatorUnregisterActiveParams,
   'environment.doctor': EnvironmentDoctorParams,
+  'feishu.addComment': FeishuCommentBody,
+  'feishu.connect': FeishuConnect,
+  'feishu.disconnect': null,
+  'feishu.getRecord': FeishuRecord,
+  'feishu.inferMapping': FeishuInferMapping,
+  'feishu.listComments': FeishuRecord,
+  'feishu.listRecords': FeishuListRecords,
+  'feishu.status': null,
+  'feishu.updateRecordState': FeishuUpdateState,
   'files.browseServerDir': ServerDirectoryBrowse,
   'files.commitUpload': FileCommitUpload,
   'files.copy': FileCopy,

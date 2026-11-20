@@ -10,6 +10,7 @@ import type {
   GitLabWorkItem,
   GitLabTodo
 } from '../../../../shared/gitlab/gitlab-types'
+import type { FeishuWorkItem } from '../../../../shared/feishu/feishu-types'
 import { getRepoBackedTaskEmptyState } from './task-page-empty-state'
 import { isGitLabIssueFilter, isGitLabMRFilter } from './task-page-source-context'
 export function useTaskPageProviderState(model: TaskPageSourceAvailabilityModel) {
@@ -76,6 +77,14 @@ export function useTaskPageProviderState(model: TaskPageSourceAvailabilityModel)
   const [gitlabView, setGitlabView] = useState<'issues' | 'mrs' | 'todos'>('mrs')
   const [gitlabTodos, setGitlabTodos] = useState<GitLabTodo[]>([])
   const [gitlabTodosLoading, setGitlabTodosLoading] = useState(false)
+  // Feishu list state: the Bitable binding lives in settings; fetch effects run in the feishu content branch.
+  const [feishuItems, setFeishuItems] = useState<FeishuWorkItem[]>([])
+  const [feishuLoading, setFeishuLoading] = useState(false)
+  const [feishuError, setFeishuError] = useState<string | null>(null)
+  const [feishuRefreshNonce, setFeishuRefreshNonce] = useState(0)
+  // Detail targets stay outside the list so filtering/refresh cannot remove their context.
+  const [selectedFeishuRecord, setSelectedFeishuRecord] = useState<FeishuWorkItem | null>(null)
+
   const gitlabEmptyState = useMemo(
     () =>
       getRepoBackedTaskEmptyState({
@@ -145,6 +154,16 @@ export function useTaskPageProviderState(model: TaskPageSourceAvailabilityModel)
     gitlabFilterIsValid: typeof gitlabFilterIsValid
     activeGitlabFilter: typeof activeGitlabFilter
     displayedGitLabItems: typeof displayedGitLabItems
+    feishuItems: typeof feishuItems
+    setFeishuItems: typeof setFeishuItems
+    feishuLoading: typeof feishuLoading
+    setFeishuLoading: typeof setFeishuLoading
+    feishuError: typeof feishuError
+    setFeishuError: typeof setFeishuError
+    feishuRefreshNonce: typeof feishuRefreshNonce
+    setFeishuRefreshNonce: typeof setFeishuRefreshNonce
+    selectedFeishuRecord: typeof selectedFeishuRecord
+    setSelectedFeishuRecord: typeof setSelectedFeishuRecord
   }
   nextModel.taskSourceManuallyChangedRef = taskSourceManuallyChangedRef
   nextModel.lastPageTaskSourceRef = lastPageTaskSourceRef
@@ -184,6 +203,19 @@ export function useTaskPageProviderState(model: TaskPageSourceAvailabilityModel)
   nextModel.gitlabFilterIsValid = gitlabFilterIsValid
   nextModel.activeGitlabFilter = activeGitlabFilter
   nextModel.displayedGitLabItems = displayedGitLabItems
-  return nextModel
+  // Why: spreading (not mutating) keeps the react-compiler bailout count at the file baseline.
+  return {
+    ...nextModel,
+    feishuItems,
+    setFeishuItems,
+    feishuLoading,
+    setFeishuLoading,
+    feishuError,
+    setFeishuError,
+    feishuRefreshNonce,
+    setFeishuRefreshNonce,
+    selectedFeishuRecord,
+    setSelectedFeishuRecord
+  }
 }
 export type TaskPageProviderStateModel = ReturnType<typeof useTaskPageProviderState>

@@ -131,6 +131,37 @@ const COPY: Record<TaskProviderErrorCode, () => string> = {
     translate(
       'taskProviders.errors.jira.invalidCloudId',
       'The site did not report a valid Atlassian cloud ID.'
+    ),
+  'feishu.notConnected': () =>
+    translate('taskProviders.errors.feishu.notConnected', 'Not connected to Feishu Bitable.'),
+  'feishu.credentialsRequired': () =>
+    translate(
+      'taskProviders.errors.feishu.credentialsRequired',
+      'Feishu app ID and app secret are required.'
+    ),
+  'feishu.appTokenRequired': () =>
+    translate('taskProviders.errors.feishu.appTokenRequired', 'A Bitable app token is required.'),
+  'feishu.tableRequired': () =>
+    translate('taskProviders.errors.feishu.tableRequired', 'A Bitable table ID is required.'),
+  'feishu.fieldMappingRequired': () =>
+    translate(
+      'taskProviders.errors.feishu.fieldMappingRequired',
+      'The Bitable field mapping is incomplete. Configure it in Settings > Tasks.'
+    ),
+  'feishu.recordsLoadFailed': () =>
+    translate('taskProviders.errors.feishu.recordsLoadFailed', 'Failed to load Bitable records.'),
+  'feishu.recordNotFound': () =>
+    translate('taskProviders.errors.feishu.recordNotFound', 'Bitable record not found.'),
+  'feishu.updateFailed': () =>
+    translate('taskProviders.errors.feishu.updateFailed', 'Failed to update the Bitable record.'),
+  'feishu.commentFailed': () =>
+    translate('taskProviders.errors.feishu.commentFailed', 'Failed to add comment.'),
+  'feishu.commentBodyRequired': () =>
+    translate('taskProviders.errors.feishu.commentBodyRequired', 'Comment body is required.'),
+  'feishu.connectionFailed': () =>
+    translate(
+      'taskProviders.errors.feishu.connectionFailed',
+      'Could not connect to Feishu. Check the app secret and scopes.'
     )
 }
 

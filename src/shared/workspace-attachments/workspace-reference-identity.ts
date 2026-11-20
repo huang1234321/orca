@@ -16,7 +16,8 @@ const PUBLIC_REFERENCE_HOSTS = new Set([
   'gitlab.com',
   'codeberg.org',
   'bitbucket.org',
-  'dev.azure.com'
+  'dev.azure.com',
+  'codeup.aliyun.com'
 ])
 
 function referenceHostProvider(host: string): WorkspaceAttachment['provider'] | undefined {
@@ -140,6 +141,11 @@ function parseReferenceRoute(
   ) {
     return numberedReference(url, 'bitbucket', 'pr', `${bitbucket[1]}/pull-requests`, bitbucket[2])
   }
+  // Codeup MR web paths: /{org}/{groups}/{repo}/change/{mrId}[/...]
+  const codeup = /^(\/.+)\/change\/(\d+)(?:\/.*)?$/.exec(url.pathname)
+  if (codeup && url.hostname === 'codeup.aliyun.com') {
+    return numberedReference(url, 'codeup', 'mr', `${codeup[1]}/change`, codeup[2])
+  }
   const git = /^(\/[^/]+\/[^/]+)\/(pull|pulls|issues)\/(\d+)(?:\/.*)?$/.exec(url.pathname)
   if (git && url.hostname !== 'linear.app' && url.hostname !== 'gitlab.com') {
     const provider =
@@ -197,6 +203,10 @@ function externalUrl(item: WorkspaceAttachment): string | undefined {
     case 'jira':
       return identity.siteUrl && identifier
         ? `${identity.siteUrl.replace(/\/+$/, '')}/browse/${identifier}`
+        : undefined
+    case 'feishu':
+      return identity.appToken && identity.tableId && item.identifier
+        ? `https://feishu.cn/base/${identity.appToken}?table=${identity.tableId}&record=${item.identifier}`
         : undefined
     case 'linear':
       return undefined

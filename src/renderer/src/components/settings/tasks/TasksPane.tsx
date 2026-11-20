@@ -8,12 +8,14 @@ import {
   normalizeVisibleTaskProviders,
   resolveVisibleTaskProvider
 } from '../../../../../shared/work-items/task-providers'
+import { FeishuIcon } from '@/components/icons/FeishuIcon'
 import { JiraIcon } from '@/components/icons/JiraIcon'
 import { LinearIcon } from '@/components/icons/LinearIcon'
 import { Button } from '@/components/ui/button'
 import { useAppStore } from '@/store/index'
 import { SearchableSetting } from '../section-layout/SearchableSetting'
 import { CodeHostSetupSteps } from './TaskSourceCodeHostSetup'
+import { FeishuSetupSteps } from './TaskSourceFeishuSetup'
 import { JiraSetupSteps } from './TaskSourceJiraSetup'
 import { TaskSourceLinearSetup } from './TaskSourceLinearSetup'
 import { TaskSourceProviderCard } from './TaskSourceProviderCard'
@@ -92,6 +94,18 @@ const PROVIDER_META: Record<
       )
     },
     Icon: ({ className }) => <JiraIcon className={className} />
+  },
+  feishu: {
+    get label() {
+      return translate('auto.components.settings.TasksPane.feishu', 'Feishu')
+    },
+    get description() {
+      return translate(
+        'auto.components.settings.TasksPane.feishuDescription',
+        'Connect a Feishu Bitable table and show its records in Tasks.'
+      )
+    },
+    Icon: ({ className }) => <FeishuIcon className={className} />
   }
 }
 
@@ -101,6 +115,7 @@ export function TasksPane({ settings, updateSettings }: TasksPaneProps): React.J
   const openSettingsPage = useAppStore((s) => s.openSettingsPage)
   const openSettingsTarget = useAppStore((s) => s.openSettingsTarget)
   const checkJiraConnection = useAppStore((s) => s.checkJiraConnection)
+  const checkFeishuConnection = useAppStore((s) => s.checkFeishuConnection)
   const refreshPreflightStatus = useAppStore((s) => s.refreshPreflightStatus)
   const readinessByProvider = useTaskSourceProviderReadiness(visibleProviders)
   useIntegrationProviderStatusRefresh()
@@ -219,6 +234,17 @@ export function TasksPane({ settings, updateSettings }: TasksPaneProps): React.J
                   onToggleVisible={() => toggleProvider('jira')}
                   onConnected={() => void checkJiraConnection()}
                   onOpenIntegrations={() => openIntegrations(JIRA_INTEGRATION_SECTION_ID)}
+                />
+              ) : provider === 'feishu' ? (
+                <FeishuSetupSteps
+                  connected={readiness.connected}
+                  checking={readiness.checking}
+                  visible={visible}
+                  canHide={canHide}
+                  onToggleVisible={() => toggleProvider('feishu')}
+                  binding={settings.feishuTaskSource ?? null}
+                  onUpdateBinding={(binding) => updateSettings({ feishuTaskSource: binding })}
+                  onConnected={() => void checkFeishuConnection()}
                 />
               ) : (
                 <CodeHostSetupSteps

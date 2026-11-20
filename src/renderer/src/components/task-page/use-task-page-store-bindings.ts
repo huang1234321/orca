@@ -90,6 +90,7 @@ export function useTaskPageStoreBindings() {
   const jiraStatusReady = jiraStatusCurrent && jiraStatusChecked
   const linearConnected = linearStatusCurrent && linearStatus.connected
   const jiraConnected = jiraStatusCurrent && jiraStatus.connected
+  const feishuStatus = useAppStore((s) => s.feishuStatus)
   const submitShortcutLabel = getScreenSubmitShortcutLabel()
   return {
     settings,
@@ -160,6 +161,7 @@ export function useTaskPageStoreBindings() {
     jiraStatusReady,
     linearConnected,
     jiraConnected,
+    feishuStatus,
     submitShortcutLabel
   }
 }

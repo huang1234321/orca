@@ -15,6 +15,7 @@ import { WorkspaceCleanupRulesParam } from '../workspace-cleanup/workspace-clean
 import { AGENT_CHAT_PERMISSION_MODES } from '../../agent-launch/permissions/agent-chat-permission-mode'
 import { PR_AUTO_REFRESH_CADENCES } from '../../source-control/hosted-review/review-refresh-policy'
 import { HOST_OWNED_SETTING_UPDATE_SHAPE } from '../../settings/host-owned-settings'
+import { FeishuTableMappingShape } from '../feishu/feishu-mapping-params'
 
 export const TaskProviderParam = z.custom<TaskProvider>(isTaskProvider, {
   message: 'Unknown task provider'
@@ -154,7 +155,15 @@ export const SettingsUpdate = z
     workspaceCleanupPolicy: WorkspaceCleanupRulesParam.optional(),
     prAutoRefresh: z.enum(PR_AUTO_REFRESH_CADENCES).optional(),
     newTabMenuLayout: z.unknown().transform(normalizeNewTabMenuLayout).optional(),
-    floatingTerminalNewTabMenuLayout: z.unknown().transform(normalizeNewTabMenuLayout).optional()
+    floatingTerminalNewTabMenuLayout: z.unknown().transform(normalizeNewTabMenuLayout).optional(),
+    feishuTaskSource: z
+      .object({
+        appToken: z.string().min(1),
+        tableId: z.string().min(1),
+        mapping: FeishuTableMappingShape
+      })
+      .nullable()
+      .optional()
   })
   .strict()
   .default({})

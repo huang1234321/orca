@@ -1,4 +1,5 @@
 import { useEffect, useMemo } from 'react'
+import { useAppStore } from '@/store'
 import { filterAvailableTaskProviders } from '../../../../../shared/work-items/task-providers'
 import type { ExecutionHostId } from '../../../../../shared/execution-host/execution-host'
 import { getMrStateFilters, getSmartWorkspaceNameModes } from './smart-workspace-localized-options'
@@ -65,6 +66,7 @@ export function useSmartWorkspaceFieldAvailability({
   jiraSourceConnected: boolean
 }) {
   const t = useTranslate()
+  const feishuConnected = useAppStore((s) => s.feishuStatus?.connected === true)
   const { disabled, textOnly, repoBackedSourcesDisabled, branchesEnabled, value } = props
   const { mode: storedMode, setMode, setDebouncedQuery } = state
   const preflightStatusCurrent = preflightStatusContextKey === expectedPreflightContextKey
@@ -91,9 +93,10 @@ export function useSmartWorkspaceFieldAvailability({
     () =>
       filterAvailableTaskProviders(['github', 'gitlab', 'linear'], {
         gitlabInstalled: gitlabSourceAvailable,
-        linearConnected: linearStatus.connected === true
+        linearConnected: linearStatus.connected === true,
+        feishuConnected: feishuConnected
       }),
-    [gitlabSourceAvailable, linearStatus.connected]
+    [feishuConnected, gitlabSourceAvailable, linearStatus.connected]
   )
   const linearAvailable = availableTaskProviders.includes('linear')
   const availableModes = getSmartWorkspaceNameModes(t).filter((item) => {

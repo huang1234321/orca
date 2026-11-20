@@ -14402,7 +14402,6 @@
           "showMoreAgents": "agents {{value0}}개 더 보기→"
         },
         "IntegrationsStep": {
-          "277f30eb34": "Linear, GitLab, Bitbucket, Azure DevOps, Gitea 및 Jira는 설정 > 연동에 있습니다.",
           "3a3e360289": "더 많은 작업 소스",
           "80e3ce0bc9": "재확인",
           "04ef416712": "Linear 연결 추가",
