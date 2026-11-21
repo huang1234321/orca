@@ -43,7 +43,7 @@ export function TaskPageGitHubModeControls({
             aria-pressed="true"
             className="rounded-md border border-border/50 bg-foreground/90 px-2.5 py-1 text-xs font-medium text-background shadow-xs transition"
           >
-            {t('feishu.mode.issues', '议题')}
+            {t('feishu.mode.issues', 'Issues')}
           </button>
         </div>
       )}

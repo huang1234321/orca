@@ -113,8 +113,8 @@ function FeishuRow({
                   className={cn(
                     'inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold leading-none transition hover:bg-accent',
                     item.state === 'closed'
-                      ? 'border-rose-500/30 bg-rose-500/10 text-rose-600 dark:text-rose-300'
-                      : 'border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-300'
+                      ? 'border-destructive/30 bg-destructive/10 text-destructive'
+                      : 'border-status-success-border bg-status-success-background text-status-success'
                   )}
                 >
                   {item.stateLabel}
@@ -133,8 +133,8 @@ function FeishuRow({
               className={cn(
                 'inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold leading-none',
                 item.state === 'closed'
-                  ? 'border-rose-500/30 bg-rose-500/10 text-rose-600 dark:text-rose-300'
-                  : 'border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-300'
+                  ? 'border-destructive/30 bg-destructive/10 text-destructive'
+                  : 'border-status-success-border bg-status-success-background text-status-success'
               )}
             >
               {item.stateLabel}
@@ -155,7 +155,7 @@ function FeishuRow({
             variant="outline"
             size="xs"
             onClick={() => onUse(item)}
-            className="min-w-[72px] gap-1 bg-background/80 font-semibold"
+            className="min-w-[72px]"
             aria-label={t('feishu.detail.launch', 'Start workspace')}
           >
             {t('feishu.row.start', 'Start')}
@@ -167,7 +167,6 @@ function FeishuRow({
                 type="button"
                 variant="outline"
                 size="icon-xs"
-                className="bg-background/80"
                 aria-label={t('feishu.row.more', 'More actions')}
               >
                 <ChevronDown className="size-3" />

@@ -183,7 +183,9 @@ export function TaskPageFeishuContent({
               value={searchInput}
               onChange={(event) => setSearchInput(event.target.value)}
               placeholder={t('feishu.list.searchPlaceholder', 'Search Feishu tasks...')}
-              className="h-8 rounded-md border-border/60 bg-background pl-8 pr-8 text-xs text-foreground shadow-xs"
+              density="compact"
+              inset="leadingIcon"
+              adornment="trailing"
             />
             {searchInput ? (
               <button
@@ -205,7 +207,7 @@ export function TaskPageFeishuContent({
                 setFeishuRefreshNonce((value) => value + 1)
               }}
               aria-label={t('feishu.list.refresh', 'Refresh Feishu tasks')}
-              className="size-8 cursor-pointer border-border/60 bg-background text-foreground shadow-xs hover:bg-muted/60"
+              className="size-8 cursor-pointer"
             >
               {feishuLoading ? (
                 <LoaderCircle className="size-4 animate-spin" />

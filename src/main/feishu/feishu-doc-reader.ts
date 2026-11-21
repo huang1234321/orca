@@ -75,6 +75,8 @@ function blockToMarkdown(block: RawBlock): string | null {
       return `- ${text}`
     case 14:
       return `\`\`\`\n${text}\n\`\`\``
+    case undefined:
+      return text || null
     default:
       return text || null
   }
