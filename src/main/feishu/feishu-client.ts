@@ -65,10 +65,29 @@ function readPersonList(value: unknown): { id: string; name: string | null }[] {
 }
 
 function readUrlLink(value: unknown): string | null {
-  // URL fields read back as [{link, text, type}] like person fields read as arrays.
+  // Shapes seen per endpoint/column drift: [{link,text,type}], {link,text,type},
+  // plain URL strings, and formula cells reading back as {type, value:[{text}]}.
   const entry = Array.isArray(value) ? value[0] : value
-  const link = isRecord(entry) ? entry.link : null
-  return typeof link === 'string' ? link : null
+  if (typeof entry === 'string') {
+    return /^https?:\/\//.test(entry) ? entry : null
+  }
+  if (isRecord(entry)) {
+    if (typeof entry.link === 'string') {
+      return entry.link
+    }
+    const segments = entry.value
+    if (Array.isArray(segments)) {
+      const text = segments.find(
+        (segment) =>
+          isRecord(segment) && typeof segment.text === 'string' && /^https?:\/\//.test(segment.text)
+      )
+      const link = isRecord(text) && typeof text.text === 'string' ? text.text : null
+      if (link) {
+        return link
+      }
+    }
+  }
+  return null
 }
 
 function mapFields(raw: RawField): FeishuFieldSchema {
