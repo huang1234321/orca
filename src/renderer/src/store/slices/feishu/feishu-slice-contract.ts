@@ -5,7 +5,6 @@ import type { FeishuConnectionStatus } from '@/runtime/feishu/runtime-feishu-cli
 export type FeishuSlice = {
   feishuStatus: FeishuConnectionStatus | null
   feishuStatusChecked: boolean
-  feishuStatusContextKey: string | null
   feishuChecking: boolean
 
   checkFeishuConnection: () => Promise<void>

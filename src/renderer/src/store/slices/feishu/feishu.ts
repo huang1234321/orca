@@ -6,7 +6,6 @@ import type { FeishuSlice } from './feishu-slice-contract'
 export const createFeishuSlice: StateCreator<AppState, [], [], FeishuSlice> = (set, get) => ({
   feishuStatus: null,
   feishuStatusChecked: false,
-  feishuStatusContextKey: null,
   feishuChecking: false,
 
   // Credentials live on local main; the status never varies by runtime environment.

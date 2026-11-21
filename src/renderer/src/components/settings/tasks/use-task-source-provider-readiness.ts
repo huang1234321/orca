@@ -61,9 +61,8 @@ export function useTaskSourceProviderReadiness(
   const jiraConnected = !jiraChecking && jiraStatus.connected === true
   const feishuStatus = useAppStore((s) => s.feishuStatus)
   const feishuStatusChecked = useAppStore((s) => s.feishuStatusChecked)
-  const feishuStatusContextKey = useAppStore((s) => s.feishuStatusContextKey)
-  const feishuChecking =
-    feishuStatusContextKey !== providerRuntimeContextKey || !feishuStatusChecked
+  // Feishu credentials live on local main; the status never varies by runtime environment.
+  const feishuChecking = !feishuStatusChecked
   const feishuConnected = !feishuChecking && feishuStatus?.connected === true
   const linearChecking =
     linearStatusContextKey !== providerRuntimeContextKey || !linearStatusChecked
