@@ -58,11 +58,18 @@ export function TaskPageFeishuContent({
   const binding = settings?.feishuTaskSource ?? null
   const connected = feishuStatus?.connected === true
   const repoUrlFilter = useMemo(() => {
+    const withRemotes = (repos ?? []).filter((repo) => repo.gitRemoteIdentity?.remoteUrl)
     if (!repoSelection || repoSelection.size === 0) {
       return []
     }
+    // A selection covering every remote-bearing repo is GitHub's "all": no filter at all.
+    const eligibleIds = new Set(withRemotes.map((repo) => repo.id))
+    const coversAll = eligibleIds.size > 0 && [...eligibleIds].every((id) => repoSelection.has(id))
+    if (coversAll) {
+      return []
+    }
     const allowed = new Set(repoSelection)
-    return (repos ?? [])
+    return withRemotes
       .filter((repo) => allowed.has(repo.id))
       .map((repo) => normalizeFeishuRepoUrl(repo.gitRemoteIdentity?.remoteUrl ?? ''))
       .filter((url) => url.length > 0)
