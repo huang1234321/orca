@@ -31,6 +31,14 @@ export const feishuApi = {
     mapping: FeishuTableMapping
   }) => ipcRenderer.invoke('feishu:getRecord', args),
 
+  updateRecordBody: (args: {
+    appToken: string
+    tableId: string
+    recordId: string
+    mapping: FeishuTableMapping
+    body: string
+  }) => ipcRenderer.invoke('feishu:updateRecordBody', args),
+
   updateRecordState: (args: {
     appToken: string
     tableId: string

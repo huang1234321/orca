@@ -5,6 +5,7 @@ import {
   FeishuInferMapping,
   FeishuListRecords,
   FeishuRecord,
+  FeishuUpdateBody,
   FeishuUpdateState
 } from '../../../../../../shared/rpc-contract/feishu/feishu-params'
 
@@ -71,6 +72,19 @@ export const FEISHU_METHODS = [
         params.recordId,
         params.mapping,
         params.stateOption
+      )
+  }),
+  defineMethod({
+    name: 'feishu.updateRecordBody',
+    permission: 'workspace',
+    params: FeishuUpdateBody,
+    handler: async (params, { runtime }) =>
+      runtime.feishuUpdateRecordBody(
+        params.appToken,
+        params.tableId,
+        params.recordId,
+        params.mapping,
+        params.body
       )
   }),
   defineMethod({

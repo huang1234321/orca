@@ -57,6 +57,29 @@ export function registerFeishuHandlers(): void {
     }
   )
 
+  ipcMain.handle('feishu:updateRecordBody', (_event, args: Record<string, unknown>) => {
+    const mapping = requireMapping(args?.mapping)
+    if (
+      typeof args?.appToken !== 'string' ||
+      typeof args?.tableId !== 'string' ||
+      typeof args?.recordId !== 'string' ||
+      typeof args?.body !== 'string' ||
+      !mapping
+    ) {
+      return taskProviderFailure(
+        'feishu.fieldMappingRequired',
+        'Bitable binding and body are required.'
+      )
+    }
+    return commands.feishuUpdateRecordBody(
+      args.appToken,
+      args.tableId,
+      args.recordId,
+      mapping,
+      args.body
+    )
+  })
+
   ipcMain.handle('feishu:disconnect', () => commands.feishuDisconnect())
 
   ipcMain.handle('feishu:status', () => commands.feishuStatus())

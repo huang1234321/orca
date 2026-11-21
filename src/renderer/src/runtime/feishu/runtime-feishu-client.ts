@@ -126,6 +126,23 @@ export function feishuUpdateRecordStateForTarget(
     : window.api.feishu.updateRecordState(args)
 }
 
+export function feishuUpdateRecordBodyForTarget(
+  target: RuntimeClientTarget,
+  args: {
+    appToken: string
+    tableId: string
+    recordId: string
+    mapping: FeishuTableMapping
+    body: string
+  }
+): Promise<FeishuMutationResult> {
+  return target.kind === 'environment'
+    ? callRuntimeRpc<FeishuMutationResult>(target, 'feishu.updateRecordBody', args, {
+        timeoutMs: 30_000
+      })
+    : window.api.feishu.updateRecordBody(args)
+}
+
 export function feishuListCommentsForTarget(
   target: RuntimeClientTarget,
   args: { appToken: string; mapping: FeishuTableMapping; recordId: string }

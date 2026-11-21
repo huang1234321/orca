@@ -227,24 +227,6 @@ export async function getFeishuRecord(
   return mapWorkItem(appToken, tableId, result.data.record, mapping)
 }
 
-export async function updateFeishuRecordState(
-  appToken: string,
-  tableId: string,
-  recordId: string,
-  mapping: FeishuTableMapping,
-  stateOption: string
-): Promise<boolean> {
-  appToken = await resolveFeishuAppToken(appToken)
-  if (!mapping.stateField) {
-    return false
-  }
-  const result = await feishuRequest(
-    `/open-apis/bitable/v1/apps/${encodeURIComponent(appToken)}/tables/${encodeURIComponent(tableId)}/records/${encodeURIComponent(recordId)}`,
-    { method: 'PUT', body: { fields: { [mapping.stateField]: stateOption } } }
-  )
-  return result.ok
-}
-
 export async function verifyFeishuCredentials(
   appId: string,
   appSecret: string

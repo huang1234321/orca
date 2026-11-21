@@ -46,6 +46,14 @@ export const FeishuUpdateState = z.object({
   stateOption: requiredString('State option is required')
 })
 
+export const FeishuUpdateBody = z.object({
+  appToken: requiredString('Bitable app token is required'),
+  tableId: requiredString('Table ID is required'),
+  recordId: requiredString('Record ID is required'),
+  mapping: FeishuTableMappingShape,
+  body: z.string()
+})
+
 export const FeishuCommentBody = z.object({
   appToken: requiredString('Bitable app token is required'),
   mapping: FeishuTableMappingShape,

@@ -5,9 +5,12 @@ import {
   getFeishuRecord,
   listFeishuFields,
   searchFeishuRecords,
-  updateFeishuRecordState,
   verifyFeishuCredentials
 } from '../../../feishu/feishu-client'
+import {
+  updateFeishuRecordBody,
+  updateFeishuRecordState
+} from '../../../feishu/feishu-record-mutations'
 import {
   addFeishuComment,
   findFeishuCommentTable,
@@ -105,6 +108,19 @@ export class RuntimeFeishuCommands {
     return updated
       ? { ok: true as const }
       : { ok: false as const, error: 'Record state update failed' }
+  }
+
+  async feishuUpdateRecordBody(
+    appToken: string,
+    tableId: string,
+    recordId: string,
+    mapping: FeishuTableMapping,
+    body: string
+  ) {
+    const updated = await updateFeishuRecordBody(appToken, tableId, recordId, mapping, body)
+    return updated
+      ? { ok: true as const }
+      : { ok: false as const, error: 'Record body update failed' }
   }
 
   async feishuListComments(appToken: string, mapping: FeishuTableMapping, recordId: string) {

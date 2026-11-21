@@ -25,8 +25,11 @@ import {
   feishuAddCommentForTarget,
   feishuListCommentsForTarget,
   feishuLocalTarget,
+  feishuUpdateRecordBodyForTarget,
   feishuUpdateRecordStateForTarget
 } from '@/runtime/feishu/runtime-feishu-client'
+import { LinearIssueMarkdownDescriptionEditor } from '@/components/task-page/linear/issue-workspace/LinearIssueMarkdownDescriptionEditor'
+import { getScreenSubmitShortcutLabel } from '@/lib/keyboard/screen-submit-shortcut'
 
 export function FeishuRecordDetail({
   record,
@@ -44,8 +47,39 @@ export function FeishuRecordDetail({
   const [commentsLoading, setCommentsLoading] = useState(true)
   const [commentBody, setCommentBody] = useState('')
   const [sending, setSending] = useState(false)
+  const [bodySaving, setBodySaving] = useState(false)
   const mapping: FeishuTableMapping = binding.mapping
   const stateOptions = Object.keys(mapping.stateCategories ?? {})
+  const submitShortcutLabel = getScreenSubmitShortcutLabel()
+
+  const saveBody = (body: string): void => {
+    if (body === (record.body ?? '')) {
+      return
+    }
+    setBodySaving(true)
+    feishuUpdateRecordBodyForTarget(feishuLocalTarget, {
+      appToken: binding.appToken,
+      tableId: binding.tableId,
+      recordId: record.id,
+      mapping,
+      body
+    })
+      .then((result) => {
+        if (result.ok) {
+          onRecordChanged({ ...record, body })
+        } else {
+          toast.error(result.error)
+          onRecordChanged({ ...record })
+        }
+      })
+      .catch(() => {
+        toast.error(t('feishu.detail.bodySaveFailed', 'Description save failed'))
+        onRecordChanged({ ...record })
+      })
+      .finally(() => {
+        setBodySaving(false)
+      })
+  }
 
   useEffect(() => {
     let cancelled = false
@@ -156,7 +190,16 @@ export function FeishuRecordDetail({
         </div>
       </div>
       <div className="min-h-0 flex-1 space-y-4 overflow-auto scrollbar-sleek px-4 py-4">
-        {record.body ? (
+        {mapping.bodyField ? (
+          <LinearIssueMarkdownDescriptionEditor
+            value={record.body ?? ''}
+            onChange={() => {}}
+            onSave={saveBody}
+            density="page"
+            disabled={bodySaving}
+            submitShortcutLabel={submitShortcutLabel}
+          />
+        ) : record.body ? (
           <CommentMarkdown content={record.body} variant="document" expandImages />
         ) : (
           <p className="text-sm text-muted-foreground">

@@ -375,6 +375,7 @@ import {
   FeishuInferMapping,
   FeishuListRecords,
   FeishuRecord,
+  FeishuUpdateBody,
   FeishuUpdateState
 } from './feishu/feishu-params'
 import {
@@ -1505,6 +1506,7 @@ export const RPC_PARAMS_BY_METHOD = {
   'feishu.listComments': FeishuRecord,
   'feishu.listRecords': FeishuListRecords,
   'feishu.status': null,
+  'feishu.updateRecordBody': FeishuUpdateBody,
   'feishu.updateRecordState': FeishuUpdateState,
   'files.browseServerDir': ServerDirectoryBrowse,
   'files.commitUpload': FileCommitUpload,
