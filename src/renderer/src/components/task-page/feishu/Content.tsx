@@ -7,6 +7,7 @@ import { useTranslate } from '@/i18n/use-translate'
 import { useAppStore } from '@/store'
 import type { TaskPageComposerActionsModel } from '../use-task-page-composer-actions'
 import { FeishuRecordList } from './FeishuRecordList'
+import { launchFeishuRecordWorkspace } from '@/lib/workspace/creation/work-item/launch-feishu-record'
 import { FeishuRecordDetail } from './FeishuRecordDetail'
 import { normalizeFeishuRepoUrl, useFeishuTaskList } from './use-feishu-task-list'
 
@@ -143,6 +144,7 @@ export function TaskPageFeishuContent({
       ) : (
         <div className="min-h-0 flex-1 overflow-auto scrollbar-sleek">
           <FeishuRecordList
+            onLaunchRecord={(item) => void launchFeishuRecordWorkspace(item)}
             items={feishuItems}
             loading={feishuLoading}
             selectedRecord={selectedFeishuRecord}

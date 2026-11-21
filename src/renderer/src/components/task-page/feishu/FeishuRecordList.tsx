@@ -1,9 +1,17 @@
-import { CircleDot, ExternalLink, CheckCircle2 } from 'lucide-react'
+import { ExternalLink, Rocket } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { useTranslate } from '@/i18n/use-translate'
 import { cn } from '@/lib/class-names'
 import { openAppHttpLink } from '@/lib/browser/navigation/app-http-link-open'
-import { formatRelativeTime } from '../task-page-source-context'
+import {
+  GITHUB_TASK_GRID_CLASS,
+  GITHUB_TASK_HEADER_SURFACE_CLASS,
+  GITHUB_TASK_STICKY_ID_CELL_CLASS,
+  GITHUB_TASK_STICKY_ID_HEADER_CLASS,
+  GITHUB_TASK_STICKY_TITLE_CELL_CLASS,
+  GITHUB_TASK_STICKY_TITLE_HEADER_CLASS,
+  formatRelativeTime
+} from '../task-page-source-context'
 import type { FeishuWorkItem } from '../../../../../shared/feishu/feishu-types'
 
 function repoLabel(repoUrl: string | null): string | null {
@@ -12,23 +20,22 @@ function repoLabel(repoUrl: string | null): string | null {
   }
   const withoutProtocol = repoUrl.replace(/^[a-z]+:\/\//i, '').replace(/\.git$/, '')
   const segments = withoutProtocol.split('/').filter(Boolean)
-  const tail = segments.slice(-2).join('/')
-  return tail || null
+  return segments.slice(-2).join('/') || null
 }
 
-/** GitHub-style two-line row: state icon + bold title + number pill, meta line below. */
+/** GitHub task-table layout: ID | Title/Context | Assignees | Status | Updated | actions. */
 function FeishuRow({
   item,
   selected,
-  onOpen
+  onOpen,
+  onLaunch
 }: {
   item: FeishuWorkItem
   selected: boolean
   onOpen: (item: FeishuWorkItem) => void
+  onLaunch: (item: FeishuWorkItem) => void
 }): React.JSX.Element {
   const t = useTranslate()
-  const open = item.state === 'open'
-  const repo = repoLabel(item.repoUrl)
   return (
     <div
       role="button"
@@ -36,63 +43,81 @@ function FeishuRow({
       onClick={() => onOpen(item)}
       onKeyDown={(event) => {
         if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault()
           onOpen(item)
         }
       }}
       className={cn(
-        'group flex cursor-pointer items-start gap-2.5 px-3 py-2.5 text-left hover:bg-muted/50',
-        selected && 'bg-muted/60'
+        'group/feishu-row grid min-h-12 cursor-pointer gap-3 px-3 py-2.5 text-left transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50',
+        selected && 'bg-accent/60',
+        GITHUB_TASK_GRID_CLASS
       )}
     >
-      {open ? (
-        <CircleDot className="mt-0.5 size-4 shrink-0 text-emerald-600" aria-hidden="true" />
-      ) : (
-        <CheckCircle2
-          className="mt-0.5 size-4 shrink-0 text-muted-foreground/70"
-          aria-hidden="true"
-        />
-      )}
-      <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-2">
-          <span className="min-w-0 truncate text-sm font-medium text-foreground">{item.title}</span>
-          <span className="inline-flex shrink-0 items-center gap-1 rounded-md border border-border/40 px-1.5 py-0.5 text-muted-foreground">
-            <span className="font-mono text-[11px] font-normal">#{item.key}</span>
-          </span>
+      <div className={cn(GITHUB_TASK_STICKY_ID_CELL_CLASS, selected && 'bg-accent/60')}>
+        <span className="inline-flex items-center gap-1 rounded-md border border-border/40 px-1.5 py-0.5 text-muted-foreground">
+          <span className="font-mono text-[11px] font-normal">#{item.key}</span>
+        </span>
+      </div>
+      <div className={GITHUB_TASK_STICKY_TITLE_CELL_CLASS}>
+        <div className="flex min-w-0 items-center gap-2">
+          <h3 className="truncate text-[13px] font-medium text-foreground">{item.title}</h3>
         </div>
-        <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-2xs text-muted-foreground">
-          {item.stateLabel ? (
-            <Badge variant={open ? 'secondary' : 'outline'} className="px-1.5 py-0 text-2xs">
-              {item.stateLabel}
-            </Badge>
-          ) : null}
+        <div className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[12px] text-muted-foreground">
           {item.labels.slice(0, 3).map((label) => (
-            <Badge key={label} variant="outline" className="px-1.5 py-0 text-2xs">
+            <span key={label} className="rounded border border-border/40 px-1.5 py-px text-[11px]">
               {label}
-            </Badge>
-          ))}
-          {repo ? <span className="truncate font-mono">{repo}</span> : null}
-          {item.assignees.length > 0 ? (
-            <span className="truncate">
-              {item.assignees
-                .map((person) => person.name ?? '')
-                .filter(Boolean)
-                .join(', ')}
             </span>
+          ))}
+          {repoLabel(item.repoUrl) ? (
+            <span className="truncate font-mono text-[11px]">{repoLabel(item.repoUrl)}</span>
           ) : null}
-          {item.updatedAt ? <span>{formatRelativeTime(item.updatedAt)}</span> : null}
         </div>
       </div>
-      <button
-        type="button"
-        className="shrink-0 rounded p-1 text-muted-foreground opacity-0 transition-opacity hover:bg-background hover:text-foreground group-hover:opacity-100"
-        aria-label={t('feishu.list.openInBrowser', 'Open in Feishu')}
-        onClick={(event) => {
-          event.stopPropagation()
-          void openAppHttpLink(item.url)
-        }}
-      >
-        <ExternalLink className="size-3.5" />
-      </button>
+      <div className="flex min-w-0 items-center">
+        <span className="truncate text-[12px] text-muted-foreground">
+          {item.assignees
+            .map((person) => person.name ?? '')
+            .filter(Boolean)
+            .join(', ')}
+        </span>
+      </div>
+      <div className="flex items-center">
+        {item.stateLabel ? (
+          <Badge
+            variant={item.state === 'closed' ? 'outline' : 'secondary'}
+            className="px-1.5 py-0"
+          >
+            {item.stateLabel}
+          </Badge>
+        ) : null}
+      </div>
+      <div className="flex items-center text-[12px] text-muted-foreground">
+        {item.updatedAt ? formatRelativeTime(item.updatedAt) : ''}
+      </div>
+      <div className="flex items-center justify-end gap-0.5 pr-0.5 opacity-0 transition-opacity group-hover/feishu-row:opacity-100">
+        <button
+          type="button"
+          className="rounded p-1 text-muted-foreground hover:bg-background hover:text-foreground"
+          aria-label={t('feishu.detail.launch', 'Start workspace')}
+          onClick={(event) => {
+            event.stopPropagation()
+            onLaunch(item)
+          }}
+        >
+          <Rocket className="size-3.5" />
+        </button>
+        <button
+          type="button"
+          className="rounded p-1 text-muted-foreground hover:bg-background hover:text-foreground"
+          aria-label={t('feishu.list.openInBrowser', 'Open in Feishu')}
+          onClick={(event) => {
+            event.stopPropagation()
+            void openAppHttpLink(item.url)
+          }}
+        >
+          <ExternalLink className="size-3.5" />
+        </button>
+      </div>
     </div>
   )
 }
@@ -101,16 +126,34 @@ export function FeishuRecordList({
   items,
   loading,
   selectedRecord,
-  onOpenRecord
+  onOpenRecord,
+  onLaunchRecord
 }: {
   items: readonly FeishuWorkItem[]
   loading: boolean
   selectedRecord: FeishuWorkItem | null
   onOpenRecord: (item: FeishuWorkItem) => void
+  onLaunchRecord: (item: FeishuWorkItem) => void
 }): React.JSX.Element {
   const t = useTranslate()
   return (
-    <div className="divide-y divide-border/50">
+    <div className="divide-y divide-border/40">
+      <div
+        className={cn(
+          'sticky top-0 z-40 grid h-8 gap-3 border-b border-border/50 px-3 text-[11px] font-semibold uppercase tracking-[0.05em] text-muted-foreground [&>span]:flex [&>span]:items-center',
+          GITHUB_TASK_HEADER_SURFACE_CLASS,
+          GITHUB_TASK_GRID_CLASS
+        )}
+      >
+        <span className={GITHUB_TASK_STICKY_ID_HEADER_CLASS}>{t('feishu.list.colId', 'ID')}</span>
+        <span className={GITHUB_TASK_STICKY_TITLE_HEADER_CLASS}>
+          {t('feishu.list.colTitle', 'Title / Context')}
+        </span>
+        <span>{t('feishu.list.colAssignees', 'Assignees')}</span>
+        <span>{t('feishu.list.colStatus', 'Status')}</span>
+        <span>{t('feishu.list.colUpdated', 'Updated')}</span>
+        <span />
+      </div>
       {loading && items.length === 0
         ? Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className="px-3 py-3">
@@ -135,6 +178,7 @@ export function FeishuRecordList({
           item={item}
           selected={selectedRecord?.id === item.id}
           onOpen={onOpenRecord}
+          onLaunch={onLaunchRecord}
         />
       ))}
     </div>
