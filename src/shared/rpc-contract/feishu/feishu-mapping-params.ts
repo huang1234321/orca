@@ -18,5 +18,6 @@ export const FeishuTableMappingShape = z.object({
   assigneeField: OptionalPlainString,
   numberField: OptionalPlainString,
   repoField: OptionalPlainString,
+  docField: OptionalPlainString,
   comments: FeishuCommentsTableMapping.nullable().optional()
 })

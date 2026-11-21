@@ -18,6 +18,7 @@ const LABELS_NAME_HINTS = ['标签', 'labels', 'tags']
 const ASSIGNEE_NAME_HINTS = ['负责人', '处理人', '执行人', 'assignee', 'owner']
 const NUMBER_NAME_HINTS = ['编号', 'number', 'id']
 const REPO_NAME_HINTS = ['仓库', '代码库', 'repo', 'repository']
+const DOC_NAME_HINTS = ['文档', '详情文档', '详情', 'doc', 'document']
 
 function nameMatches(name: string, hints: readonly string[]): boolean {
   const lower = name.toLowerCase()
@@ -52,6 +53,12 @@ export function inferFeishuTableMapping(fields: readonly FeishuFieldSchema[]): F
     find((f) => uiType(f) === 'autonumber' && nameMatches(f.fieldName, NUMBER_NAME_HINTS)) ??
     find((f) => uiType(f) === 'autonumber')
   const repo = find((f) => uiType(f) === 'url' && nameMatches(f.fieldName, REPO_NAME_HINTS))
+  const doc = find(
+    (f) =>
+      uiType(f) === 'url' &&
+      f.fieldName !== repo?.fieldName &&
+      nameMatches(f.fieldName, DOC_NAME_HINTS)
+  )
 
   return {
     titleField: title?.fieldName ?? fields[0]?.fieldName ?? '',
@@ -61,6 +68,7 @@ export function inferFeishuTableMapping(fields: readonly FeishuFieldSchema[]): F
     ...(assignee ? { assigneeField: assignee.fieldName } : { assigneeField: null }),
     ...(number ? { numberField: number.fieldName } : { numberField: null }),
     ...(repo ? { repoField: repo.fieldName } : { repoField: null }),
+    ...(doc ? { docField: doc.fieldName } : { docField: null }),
     stateCategories: state ? inferStateCategories(state) : null,
     comments: null
   }

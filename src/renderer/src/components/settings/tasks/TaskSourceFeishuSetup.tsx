@@ -36,7 +36,8 @@ function mappingSlotList(
     { label: t('feishu.mapping.assignee', 'Assignee'), field: mapping.assigneeField },
     { label: t('feishu.mapping.body', 'Description'), field: mapping.bodyField },
     { label: t('feishu.mapping.number', 'Number'), field: mapping.numberField },
-    { label: t('feishu.mapping.repo', 'Repository link'), field: mapping.repoField }
+    { label: t('feishu.mapping.repo', 'Repository link'), field: mapping.repoField },
+    { label: t('feishu.mapping.doc', 'Detail doc'), field: mapping.docField }
   ]
 }
 

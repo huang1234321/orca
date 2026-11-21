@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import { ExternalLink, LoaderCircle, Rocket, X } from 'lucide-react'
+import { ExternalLink, FileText, LoaderCircle, Rocket, X } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -174,6 +174,17 @@ export function FeishuRecordDetail({
                 ))}
               </SelectContent>
             </Select>
+          ) : null}
+          {record.docUrl ? (
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => void openAppHttpLink(record.docUrl ?? '')}
+            >
+              <FileText className="size-4" />
+              {t('feishu.detail.openDoc', 'Doc')}
+            </Button>
           ) : null}
           <Button
             type="button"

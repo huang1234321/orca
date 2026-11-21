@@ -111,6 +111,7 @@ function mapWorkItem(
   const stateLabel = readString(fields[mapping.stateField ?? ''])
   const assignees = readPersonList(fields[mapping.assigneeField ?? ''])
   const repoUrl = readUrlLink(fields[mapping.repoField ?? ''])
+  const docUrl = readUrlLink(fields[mapping.docField ?? ''])
   return {
     id: recordId,
     key:
@@ -125,6 +126,7 @@ function mapWorkItem(
     labels: mapping.labelsField ? asStringArray(fields[mapping.labelsField]) : [],
     assignees,
     repoUrl,
+    docUrl,
     url: feishuRecordUrl(appToken, tableId, recordId),
     updatedAt: toIsoTimestamp(fields['更新时间'] ?? fields['修改时间']),
     createdAt: toIsoTimestamp(fields['创建时间'])
@@ -180,6 +182,7 @@ export async function searchFeishuRecords(
       ...(mapping.assigneeField ? [mapping.assigneeField] : []),
       ...(mapping.numberField ? [mapping.numberField] : []),
       ...(mapping.repoField ? [mapping.repoField] : []),
+      ...(mapping.docField ? [mapping.docField] : []),
       '创建时间',
       '更新时间'
     ].filter((name, index, all) => all.indexOf(name) === index),

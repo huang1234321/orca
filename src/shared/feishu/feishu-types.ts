@@ -19,6 +19,8 @@ export type FeishuTableMapping = {
   assigneeField?: string | null
   numberField?: string | null
   repoField?: string | null
+  /** URL field pointing at the row's linked Feishu doc; maintenance happens there. */
+  docField?: string | null
   comments?: {
     tableId: string
     linkField: string
@@ -58,6 +60,7 @@ export type FeishuWorkItem = {
   labels: string[]
   assignees: { id: string; name: string | null }[]
   repoUrl: string | null
+  docUrl: string | null
   url: string
   updatedAt: string | null
   createdAt: string | null
