@@ -25706,6 +25706,33 @@
       "stateMissing": "No single-select column found for state; records stay \"open\" until mapped.",
       "appIdPlaceholder": "cli_xxxxxxxxxxxxxxxx",
       "bindingPlaceholder": "https://xxx.feishu.cn/base/bascn…?table=tbl…&view=…"
+    },
+    "bodySaveFailed": "Description save failed",
+    "docContent": "Detail doc",
+    "docLoadFailed": "Doc load failed",
+    "launch": "Start workspace",
+    "openDoc": "Doc",
+    "repoUnmatched": "Repository not matched in Orca; add the repo or fix the row link, then retry",
+    "clearSearch": "Clear search",
+    "colAssignees": "Assignees",
+    "colId": "ID",
+    "colStatus": "Status",
+    "colTitle": "Title / Context",
+    "colUpdated": "Updated",
+    "doc": "Detail doc",
+    "all": "All",
+    "done": "Done",
+    "open": "Open",
+    "searchPlaceholder": "Search Feishu tasks...",
+    "refresh": "Refresh Feishu tasks",
+    "row": {
+      "start": "Start",
+      "more": "More actions",
+      "launchDirect": "Launch workspace directly",
+      "openBrowser": "Open in browser"
+    },
+    "mode": {
+      "issues": "Issues"
     }
   },
   "workspaceSpace": {

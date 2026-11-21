@@ -22334,6 +22334,33 @@
       "stateMissing": "未找到可作為狀態的單選欄位;映射前記錄全部視為「進行中」。",
       "appIdPlaceholder": "cli_xxxxxxxxxxxxxxxx",
       "bindingPlaceholder": "https://xxx.feishu.cn/base/bascn…?table=tbl…&view=…"
+    },
+    "bodySaveFailed": "描述儲存失敗",
+    "docContent": "詳情文件",
+    "docLoadFailed": "文件載入失敗",
+    "launch": "啟動工作區",
+    "openDoc": "文件",
+    "repoUnmatched": "未在 Orca 中匹配到倉庫;請添加倉庫或修正行內連結後重試",
+    "clearSearch": "清除搜尋",
+    "colAssignees": "負責人",
+    "colId": "ID",
+    "colStatus": "狀態",
+    "colTitle": "標題 / 上下文",
+    "colUpdated": "最後更新",
+    "doc": "詳情文件",
+    "all": "全部",
+    "done": "已完成",
+    "open": "開啟",
+    "searchPlaceholder": "搜尋飛書任務…",
+    "refresh": "重新整理飛書任務",
+    "row": {
+      "start": "啟動",
+      "more": "更多操作",
+      "launchDirect": "直接啟動工作區",
+      "openBrowser": "在瀏覽器開啟"
+    },
+    "mode": {
+      "issues": "議題"
     }
   },
   "workspaceSpace": {

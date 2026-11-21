@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { LoaderCircle, RefreshCw, Search, X } from 'lucide-react'
+import { toast } from 'sonner'
 import { FeishuIcon } from '@/components/icons/FeishuIcon'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -9,6 +10,11 @@ import type { TaskPageComposerActionsModel } from '../use-task-page-composer-act
 import { FeishuRecordList } from './FeishuRecordList'
 import { PresetChip } from '../github/listing/Filters'
 import { launchFeishuRecordWorkspace } from '@/lib/workspace/creation/work-item/launch-feishu-record'
+import {
+  feishuLocalTarget,
+  feishuUpdateRecordStateForTarget
+} from '@/runtime/feishu/runtime-feishu-client'
+import type { FeishuWorkItem } from '../../../../../shared/feishu/feishu-types'
 import { FeishuRecordDetail } from './FeishuRecordDetail'
 import { normalizeFeishuRepoUrl, useFeishuTaskList } from './use-feishu-task-list'
 
@@ -27,6 +33,7 @@ export function TaskPageFeishuContent({
   const [searchInput, setSearchInput] = useState('')
   const [presetFilter, setPresetFilter] = useState<'all' | 'open' | 'done'>('open')
   const {
+    openModal,
     settings,
     repos,
     repoSelection,
@@ -68,6 +75,52 @@ export function TaskPageFeishuContent({
     refreshNonce: feishuRefreshNonce
   })
 
+  const useRecord = (item: FeishuWorkItem): void => {
+    openModal('new-workspace-composer', {
+      linkedWorkItem: {
+        provider: 'feishu',
+        type: 'issue',
+        number: Number(item.key) || 0,
+        title: item.title,
+        url: item.url
+      },
+      prefilledName: item.title
+    })
+  }
+
+  const changeRecordState = (item: FeishuWorkItem, stateOption: string): void => {
+    const b = binding
+    if (!b) {
+      return
+    }
+    const prev = feishuItems
+    setFeishuItems(
+      prev.map((current) =>
+        current.id === item.id
+          ? {
+              ...current,
+              stateLabel: stateOption,
+              state: stateOption === '已完成' ? 'closed' : 'open'
+            }
+          : current
+      )
+    )
+    feishuUpdateRecordStateForTarget(feishuLocalTarget, {
+      appToken: b.appToken,
+      tableId: b.tableId,
+      recordId: item.id,
+      mapping: b.mapping,
+      stateOption
+    })
+      .then((result) => {
+        if (!result.ok) {
+          setFeishuItems(prev)
+          toast.error(result.error)
+        }
+      })
+      .catch(() => setFeishuItems(prev))
+  }
+
   if (taskSource !== 'feishu') {
     return null
   }
@@ -96,6 +149,17 @@ export function TaskPageFeishuContent({
   return (
     <div className="mt-3 flex min-h-0 min-w-0 max-h-full flex-col overflow-hidden rounded-md border border-border/50 bg-background shadow-sm">
       <div className="flex min-w-0 flex-col gap-2.5 rounded-md rounded-b-none border border-border/50 bg-muted/35 px-3 py-2.5">
+        <div className="flex min-w-0 flex-wrap items-center gap-2">
+          <div className="flex items-center gap-1 text-xs">
+            <button
+              type="button"
+              className="rounded-md border border-border/50 bg-foreground/90 px-2.5 py-1 text-xs font-medium text-background shadow-xs transition"
+              aria-pressed="true"
+            >
+              {t('feishu.mode.issues', '议题')}
+            </button>
+          </div>
+        </div>
         <div className="flex flex-wrap gap-1.5">
           {(
             [
@@ -176,6 +240,9 @@ export function TaskPageFeishuContent({
         >
           <FeishuRecordList
             onLaunchRecord={(item) => void launchFeishuRecordWorkspace(item)}
+            onUseRecord={useRecord}
+            onStateChange={changeRecordState}
+            stateOptions={Object.keys(binding?.mapping?.stateCategories ?? {})}
             items={feishuItems}
             loading={feishuLoading}
             selectedRecord={selectedFeishuRecord}

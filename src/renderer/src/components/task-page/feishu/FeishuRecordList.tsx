@@ -1,6 +1,13 @@
-import { ExternalLink, Rocket } from 'lucide-react'
+import { ArrowRight, ChevronDown, ExternalLink, Rocket } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { ButtonGroup } from '@/components/ui/button-group'
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem
+} from '@/components/ui/dropdown-menu'
 import { GitHubUserAvatar } from '@/components/github/github-user-avatar'
-import { Badge } from '@/components/ui/badge'
 import { useTranslate } from '@/i18n/use-translate'
 import { cn } from '@/lib/class-names'
 import { openAppHttpLink } from '@/lib/browser/navigation/app-http-link-open'
@@ -28,13 +35,19 @@ function repoLabel(repoUrl: string | null): string | null {
 function FeishuRow({
   item,
   selected,
+  stateOptions,
   onOpen,
-  onLaunch
+  onUse,
+  onLaunch,
+  onStateChange
 }: {
   item: FeishuWorkItem
   selected: boolean
+  stateOptions: readonly string[]
   onOpen: (item: FeishuWorkItem) => void
+  onUse: (item: FeishuWorkItem) => void
   onLaunch: (item: FeishuWorkItem) => void
+  onStateChange: (item: FeishuWorkItem, stateOption: string) => void
 }): React.JSX.Element {
   const t = useTranslate()
   return (
@@ -91,40 +104,87 @@ function FeishuRow({
       </div>
       <div className="flex items-center">
         {item.stateLabel ? (
-          <Badge
-            variant={item.state === 'closed' ? 'outline' : 'secondary'}
-            className="px-1.5 py-0"
-          >
-            {item.stateLabel}
-          </Badge>
+          stateOptions.length > 0 ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  type="button"
+                  onClick={(event) => event.stopPropagation()}
+                  className={cn(
+                    'inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold leading-none transition hover:bg-accent',
+                    item.state === 'closed'
+                      ? 'border-rose-500/30 bg-rose-500/10 text-rose-600 dark:text-rose-300'
+                      : 'border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-300'
+                  )}
+                >
+                  {item.stateLabel}
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" onClick={(event) => event.stopPropagation()}>
+                {stateOptions.map((option) => (
+                  <DropdownMenuItem key={option} onSelect={() => onStateChange(item, option)}>
+                    {option}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <span
+              className={cn(
+                'inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold leading-none',
+                item.state === 'closed'
+                  ? 'border-rose-500/30 bg-rose-500/10 text-rose-600 dark:text-rose-300'
+                  : 'border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-300'
+              )}
+            >
+              {item.stateLabel}
+            </span>
+          )
         ) : null}
       </div>
       <div className="flex items-center text-[12px] text-muted-foreground">
         {item.updatedAt ? formatRelativeTime(item.updatedAt) : ''}
       </div>
-      <div className="flex items-center justify-end gap-0.5 pr-0.5 opacity-0 transition-opacity group-hover/feishu-row:opacity-100">
-        <button
-          type="button"
-          className="rounded p-1 text-muted-foreground hover:bg-background hover:text-foreground"
-          aria-label={t('feishu.detail.launch', 'Start workspace')}
-          onClick={(event) => {
-            event.stopPropagation()
-            onLaunch(item)
-          }}
-        >
-          <Rocket className="size-3.5" />
-        </button>
-        <button
-          type="button"
-          className="rounded p-1 text-muted-foreground hover:bg-background hover:text-foreground"
-          aria-label={t('feishu.list.openInBrowser', 'Open in Feishu')}
-          onClick={(event) => {
-            event.stopPropagation()
-            void openAppHttpLink(item.url)
-          }}
-        >
-          <ExternalLink className="size-3.5" />
-        </button>
+      <div
+        className="flex items-center justify-end pr-0.5"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <ButtonGroup>
+          <Button
+            type="button"
+            variant="outline"
+            size="xs"
+            onClick={() => onUse(item)}
+            className="min-w-[72px] gap-1 bg-background/80 font-semibold"
+            aria-label={t('feishu.detail.launch', 'Start workspace')}
+          >
+            {t('feishu.row.start', 'Start')}
+            <ArrowRight className="size-3" />
+          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                type="button"
+                variant="outline"
+                size="icon-xs"
+                className="bg-background/80"
+                aria-label={t('feishu.row.more', 'More actions')}
+              >
+                <ChevronDown className="size-3" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onSelect={() => onLaunch(item)}>
+                <Rocket className="size-4" />
+                {t('feishu.row.launchDirect', 'Launch workspace directly')}
+              </DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => void openAppHttpLink(item.url)}>
+                <ExternalLink className="size-4" />
+                {t('feishu.row.openBrowser', 'Open in browser')}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </ButtonGroup>
       </div>
     </div>
   )
@@ -134,14 +194,20 @@ export function FeishuRecordList({
   items,
   loading,
   selectedRecord,
+  stateOptions,
   onOpenRecord,
-  onLaunchRecord
+  onUseRecord,
+  onLaunchRecord,
+  onStateChange
 }: {
   items: readonly FeishuWorkItem[]
   loading: boolean
   selectedRecord: FeishuWorkItem | null
+  stateOptions: readonly string[]
   onOpenRecord: (item: FeishuWorkItem) => void
+  onUseRecord: (item: FeishuWorkItem) => void
   onLaunchRecord: (item: FeishuWorkItem) => void
+  onStateChange: (item: FeishuWorkItem, stateOption: string) => void
 }): React.JSX.Element {
   const t = useTranslate()
   return (
@@ -185,8 +251,11 @@ export function FeishuRecordList({
           key={item.id}
           item={item}
           selected={selectedRecord?.id === item.id}
+          stateOptions={stateOptions}
           onOpen={onOpenRecord}
+          onUse={onUseRecord}
           onLaunch={onLaunchRecord}
+          onStateChange={onStateChange}
         />
       ))}
     </div>
