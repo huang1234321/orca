@@ -65,7 +65,9 @@ function readPersonList(value: unknown): { id: string; name: string | null }[] {
 }
 
 function readUrlLink(value: unknown): string | null {
-  const link = isRecord(value) ? value.link : null
+  // URL fields read back as [{link, text, type}] like person fields read as arrays.
+  const entry = Array.isArray(value) ? value[0] : value
+  const link = isRecord(entry) ? entry.link : null
   return typeof link === 'string' ? link : null
 }
 
