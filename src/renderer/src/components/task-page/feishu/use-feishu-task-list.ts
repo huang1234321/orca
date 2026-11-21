@@ -103,7 +103,7 @@ export function normalizeFeishuRepoUrl(url: string): string {
     .replace(/\.git$/, '')
 }
 
-/** A repo picker selection scopes repo-linked rows; unlinked rows stay visible. */
+/** A repo picker selection scopes rows to the selected repos; unlinked rows only show with no selection. */
 export function scopeItemsToRepoFilter(
   items: FeishuWorkItem[],
   filter: readonly string[] | undefined
@@ -112,7 +112,9 @@ export function scopeItemsToRepoFilter(
     return items
   }
   const allowed = new Set(filter.map(repoUrlPath))
-  return items.filter((item) => !item.repoUrl || allowed.has(repoUrlPath(item.repoUrl)))
+  return items.filter(
+    (item) => item.repoUrl !== null && allowed.has(repoUrlPath(item.repoUrl ?? ''))
+  )
 }
 
 /** Path-only so web links match clone remotes regardless of host spelling. */
