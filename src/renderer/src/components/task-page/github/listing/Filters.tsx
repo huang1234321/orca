@@ -28,7 +28,7 @@ import {
   gitHubPRWhoPreset
 } from './task-page-pr-chips'
 
-function PresetChip({
+export function PresetChip({
   label,
   active,
   onSelect,

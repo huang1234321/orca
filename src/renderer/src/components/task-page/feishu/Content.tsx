@@ -4,10 +4,10 @@ import { FeishuIcon } from '@/components/icons/FeishuIcon'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useTranslate } from '@/i18n/use-translate'
-import { cn } from '@/lib/class-names'
 import { useAppStore } from '@/store'
 import type { TaskPageComposerActionsModel } from '../use-task-page-composer-actions'
 import { FeishuRecordList } from './FeishuRecordList'
+import { PresetChip } from '../github/listing/Filters'
 import { launchFeishuRecordWorkspace } from '@/lib/workspace/creation/work-item/launch-feishu-record'
 import { FeishuRecordDetail } from './FeishuRecordDetail'
 import { normalizeFeishuRepoUrl, useFeishuTaskList } from './use-feishu-task-list'
@@ -104,20 +104,12 @@ export function TaskPageFeishuContent({
               { id: 'done', label: t('feishu.preset.done', 'Done') }
             ] as const
           ).map((chip) => (
-            <button
+            <PresetChip
               key={chip.id}
-              type="button"
-              aria-pressed={presetFilter === chip.id}
-              onClick={() => setPresetFilter(chip.id)}
-              className={cn(
-                'rounded-md border px-2.5 py-1 text-xs font-medium transition',
-                presetFilter === chip.id
-                  ? 'border-border/50 bg-foreground/90 text-background shadow-xs'
-                  : 'border-border/60 bg-background text-foreground shadow-xs hover:bg-muted/60'
-              )}
-            >
-              {chip.label}
-            </button>
+              label={chip.label}
+              active={presetFilter === chip.id}
+              onSelect={() => setPresetFilter(chip.id)}
+            />
           ))}
         </div>
         <div className="flex min-w-0 flex-wrap items-center gap-2">
@@ -177,7 +169,11 @@ export function TaskPageFeishuContent({
           onRecordChanged={setSelectedFeishuRecord}
         />
       ) : (
-        <div className="min-h-0 flex-1 overflow-auto scrollbar-sleek">
+        <div
+          data-task-list-scroll="feishu"
+          className="min-h-0 flex-initial overflow-auto scrollbar-sleek scrollbar-sleek-lg"
+          style={{ scrollbarGutter: 'stable' }}
+        >
           <FeishuRecordList
             onLaunchRecord={(item) => void launchFeishuRecordWorkspace(item)}
             items={feishuItems}

@@ -1,4 +1,5 @@
 import { ExternalLink, Rocket } from 'lucide-react'
+import { GitHubUserAvatar } from '@/components/github/github-user-avatar'
 import { Badge } from '@/components/ui/badge'
 import { useTranslate } from '@/i18n/use-translate'
 import { cn } from '@/lib/class-names'
@@ -74,12 +75,19 @@ function FeishuRow({
         </div>
       </div>
       <div className="flex min-w-0 items-center">
-        <span className="truncate text-[12px] text-muted-foreground">
-          {item.assignees
-            .map((person) => person.name ?? '')
-            .filter(Boolean)
-            .join(', ')}
-        </span>
+        {item.assignees.slice(0, 2).map((person, index) => (
+          <GitHubUserAvatar
+            key={person.id}
+            login={person.id}
+            name={person.name}
+            className={cn('size-5 rounded-full ring-1 ring-background', index > 0 && '-ml-1.5')}
+          />
+        ))}
+        {item.assignees.length > 2 ? (
+          <span className="-ml-1.5 text-[11px] text-muted-foreground">
+            +{item.assignees.length - 2}
+          </span>
+        ) : null}
       </div>
       <div className="flex items-center">
         {item.stateLabel ? (
