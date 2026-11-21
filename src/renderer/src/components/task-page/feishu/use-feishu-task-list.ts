@@ -60,8 +60,7 @@ export function useFeishuTaskList(model: FeishuTaskListModel): void {
         setItems([])
         return
       }
-      const visible = scopeItemsToRepoFilter(result.items, model.repoUrlFilter)
-      collected.push(...visible)
+      collected.push(...result.items)
       setItems([...collected])
       if (result.hasMore && result.pageToken && depth + 1 < MAX_PAGES_PER_FETCH) {
         await fetchPages(result.pageToken, depth + 1)
@@ -105,7 +104,7 @@ export function normalizeFeishuRepoUrl(url: string): string {
 }
 
 /** A repo picker selection scopes repo-linked rows; unlinked rows stay visible. */
-function scopeItemsToRepoFilter(
+export function scopeItemsToRepoFilter(
   items: FeishuWorkItem[],
   filter: readonly string[] | undefined
 ): FeishuWorkItem[] {

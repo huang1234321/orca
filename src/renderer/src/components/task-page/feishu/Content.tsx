@@ -16,7 +16,11 @@ import {
 } from '@/runtime/feishu/runtime-feishu-client'
 import type { FeishuWorkItem } from '../../../../../shared/feishu/feishu-types'
 import { FeishuRecordDetail } from './FeishuRecordDetail'
-import { normalizeFeishuRepoUrl, useFeishuTaskList } from './use-feishu-task-list'
+import {
+  normalizeFeishuRepoUrl,
+  scopeItemsToRepoFilter,
+  useFeishuTaskList
+} from './use-feishu-task-list'
 
 function openFeishuSetup(): void {
   useAppStore.getState().openSettingsPage()
@@ -63,9 +67,9 @@ export function TaskPageFeishuContent({
       .map((repo) => normalizeFeishuRepoUrl(repo.gitRemoteIdentity?.remoteUrl ?? ''))
       .filter((url) => url.length > 0)
   }, [repos, repoSelection])
+  const visibleItems = scopeItemsToRepoFilter(feishuItems, repoUrlFilter)
   useFeishuTaskList({
     binding,
-    repoUrlFilter,
     connected,
     setItems: setFeishuItems,
     setLoading: setFeishuLoading,
@@ -232,7 +236,7 @@ export function TaskPageFeishuContent({
             onUseRecord={useRecord}
             onStateChange={changeRecordState}
             stateOptions={Object.keys(binding?.mapping?.stateCategories ?? {})}
-            items={feishuItems}
+            items={visibleItems}
             loading={feishuLoading}
             selectedRecord={selectedFeishuRecord}
             onOpenRecord={setSelectedFeishuRecord}
