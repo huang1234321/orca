@@ -1,5 +1,6 @@
 import React from 'react'
 import { useTaskPageStoreBindings } from './use-task-page-store-bindings'
+import { useIntegrationProviderStatusRefresh } from '@/runtime/hosts/observations/use-integration-provider-status-refresh'
 import { useTaskPageRepoSelection } from './use-task-page-repo-selection'
 import { useTaskPageRuntimeHosts } from './use-task-page-runtime-hosts'
 import { useTaskPageSourceAvailability } from './use-task-page-source-availability'
@@ -42,6 +43,8 @@ import { useTaskPageComposerActions } from './use-task-page-composer-actions'
 import { TaskPageSurface } from './Surface'
 
 export default function TaskPage(): React.JSX.Element {
+  // Task-page mount must surface provider connection state (e.g. Feishu) without visiting Settings.
+  useIntegrationProviderStatusRefresh()
   const stage1 = useTaskPageStoreBindings()
   const stage2 = useTaskPageRepoSelection(stage1)
   const stage3 = useTaskPageRuntimeHosts(stage2)
