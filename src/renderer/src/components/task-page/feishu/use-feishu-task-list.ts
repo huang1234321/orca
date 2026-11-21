@@ -14,6 +14,8 @@ const MAX_PAGES_PER_FETCH = 3
 export type FeishuTaskListModel = {
   binding: FeishuTaskSourceBinding | null
   connected: boolean
+  /** Normalized repo URLs from the task page repo picker; empty means unscoped. */
+  repoUrlFilter?: readonly string[]
   setItems: (items: FeishuWorkItem[]) => void
   setLoading: (loading: boolean) => void
   setError: (error: string | null) => void
@@ -55,7 +57,8 @@ export function useFeishuTaskList(model: FeishuTaskListModel): void {
         setItems([])
         return
       }
-      collected.push(...result.items)
+      const visible = scopeItemsToRepoFilter(result.items, model.repoUrlFilter)
+      collected.push(...visible)
       setItems([...collected])
       if (result.hasMore && result.pageToken && depth + 1 < MAX_PAGES_PER_FETCH) {
         await fetchPages(result.pageToken, depth + 1)
@@ -86,4 +89,25 @@ export function useFeishuTaskList(model: FeishuTaskListModel): void {
     setError,
     setItems
   ])
+}
+
+export function normalizeFeishuRepoUrl(url: string): string {
+  return url
+    .trim()
+    .toLowerCase()
+    .replace(/^[a-z]+:\/\//, '')
+    .replace(/\/+$/, '')
+    .replace(/\.git$/, '')
+}
+
+/** A repo picker selection scopes repo-linked rows; unlinked rows stay visible. */
+function scopeItemsToRepoFilter(
+  items: FeishuWorkItem[],
+  filter: readonly string[] | undefined
+): FeishuWorkItem[] {
+  if (!filter || filter.length === 0) {
+    return items
+  }
+  const allowed = new Set(filter)
+  return items.filter((item) => !item.repoUrl || allowed.has(normalizeFeishuRepoUrl(item.repoUrl)))
 }

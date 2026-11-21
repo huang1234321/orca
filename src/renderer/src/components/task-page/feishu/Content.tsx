@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { LoaderCircle, RefreshCcw } from 'lucide-react'
 import { FeishuIcon } from '@/components/icons/FeishuIcon'
 import { Button } from '@/components/ui/button'
@@ -8,7 +8,7 @@ import { useAppStore } from '@/store'
 import type { TaskPageComposerActionsModel } from '../use-task-page-composer-actions'
 import { FeishuRecordList } from './FeishuRecordList'
 import { FeishuRecordDetail } from './FeishuRecordDetail'
-import { useFeishuTaskList } from './use-feishu-task-list'
+import { normalizeFeishuRepoUrl, useFeishuTaskList } from './use-feishu-task-list'
 
 function openFeishuSetup(): void {
   useAppStore.getState().openSettingsPage()
@@ -25,6 +25,8 @@ export function TaskPageFeishuContent({
   const [searchInput, setSearchInput] = useState('')
   const {
     settings,
+    repos,
+    repoSelection,
     taskSource,
     hideTaskSource,
     feishuStatus,
@@ -41,8 +43,19 @@ export function TaskPageFeishuContent({
   } = model
   const binding = settings?.feishuTaskSource ?? null
   const connected = feishuStatus?.connected === true
+  const repoUrlFilter = useMemo(() => {
+    if (!repoSelection || repoSelection.size === 0) {
+      return []
+    }
+    const allowed = new Set(repoSelection)
+    return (repos ?? [])
+      .filter((repo) => allowed.has(repo.id))
+      .map((repo) => normalizeFeishuRepoUrl(repo.gitRemoteIdentity?.remoteUrl ?? ''))
+      .filter((url) => url.length > 0)
+  }, [repos, repoSelection])
   useFeishuTaskList({
     binding,
+    repoUrlFilter,
     connected,
     setItems: setFeishuItems,
     setLoading: setFeishuLoading,

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import { ExternalLink, LoaderCircle, X } from 'lucide-react'
+import { ExternalLink, LoaderCircle, Rocket, X } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -14,6 +14,7 @@ import {
 import CommentMarkdown from '@/components/comment-markdown/CommentMarkdown'
 import { useTranslate } from '@/i18n/use-translate'
 import { openAppHttpLink } from '@/lib/browser/navigation/app-http-link-open'
+import { launchFeishuRecordWorkspace } from '@/lib/workspace/creation/work-item/launch-feishu-record'
 import { formatRelativeTime } from '../task-page-source-context'
 import type {
   FeishuComment,
@@ -174,6 +175,15 @@ export function FeishuRecordDetail({
               </SelectContent>
             </Select>
           ) : null}
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            onClick={() => void launchFeishuRecordWorkspace(record)}
+          >
+            <Rocket className="size-4" />
+            <span className="sr-only">{t('feishu.detail.launch', 'Start workspace')}</span>
+          </Button>
           <Button
             type="button"
             variant="ghost"
