@@ -1,21 +1,17 @@
 import { useEffect, useMemo } from 'react'
-import type { GlobalSettings } from '../../../../../shared/settings/global-settings-types'
 import { parseTaskQuery } from '../../../../../shared/work-items/task-query'
 import type {
   FeishuTaskSourceBinding,
   FeishuWorkItem
 } from '../../../../../shared/feishu/feishu-types'
-import { feishuListRecordsForTarget } from '@/runtime/feishu/runtime-feishu-client'
 import {
-  defaultScopeSource,
-  rowLessSourceTarget
-} from '@/runtime/hosts/selection/default-creation-host'
-import type { RuntimeClientTarget } from '../../../../../shared/remote-runtime/host-catalog/runtime-client-target'
+  feishuListRecordsForTarget,
+  feishuLocalTarget
+} from '@/runtime/feishu/runtime-feishu-client'
 
 const MAX_PAGES_PER_FETCH = 3
 
 export type FeishuTaskListModel = {
-  settings: Pick<GlobalSettings, 'activeRuntimeEnvironmentId'> | null
   binding: FeishuTaskSourceBinding | null
   connected: boolean
   setItems: (items: FeishuWorkItem[]) => void
@@ -29,21 +25,9 @@ export type FeishuTaskListModel = {
 export function useFeishuTaskList(model: FeishuTaskListModel): void {
   const { binding, connected, setItems, setLoading, setError } = model
   const parsed = useMemo(() => parseTaskQuery(model.searchInput), [model.searchInput])
-  const target: RuntimeClientTarget = useMemo(
-    () => rowLessSourceTarget(defaultScopeSource(model.settings)),
-    [model.settings]
-  )
   const state = parsed.state === 'open' || parsed.state === 'closed' ? parsed.state : null
   const freeText = parsed.freeText || null
   const labels = parsed.labels
-  const scopeKey = JSON.stringify([
-    binding?.appToken ?? null,
-    binding?.tableId ?? null,
-    state,
-    freeText,
-    labels,
-    model.refreshNonce
-  ])
 
   useEffect(() => {
     if (!binding || !connected) {
@@ -54,7 +38,7 @@ export function useFeishuTaskList(model: FeishuTaskListModel): void {
     setError(null)
     const collected: FeishuWorkItem[] = []
     const fetchPages = async (pageToken?: string, depth = 0): Promise<void> => {
-      const result = await feishuListRecordsForTarget(target, {
+      const result = await feishuListRecordsForTarget(feishuLocalTarget, {
         appToken: binding.appToken,
         tableId: binding.tableId,
         mapping: binding.mapping,
@@ -91,13 +75,15 @@ export function useFeishuTaskList(model: FeishuTaskListModel): void {
     return () => {
       cancelled = true
     }
-    // scopeKey folds every fetch input; setter identity stays stable.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [scopeKey, connected, target, setLoading, setError, setItems])
-}
-
-export function feishuTaskTarget(
-  settings: Pick<GlobalSettings, 'activeRuntimeEnvironmentId'> | null
-): RuntimeClientTarget {
-  return rowLessSourceTarget(defaultScopeSource(settings))
+  }, [
+    binding,
+    connected,
+    state,
+    freeText,
+    labels,
+    model.refreshNonce,
+    setLoading,
+    setError,
+    setItems
+  ])
 }

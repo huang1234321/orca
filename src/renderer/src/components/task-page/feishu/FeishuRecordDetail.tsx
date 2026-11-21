@@ -24,20 +24,18 @@ import type {
 import {
   feishuAddCommentForTarget,
   feishuListCommentsForTarget,
+  feishuLocalTarget,
   feishuUpdateRecordStateForTarget
 } from '@/runtime/feishu/runtime-feishu-client'
-import type { RuntimeClientTarget } from '../../../../../shared/remote-runtime/host-catalog/runtime-client-target'
 
 export function FeishuRecordDetail({
   record,
   binding,
-  target,
   onClose,
   onRecordChanged
 }: {
   record: FeishuWorkItem
   binding: FeishuTaskSourceBinding
-  target: RuntimeClientTarget
   onClose: () => void
   onRecordChanged: (record: FeishuWorkItem) => void
 }): React.JSX.Element {
@@ -57,7 +55,7 @@ export function FeishuRecordDetail({
       setCommentsLoading(false)
       return
     }
-    feishuListCommentsForTarget(target, {
+    feishuListCommentsForTarget(feishuLocalTarget, {
       appToken: binding.appToken,
       mapping,
       recordId: record.id
@@ -80,7 +78,7 @@ export function FeishuRecordDetail({
     return () => {
       cancelled = true
     }
-  }, [binding.appToken, mapping, record.id, target])
+  }, [binding.appToken, mapping, record.id])
 
   const submitComment = async (): Promise<void> => {
     const body = commentBody.trim()
@@ -88,26 +86,18 @@ export function FeishuRecordDetail({
       return
     }
     setSending(true)
-    try {
-      const result = await feishuAddCommentForTarget(target, {
-        appToken: binding.appToken,
-        mapping,
-        recordId: record.id,
-        body
-      })
-      if (!result.ok) {
-        toast.error(result.error)
-        return
+    await postFeishuComment(
+      { appToken: binding.appToken, mapping, recordId: record.id, body },
+      (comment) => {
+        setComments((current) => [...current, comment])
+        setCommentBody('')
       }
-      setComments((current) => [...current, result.comment])
-      setCommentBody('')
-    } finally {
-      setSending(false)
-    }
+    )
+    setSending(false)
   }
 
   const changeState = async (stateOption: string): Promise<void> => {
-    const result = await feishuUpdateRecordStateForTarget(target, {
+    const result = await feishuUpdateRecordStateForTarget(feishuLocalTarget, {
       appToken: binding.appToken,
       tableId: binding.tableId,
       recordId: record.id,
@@ -236,4 +226,19 @@ export function FeishuRecordDetail({
       </div>
     </div>
   )
+}
+
+/** Module-level so the component keeps no try/finally (a React Compiler bailout). */
+async function postFeishuComment(
+  args: Parameters<typeof feishuAddCommentForTarget>[1],
+  onSent: (comment: FeishuComment) => void
+): Promise<void> {
+  const result = await feishuAddCommentForTarget(feishuLocalTarget, args)
+  if (!result.ok) {
+    toast.error(result.error)
+    return
+  }
+  if (result.ok) {
+    onSent(result.comment)
+  }
 }

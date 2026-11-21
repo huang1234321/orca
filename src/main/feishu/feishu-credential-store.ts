@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from 'node:fs'
+import { readFile, writeFile } from 'node:fs/promises'
 import { homedir } from 'node:os'
 import { join } from 'node:path'
 import { createIntegrationStateFileCache } from '../credentials/integration-state-file-cache'
@@ -24,9 +24,9 @@ function tokenFilePath(_appId: string): string {
 
 const appFileCache = createIntegrationStateFileCache<FeishuAppRecord | null>({
   filePath: appFilePath,
-  readFromDisk: (): FeishuAppRecord | null => {
+  readFromDisk: async (): Promise<FeishuAppRecord | null> => {
     try {
-      const parsed: { appId?: unknown } = JSON.parse(readFileSync(appFilePath(), 'utf8'))
+      const parsed: { appId?: unknown } = JSON.parse(await readFile(appFilePath(), 'utf8'))
       return typeof parsed.appId === 'string' && parsed.appId.trim()
         ? { appId: parsed.appId.trim() }
         : null
@@ -53,7 +53,7 @@ export function feishuCredentialError(): Promise<string | undefined> {
 export async function saveFeishuApp(appId: string, appSecret: string): Promise<void> {
   await inCredentialFileOrder(`${tokenFilePath(appId)}.mutation`, async () => {
     await writeEncryptedCredential('Feishu', tokenFilePath(appId), appSecret)
-    writeFileSync(appFilePath(), `${JSON.stringify({ appId }, null, 2)}\n`, { mode: 0o600 })
+    await writeFile(appFilePath(), `${JSON.stringify({ appId }, null, 2)}\n`, { mode: 0o600 })
     appFileCache.invalidate()
   })
   tokenCache.forget('app')

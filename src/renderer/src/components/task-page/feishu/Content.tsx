@@ -8,7 +8,7 @@ import { useAppStore } from '@/store'
 import type { TaskPageComposerActionsModel } from '../use-task-page-composer-actions'
 import { FeishuRecordList } from './FeishuRecordList'
 import { FeishuRecordDetail } from './FeishuRecordDetail'
-import { feishuTaskTarget, useFeishuTaskList } from './use-feishu-task-list'
+import { useFeishuTaskList } from './use-feishu-task-list'
 
 function openFeishuSetup(): void {
   useAppStore.getState().openSettingsPage()
@@ -42,7 +42,6 @@ export function TaskPageFeishuContent({
   const binding = settings?.feishuTaskSource ?? null
   const connected = feishuStatus?.connected === true
   useFeishuTaskList({
-    settings: settings ?? null,
     binding,
     connected,
     setItems: setFeishuItems,
@@ -125,7 +124,6 @@ export function TaskPageFeishuContent({
         <FeishuRecordDetail
           record={selectedFeishuRecord}
           binding={binding}
-          target={feishuTaskTarget(settings ?? null)}
           onClose={() => setSelectedFeishuRecord(null)}
           onRecordChanged={setSelectedFeishuRecord}
         />

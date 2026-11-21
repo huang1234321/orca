@@ -5,18 +5,14 @@ import { Input } from '@/components/ui/input'
 import { TaskSourceShowInTasksStep } from './TaskSourceShowInTasksStep'
 import { TaskSourceStepRow } from './TaskSourceStepRow'
 import { useTranslate } from '@/i18n/use-translate'
-import { useAppStore } from '@/store'
 import type {
   FeishuTableMapping,
   FeishuTaskSourceBinding
 } from '../../../../../shared/feishu/feishu-types'
 import {
-  defaultScopeSource,
-  rowLessSourceTarget
-} from '@/runtime/hosts/selection/default-creation-host'
-import {
   feishuConnectForTarget,
-  feishuInferMappingForTarget
+  feishuInferMappingForTarget,
+  feishuLocalTarget
 } from '@/runtime/feishu/runtime-feishu-client'
 import { getConnectStepState, type ConnectStepProps } from './task-source-setup-state'
 
@@ -50,7 +46,6 @@ export function FeishuSetupSteps(
   }
 ): React.JSX.Element {
   const t = useTranslate()
-  const settings = useAppStore((s) => s.settings)
   const [connectOpen, setConnectOpen] = useState(false)
   const [appId, setAppId] = useState('')
   const [appSecret, setAppSecret] = useState('')
@@ -60,25 +55,16 @@ export function FeishuSetupSteps(
   )
   const [inferring, setInferring] = useState(false)
   const [inferred, setInferred] = useState<FeishuTableMapping | null>(null)
-  const target = rowLessSourceTarget(defaultScopeSource(settings))
 
   const handleConnect = async (): Promise<void> => {
     setConnecting(true)
-    try {
-      const result = await feishuConnectForTarget(target, {
-        appId: appId.trim(),
-        appSecret: appSecret.trim()
-      })
-      if (!result.ok) {
-        toast.error(result.error)
-        return
-      }
-      setConnectOpen(false)
-      setAppSecret('')
-      props.onConnected()
-    } finally {
-      setConnecting(false)
-    }
+    await connectFeishuApp(
+      appId.trim(),
+      appSecret.trim(),
+      () => setConnectOpen(false),
+      props.onConnected
+    )
+    setConnecting(false)
   }
 
   const handleInfer = async (): Promise<void> => {
@@ -97,16 +83,11 @@ export function FeishuSetupSteps(
       return
     }
     setInferring(true)
-    try {
-      const result = await feishuInferMappingForTarget(target, parsed)
-      if (!result.ok) {
-        toast.error(result.error)
-        return
-      }
-      setInferred(result.mapping)
-      props.onUpdateBinding({ ...parsed, mapping: result.mapping })
-    } finally {
-      setInferring(false)
+    const mapping = await inferFeishuMapping(parsed)
+    setInferring(false)
+    if (mapping) {
+      setInferred(mapping)
+      props.onUpdateBinding({ ...parsed, mapping })
     }
   }
 
@@ -233,4 +214,33 @@ export function FeishuSetupSteps(
       />
     </ol>
   )
+}
+
+/** Module-level so the component keeps no try/finally (a React Compiler bailout). */
+async function connectFeishuApp(
+  appId: string,
+  appSecret: string,
+  closeDialog: () => void,
+  onConnected: () => void
+): Promise<void> {
+  const result = await feishuConnectForTarget(feishuLocalTarget, { appId, appSecret })
+  if (!result.ok) {
+    toast.error(result.error)
+    return
+  }
+  closeDialog()
+  onConnected()
+}
+
+/** Module-level so the component keeps no try/finally (a React Compiler bailout). */
+async function inferFeishuMapping(binding: {
+  appToken: string
+  tableId: string
+}): Promise<FeishuTableMapping | null> {
+  const result = await feishuInferMappingForTarget(feishuLocalTarget, binding)
+  if (!result.ok) {
+    toast.error(result.error)
+    return null
+  }
+  return result.mapping
 }

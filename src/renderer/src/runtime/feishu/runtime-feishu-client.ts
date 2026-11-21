@@ -7,6 +7,9 @@ import type {
 import type { RuntimeClientTarget } from '../../../../shared/remote-runtime/host-catalog/runtime-client-target'
 import { callRuntimeRpc } from '../rpc/calls/runtime-rpc-call'
 
+/** Feishu credentials and RPC handlers live on local main; there is no remote owner to route by. */
+export const feishuLocalTarget: RuntimeClientTarget = { kind: 'local' }
+
 export type FeishuConnectionStatus = {
   connected: boolean
   appId: string | null

@@ -17,14 +17,8 @@ import {
   isRetryableWorktreeCreateConflict
 } from '../../../../../../shared/new-workspace/worktree-create-retry-policy'
 import { assertRuntimeEnvironmentCapability } from '../../../../runtime/rpc/compatibility/runtime-capability-proof'
-import { runtimeTargetSupportsCapability } from '../../../../runtime/rpc/compatibility/runtime-target-capability'
 import { runtimeTargetForRepoOwner } from '@/lib/workspace/ownership/repo-runtime-owner'
-import {
-  WORKTREE_LINKED_WORK_ITEM_CONTEXT_RUNTIME_CAPABILITY,
-  WORKTREE_OPEN_EXISTING_BRANCH_RUNTIME_CAPABILITY,
-  WORKTREE_OPEN_EXISTING_BRANCH_V2_RUNTIME_CAPABILITY,
-  WORKTREE_OPEN_EXISTING_BRANCH_V2_REQUEST_RUNTIME_CAPABILITY
-} from '../../../../../../shared/remote-runtime/protocol/worktree-runtime-capabilities'
+import { WORKTREE_LINKED_WORK_ITEM_CONTEXT_RUNTIME_CAPABILITY } from '../../../../../../shared/remote-runtime/protocol/worktree-runtime-capabilities'
 import { showCreatedWorktreeBaseRefNotices } from './created-worktree-base-ref-notices'
 import { applyCreatedWorktree } from './created-worktree-state-merge'
 import { applyWorktreeCreateBranchIntent } from './create-worktree-branch-intent'
