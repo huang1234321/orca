@@ -1,13 +1,12 @@
 import type { AgentLaunchChoices } from '../agent-launch/choices/agent-launch-choices'
 import type { FeishuTaskSourceBinding } from '../feishu/feishu-types'
-import type { TelemetrySettings } from '../telemetry/telemetry-settings-types'
+import type { MiniMaxEndpoint } from './minimax-endpoint'
+import type { OptInServiceSettings } from './global-settings-opt-in-services'
 import type { BrowserProfileScope } from '../browser/profiles/browser-profile-scope'
 import type { GlobalSettingsBase } from './global-settings-base'
 import type { ExecutionHostId } from '../execution-host/execution-host'
 import type { OrcaWorkspaceLayout } from '../worktree/paths/orca-workspace-layout'
 import type { GitHubProjectSettings } from '../github/projects/project-types'
-import type { VoiceSettings } from '../speech/speech-types'
-import type { AiVaultSearchSettings } from '../ai-vault/search/ai-vault-search-settings'
 import type { GitLabProjectSettings } from '../gitlab/gitlab-types'
 import type { TaskProvider } from '../work-items/task-providers'
 import type { AppIconId } from '../app-lifecycle/identity/app-icon'
@@ -32,6 +31,7 @@ import type { TerminalQuickCommand } from '../terminal/quick-commands/terminal-q
 import type { TuiAgent } from '../agent-launch/catalog/tui-agent'
 import type { ZcodePlanSite } from '../agent-accounts/usage-credentials/zcode-plan-sites'
 import type {
+  AgentDashboardMode,
   BranchPrefixStrategy,
   FloatingTerminalTriggerLocation,
   JiraIssueKeyCasing,
@@ -42,11 +42,9 @@ import type {
   TaskViewPresetId
 } from '../ui-chrome/ui-chrome-types'
 import type { WorktreeVisibilityDefaults } from '../repository/repo-types'
-import type { ExperimentalAgentViewSettings } from './global-settings-experimental'
-import type { MiniMaxEndpoint } from './minimax-endpoint'
 
 export type GlobalSettings = GlobalSettingsBase &
-  ExperimentalAgentViewSettings & {
+  OptInServiceSettings & {
     workspaceDir: string
     /** Host-owned defaults used when a repository has no explicit visibility override. */
     worktreeVisibilityDefaults?: WorktreeVisibilityDefaults
@@ -275,6 +273,10 @@ export type GlobalSettings = GlobalSettingsBase &
      *  chats use the user's own signed-in agy or Orca's server, and chats already on agy run the
      *  user's own agy (same history) or, where there is none, refuse as agy not found. Absent means on. */
     antigravityManagedAgyEnabled?: boolean
+    /** How chats on the Google account method sign in: agy's own login, or Orca's built-in sign-in
+     *  on Google's ACP server. Absent or 'auto': the server where Orca's sign-in is already in use,
+     *  else agy. */
+    antigravityGoogleSignIn?: 'auto' | 'agy' | 'orca'
     /** Browser profile new tabs in a workspace use; missing = 'shared' (the Default profile). */
     browserProfileScope?: BrowserProfileScope
     /** Profile new tabs use per browser host when no repo/workspace profile applies; missing = Default. */
@@ -356,8 +358,6 @@ export type GlobalSettings = GlobalSettingsBase &
     visibleTaskProviders: TaskProvider[]
     /** Why: one-shot guard to make Jira visible for existing profiles once, without re-adding after a later opt-out. */
     visibleTaskProvidersDefaultedForJira: boolean
-    /** Feishu Bitable binding: which base/table Tasks reads and how columns map onto the task contract. */
-    feishuTaskSource?: FeishuTaskSourceBinding | null
     /** Repo selection: null includes all present/future repos; arrays freeze a subset, dropping ineligible ids on load and treating empty as null. */
     defaultRepoSelection: string[] | null
     /** Linear team selection: null includes all; arrays freeze selected team IDs, matching defaultRepoSelection. */
@@ -454,6 +454,40 @@ export type GlobalSettings = GlobalSettingsBase &
     experimentalActivity: boolean
     /** Experimental: pop-out Kanban dashboard for monitoring and opening agent terminals across worktrees. */
     experimentalAgentDashboardPopout?: boolean
+    /** Experimental: panel beside chats and terminals listing the agents each agent works with; off mounts nothing. */
+    experimentalOrchestrationPanel?: boolean
+    /** Experimental: icon-only app rail left of the workspace list for switching between Orca destinations. */
+    experimentalAppRail?: boolean
+    /** Set after the one-time legacy Agents tab introduction has been acknowledged. */
+    agentsSidebarIntroShown?: boolean
+    /** True when the profile previously opted into the legacy Agents view. */
+    agentsSidebarMigratedFromExperimental?: boolean
+    /** How the Agent Dashboard opens: an in-window companion board or a separate pop-out window. Defaults to in-window. */
+    experimentalAgentDashboardMode?: AgentDashboardMode
+    /** Includes stale quiet agents as a fourth Agent Dashboard column. */
+    experimentalAgentDashboardShowIdle?: boolean
+    /** One-shot migration guard for defaulting the Agents view off; later explicit opt-ins persist normally. */
+    experimentalActivityDefaultedOffForAllUsers?: boolean
+    /** Experimental: persistent terminal-pane attention ring for bell + agent-completion events. Opt-in while tuning signal/noise. */
+    experimentalTerminalAttention: boolean
+    /** Experimental: automatically sleep completed, resumable background agent terminals. */
+    experimentalAgentHibernation?: boolean
+    /** Milliseconds a completed agent must stay idle before hibernation can be considered. */
+    agentHibernationIdleMs?: number
+    /** Experimental: opt-in preview of the updated worktree-card layout and metadata behavior. */
+    experimentalNewWorktreeCardStyle?: boolean
+    /** Plugin frames as isolated guests (default on); main-only kill switch, see plugin-frame-isolation.ts. */
+    experimentalPluginIsolatedFrames?: boolean
+    /** Experimental: per-workspace on-demand environment recipes and setup surface. */
+    experimentalEphemeralVms?: boolean
+    /** Experimental (Windows): add WSL distros as hosts, each running its own Orca server. */
+    experimentalWslHosts?: boolean
+    /** Declined the add-project offer to run a `\\wsl.localhost` project's distro as a host. */
+    wslHostOfferDismissed?: boolean
+    /** Compact worktree cards: hide the metadata row when title and branch say the same thing. */
+    compactWorktreeCards: boolean
+    /** Legacy persisted key from the Experimental rollout; new writes use compactWorktreeCards. */
+    experimentalCompactWorktreeCards?: boolean
     /** Active non-local runtime environment for client-routed RPC; null keeps local desktop behavior. */
     activeRuntimeEnvironmentId?: string | null
     /** GitHub Project pinned/recent/active/last-view state; persistence hydrates defaults for older profiles. */
@@ -464,12 +498,6 @@ export type GlobalSettings = GlobalSettingsBase &
     sourceControlAi?: SourceControlAiSettings
     /** GitLab project preferences (pinned + recent paths). Optional for pre-GitLab profiles; persistence merge fills the default. */
     gitlabProjects?: GitLabProjectSettings
-    /** Anonymous telemetry consent, identity, frozen experiments, and daily usage limits; optional before migration. */
-    telemetry?: TelemetrySettings
-    /** Voice/dictation settings; persistence merge hydrates getDefaultSettings() values for older profiles. */
-    voice?: VoiceSettings
-    /** One-shot migration flag for the Auto dictation-mode default; after migration an explicit Toggle sticks. */
-    voiceDictationModeDefaultedToAuto?: boolean
-    /** Transcript full-text search consent + retention. Absent means off; nothing indexes until the user opts in. */
-    aiVaultSearch?: AiVaultSearchSettings
+    /** Feishu Bitable binding: which base/table Tasks reads and how columns map onto the task contract. */
+    feishuTaskSource?: FeishuTaskSourceBinding | null
   }

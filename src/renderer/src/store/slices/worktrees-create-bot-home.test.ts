@@ -206,7 +206,8 @@ describe('createWorktree from a bot home', () => {
       })
       const createWorktree = store.getState().createWorktree
       const args: Parameters<typeof createWorktree> = ['repo1', 'feature']
-      args[25] = { executionHostId: 'runtime:env-1', note: 'Follow-up for task_abc123' }
+      args[25] = undefined
+      args[26] = { executionHostId: 'runtime:env-1', note: 'Follow-up for task_abc123' }
 
       await createWorktree(...args)
 
