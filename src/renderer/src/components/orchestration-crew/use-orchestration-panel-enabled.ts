@@ -1,4 +1,9 @@
+import { useAppStore } from '../../store/index'
+
+/**
+ * Reads the experimental opt-in; upstream suspended the default after
+ * performance regressions, so the panel stays off unless explicitly enabled.
+ */
 export function useOrchestrationPanelEnabled(): boolean {
-  // Suspended after repeated performance regressions; saved opt-ins must not mount producers.
-  return false
+  return useAppStore((s) => s.settings?.experimentalOrchestrationPanel === true)
 }

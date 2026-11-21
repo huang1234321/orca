@@ -134,6 +134,46 @@ export function ExperimentalPane({
           </SearchableSetting>
         ) : null}
 
+        <SearchableSetting
+          title={t(
+            'auto.components.settings.ExperimentalPane.orchestrationPanel',
+            'Orchestration panel'
+          )}
+          description={t(
+            'auto.components.settings.ExperimentalPane.orchestrationPanel.desc',
+            'Agent crew panel beside chats and terminals.'
+          )}
+          keywords={['crew', 'orchestration', 'dag']}
+          className="space-y-3 py-3"
+        >
+          <div className="flex items-start justify-between gap-4">
+            <div className="min-w-0 shrink space-y-0.5">
+              <Label>
+                {t(
+                  'auto.components.settings.ExperimentalPane.orchestrationPanel',
+                  'Orchestration panel'
+                )}
+              </Label>
+              <p className="text-xs text-muted-foreground">
+                {t(
+                  'auto.components.settings.ExperimentalPane.orchestrationPanel.note',
+                  'Shows the agent crew panel beside chats and terminals. Off mounts nothing.'
+                )}
+              </p>
+            </div>
+            <Switch
+              aria-label={t(
+                'auto.components.settings.ExperimentalPane.orchestrationPanel',
+                'Orchestration panel'
+              )}
+              checked={settings.experimentalOrchestrationPanel === true}
+              onCheckedChange={(checked) =>
+                updateSettings({ experimentalOrchestrationPanel: checked })
+              }
+            />
+          </div>
+        </SearchableSetting>
+
         {showAgentHibernation ? (
           <SearchableSetting
             title={t(
