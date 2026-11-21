@@ -195,11 +195,20 @@ export function FeishuRecordDetail({
     <div className="flex min-h-0 flex-col">
       <div className="flex flex-none items-start justify-between gap-3 border-b border-border/50 px-4 py-3">
         <div className="min-w-0">
-          <div className="flex items-center gap-2">
-            <span className="font-mono text-2xs text-muted-foreground">{record.key}</span>
-            {record.stateLabel ? <Badge variant="secondary">{record.stateLabel}</Badge> : null}
-          </div>
-          <h2 className="mt-1 truncate text-sm font-medium text-foreground">{record.title}</h2>
+          <h2 className="flex items-center gap-2 text-sm font-semibold text-foreground">
+            <span className="min-w-0 truncate">{record.title}</span>
+            <span className="inline-flex shrink-0 items-center gap-1 rounded-md border border-border/40 px-1.5 py-0.5 text-muted-foreground">
+              <span className="font-mono text-[11px] font-normal">#{record.key}</span>
+            </span>
+            {record.stateLabel ? (
+              <Badge
+                variant={record.state === 'closed' ? 'outline' : 'secondary'}
+                className="shrink-0"
+              >
+                {record.stateLabel}
+              </Badge>
+            ) : null}
+          </h2>
         </div>
         <div className="flex shrink-0 items-center gap-2">
           {stateOptions.length > 0 && record.stateLabel ? (
