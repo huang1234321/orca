@@ -26,6 +26,7 @@ import {
   feishuAddCommentForTarget,
   feishuListCommentsForTarget,
   feishuLocalTarget,
+  feishuReadDocContentForTarget,
   feishuUpdateRecordBodyForTarget,
   feishuUpdateRecordStateForTarget
 } from '@/runtime/feishu/runtime-feishu-client'
@@ -49,6 +50,9 @@ export function FeishuRecordDetail({
   const [commentBody, setCommentBody] = useState('')
   const [sending, setSending] = useState(false)
   const [bodySaving, setBodySaving] = useState(false)
+  const [docMarkdown, setDocMarkdown] = useState<string | null>(null)
+  const [docLoading, setDocLoading] = useState(false)
+  const [docError, setDocError] = useState<string | null>(null)
   const mapping: FeishuTableMapping = binding.mapping
   const stateOptions = Object.keys(mapping.stateCategories ?? {})
   const submitShortcutLabel = getScreenSubmitShortcutLabel()
@@ -114,6 +118,43 @@ export function FeishuRecordDetail({
       cancelled = true
     }
   }, [binding.appToken, mapping, record.id])
+
+  useEffect(() => {
+    let cancelled = false
+    if (!record.docUrl) {
+      setDocMarkdown(null)
+      setDocError(null)
+      return
+    }
+    setDocLoading(true)
+    setDocError(null)
+    feishuReadDocContentForTarget(feishuLocalTarget, { docUrl: record.docUrl })
+      .then((result) => {
+        if (cancelled) {
+          return
+        }
+        if (result.ok) {
+          setDocMarkdown(result.markdown)
+        } else {
+          setDocMarkdown(null)
+          setDocError(result.error)
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setDocMarkdown(null)
+          setDocError(t('feishu.detail.docLoadFailed', 'Doc load failed'))
+        }
+      })
+      .finally(() => {
+        if (!cancelled) {
+          setDocLoading(false)
+        }
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [record.docUrl, t])
 
   const submitComment = async (): Promise<void> => {
     const body = commentBody.trim()
@@ -211,7 +252,33 @@ export function FeishuRecordDetail({
         </div>
       </div>
       <div className="min-h-0 flex-1 space-y-4 overflow-auto scrollbar-sleek px-4 py-4">
-        {mapping.bodyField ? (
+        {record.docUrl ? (
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <p className="text-xs font-medium uppercase tracking-[0.12em] text-muted-foreground">
+                {t('feishu.detail.docContent', 'Detail doc')}
+              </p>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => void openAppHttpLink(record.docUrl ?? '')}
+              >
+                <FileText className="size-3.5" />
+                {t('feishu.detail.openDoc', 'Doc')}
+              </Button>
+            </div>
+            {docLoading ? (
+              <div className="flex items-center gap-2 py-2 text-sm text-muted-foreground">
+                <LoaderCircle className="size-4 animate-spin" />
+              </div>
+            ) : docError ? (
+              <p className="text-sm text-destructive">{docError}</p>
+            ) : docMarkdown ? (
+              <CommentMarkdown content={docMarkdown} variant="document" expandImages />
+            ) : null}
+          </div>
+        ) : mapping.bodyField ? (
           <LinearIssueMarkdownDescriptionEditor
             value={record.body ?? ''}
             onChange={() => {}}

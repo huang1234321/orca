@@ -64,3 +64,7 @@ export const FeishuCommentBody = z.object({
 export const FeishuListTables = z.object({
   appToken: requiredString('Bitable app token is required')
 })
+
+export const FeishuReadDoc = z.object({
+  docUrl: requiredString('Doc URL is required')
+})

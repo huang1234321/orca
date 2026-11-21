@@ -11,6 +11,7 @@ import {
   updateFeishuRecordBody,
   updateFeishuRecordState
 } from '../../../feishu/feishu-record-mutations'
+import { readFeishuDocMarkdown } from '../../../feishu/feishu-doc-reader'
 import {
   addFeishuComment,
   findFeishuCommentTable,
@@ -137,5 +138,12 @@ export class RuntimeFeishuCommands {
     return comment
       ? { ok: true as const, comment }
       : { ok: false as const, error: 'Comment creation failed' }
+  }
+
+  async feishuReadDocContent(docUrl: string) {
+    const markdown = await readFeishuDocMarkdown(docUrl)
+    return markdown === null
+      ? { ok: false as const, error: 'Doc not readable; check the link and docx scopes.' }
+      : { ok: true as const, markdown }
   }
 }

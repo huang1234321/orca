@@ -143,6 +143,20 @@ export function feishuUpdateRecordBodyForTarget(
     : window.api.feishu.updateRecordBody(args)
 }
 
+export function feishuReadDocContentForTarget(
+  target: RuntimeClientTarget,
+  args: { docUrl: string }
+): Promise<{ ok: true; markdown: string } | { ok: false; error: string }> {
+  return target.kind === 'environment'
+    ? callRuntimeRpc<{ ok: true; markdown: string } | { ok: false; error: string }>(
+        target,
+        'feishu.readDocContent',
+        args,
+        { timeoutMs: 30_000 }
+      )
+    : window.api.feishu.readDocContent(args)
+}
+
 export function feishuListCommentsForTarget(
   target: RuntimeClientTarget,
   args: { appToken: string; mapping: FeishuTableMapping; recordId: string }

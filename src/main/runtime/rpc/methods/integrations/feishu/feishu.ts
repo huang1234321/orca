@@ -5,6 +5,7 @@ import {
   FeishuInferMapping,
   FeishuListRecords,
   FeishuRecord,
+  FeishuReadDoc,
   FeishuUpdateBody,
   FeishuUpdateState
 } from '../../../../../../shared/rpc-contract/feishu/feishu-params'
@@ -86,6 +87,12 @@ export const FEISHU_METHODS = [
         params.mapping,
         params.body
       )
+  }),
+  defineMethod({
+    name: 'feishu.readDocContent',
+    permission: 'workspace',
+    params: FeishuReadDoc,
+    handler: async (params, { runtime }) => runtime.feishuReadDocContent(params.docUrl)
   }),
   defineMethod({
     name: 'feishu.listComments',

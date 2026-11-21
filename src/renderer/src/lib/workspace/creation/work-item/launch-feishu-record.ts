@@ -12,8 +12,16 @@ function normalizeRepoUrl(url: string): string {
     .trim()
     .toLowerCase()
     .replace(/^[a-z]+:\/\//, '')
+    .replace(/^[^/@]+@/, '')
     .replace(/\/+$/, '')
     .replace(/\.git$/, '')
+}
+
+/** Path-only fallback so web URLs match clone remotes regardless of host spelling. */
+function repoUrlPath(url: string): string {
+  const normalized = normalizeRepoUrl(url)
+  const slash = normalized.indexOf('/')
+  return slash === -1 ? normalized : normalized.slice(slash)
 }
 
 /** Match the row's 仓库链接 against catalog repo remotes, ignoring protocol and .git suffixes. */
@@ -22,9 +30,16 @@ function findRepoIdByRemoteUrl(repos: readonly Repo[], repoUrl: string): string 
   if (!wanted) {
     return null
   }
+  const wantedPath = repoUrlPath(repoUrl)
   for (const repo of repos) {
     const remote = repo.gitRemoteIdentity?.remoteUrl
     if (remote && normalizeRepoUrl(remote) === wanted) {
+      return repo.id
+    }
+  }
+  for (const repo of repos) {
+    const remote = repo.gitRemoteIdentity?.remoteUrl
+    if (remote && repoUrlPath(remote) === wantedPath) {
       return repo.id
     }
   }

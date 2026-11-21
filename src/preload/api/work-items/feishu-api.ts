@@ -49,6 +49,9 @@ export type FeishuApi = {
     recordId: string
     mapping: FeishuTableMapping
   }) => Promise<{ ok: true; item: FeishuWorkItem } | { ok: false; error: string }>
+  readDocContent: (args: {
+    docUrl: string
+  }) => Promise<{ ok: true; markdown: string } | { ok: false; error: string }>
   updateRecordBody: (args: {
     appToken: string
     tableId: string

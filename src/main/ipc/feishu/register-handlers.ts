@@ -82,6 +82,12 @@ export function registerFeishuHandlers(): void {
 
   ipcMain.handle('feishu:disconnect', () => commands.feishuDisconnect())
 
+  ipcMain.handle('feishu:readDocContent', (_event, args: { docUrl?: unknown }) =>
+    typeof args?.docUrl === 'string'
+      ? commands.feishuReadDocContent(args.docUrl)
+      : taskProviderFailure('feishu.tableRequired', 'Doc URL is required.')
+  )
+
   ipcMain.handle('feishu:status', () => commands.feishuStatus())
 
   ipcMain.handle(

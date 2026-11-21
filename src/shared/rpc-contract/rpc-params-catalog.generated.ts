@@ -374,6 +374,7 @@ import {
   FeishuConnect,
   FeishuInferMapping,
   FeishuListRecords,
+  FeishuReadDoc,
   FeishuRecord,
   FeishuUpdateBody,
   FeishuUpdateState
@@ -1505,6 +1506,7 @@ export const RPC_PARAMS_BY_METHOD = {
   'feishu.inferMapping': FeishuInferMapping,
   'feishu.listComments': FeishuRecord,
   'feishu.listRecords': FeishuListRecords,
+  'feishu.readDocContent': FeishuReadDoc,
   'feishu.status': null,
   'feishu.updateRecordBody': FeishuUpdateBody,
   'feishu.updateRecordState': FeishuUpdateState,
