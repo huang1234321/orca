@@ -36,6 +36,17 @@ export function TaskPageGitHubModeControls({
   const githubOnly = taskSource === 'github'
   return githubOnly || taskSource === 'feishu' ? (
     <div className="flex min-w-0 flex-wrap items-center gap-2">
+      {githubOnly ? null : (
+        <div className="flex items-center gap-1 text-xs">
+          <button
+            type="button"
+            aria-pressed="true"
+            className="rounded-md border border-border/50 bg-foreground/90 px-2.5 py-1 text-xs font-medium text-background shadow-xs transition"
+          >
+            {t('feishu.mode.issues', '议题')}
+          </button>
+        </div>
+      )}
       {githubOnly && projectModeVisible ? (
         <div className="flex items-center gap-1 text-xs">
           {githubModeButtons.map((mode) => {

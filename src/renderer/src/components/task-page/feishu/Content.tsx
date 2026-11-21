@@ -149,17 +149,6 @@ export function TaskPageFeishuContent({
   return (
     <div className="mt-3 flex min-h-0 min-w-0 max-h-full flex-col overflow-hidden rounded-md border border-border/50 bg-background shadow-sm">
       <div className="flex min-w-0 flex-col gap-2.5 rounded-md rounded-b-none border border-border/50 bg-muted/35 px-3 py-2.5">
-        <div className="flex min-w-0 flex-wrap items-center gap-2">
-          <div className="flex items-center gap-1 text-xs">
-            <button
-              type="button"
-              className="rounded-md border border-border/50 bg-foreground/90 px-2.5 py-1 text-xs font-medium text-background shadow-xs transition"
-              aria-pressed="true"
-            >
-              {t('feishu.mode.issues', '议题')}
-            </button>
-          </div>
-        </div>
         <div className="flex flex-wrap gap-1.5">
           {(
             [
