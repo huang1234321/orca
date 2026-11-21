@@ -1,9 +1,10 @@
 import { useMemo, useState } from 'react'
-import { LoaderCircle, RefreshCcw } from 'lucide-react'
+import { LoaderCircle, RefreshCw, Search, X } from 'lucide-react'
 import { FeishuIcon } from '@/components/icons/FeishuIcon'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useTranslate } from '@/i18n/use-translate'
+import { cn } from '@/lib/class-names'
 import { useAppStore } from '@/store'
 import type { TaskPageComposerActionsModel } from '../use-task-page-composer-actions'
 import { FeishuRecordList } from './FeishuRecordList'
@@ -24,6 +25,7 @@ export function TaskPageFeishuContent({
   const t = useTranslate()
   const checkFeishuConnection = useAppStore((s) => s.checkFeishuConnection)
   const [searchInput, setSearchInput] = useState('')
+  const [presetFilter, setPresetFilter] = useState<'all' | 'open' | 'done'>('open')
   const {
     settings,
     repos,
@@ -62,6 +64,7 @@ export function TaskPageFeishuContent({
     setLoading: setFeishuLoading,
     setError: setFeishuError,
     searchInput,
+    stateOverride: presetFilter === 'all' ? null : presetFilter === 'open' ? 'open' : 'closed',
     refreshNonce: feishuRefreshNonce
   })
 
@@ -91,38 +94,70 @@ export function TaskPageFeishuContent({
     )
   }
   return (
-    <div className="@container flex min-h-0 max-h-full flex-col overflow-hidden rounded-md rounded-t-none border border-t-0 border-border/50 bg-background shadow-sm">
-      <div className="flex min-h-10 flex-none flex-wrap items-center justify-between gap-3 border-b border-border/50 bg-muted/35 px-3 py-1">
-        <div className="min-w-0 text-[11px] font-medium uppercase tracking-[0.12em] text-muted-foreground">
-          {t('feishu.list.title', 'Feishu records')}
+    <div className="mt-3 flex min-h-0 min-w-0 max-h-full flex-col overflow-hidden rounded-md border border-border/50 bg-background shadow-sm">
+      <div className="flex min-w-0 flex-col gap-2.5 rounded-md rounded-b-none border border-border/50 bg-muted/35 px-3 py-2.5">
+        <div className="flex flex-wrap gap-1.5">
+          {(
+            [
+              { id: 'all', label: t('feishu.preset.all', 'All') },
+              { id: 'open', label: t('feishu.preset.open', 'Open') },
+              { id: 'done', label: t('feishu.preset.done', 'Done') }
+            ] as const
+          ).map((chip) => (
+            <button
+              key={chip.id}
+              type="button"
+              aria-pressed={presetFilter === chip.id}
+              onClick={() => setPresetFilter(chip.id)}
+              className={cn(
+                'rounded-md border px-2.5 py-1 text-xs font-medium transition',
+                presetFilter === chip.id
+                  ? 'border-border/50 bg-foreground/90 text-background shadow-xs'
+                  : 'border-border/60 bg-background text-foreground shadow-xs hover:bg-muted/60'
+              )}
+            >
+              {chip.label}
+            </button>
+          ))}
         </div>
-        <div className="flex min-w-0 flex-1 items-center justify-end gap-2">
-          <Input
-            value={searchInput}
-            onChange={(event) => setSearchInput(event.target.value)}
-            placeholder={t(
-              'feishu.list.searchPlaceholder',
-              'Search or filter, e.g. is:open label:bug'
-            )}
-            className="h-7 max-w-64"
-            aria-label={t(
-              'feishu.list.searchPlaceholder',
-              'Search or filter, e.g. is:open label:bug'
-            )}
-          />
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            className="size-7"
-            aria-label={t('feishu.list.refresh', 'Refresh')}
-            onClick={() => {
-              void checkFeishuConnection()
-              setFeishuRefreshNonce((value) => value + 1)
-            }}
-          >
-            <RefreshCcw className="size-3.5" />
-          </Button>
+        <div className="flex min-w-0 flex-wrap items-center gap-2">
+          <div className="relative min-w-0 flex-1 basis-64">
+            <Search className="pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              value={searchInput}
+              onChange={(event) => setSearchInput(event.target.value)}
+              placeholder={t('feishu.list.searchPlaceholder', 'Search Feishu tasks...')}
+              className="h-8 rounded-md border-border/60 bg-background pl-8 pr-8 text-xs text-foreground shadow-xs"
+            />
+            {searchInput ? (
+              <button
+                type="button"
+                aria-label={t('feishu.list.clearSearch', 'Clear search')}
+                onClick={() => setSearchInput('')}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition hover:text-foreground"
+              >
+                <X className="size-4" />
+              </button>
+            ) : null}
+          </div>
+          <div className="flex shrink-0 items-center gap-2">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => {
+                void checkFeishuConnection()
+                setFeishuRefreshNonce((value) => value + 1)
+              }}
+              aria-label={t('feishu.list.refresh', 'Refresh Feishu tasks')}
+              className="size-8 cursor-pointer border-border/60 bg-background text-foreground shadow-xs hover:bg-muted/60"
+            >
+              {feishuLoading ? (
+                <LoaderCircle className="size-4 animate-spin" />
+              ) : (
+                <RefreshCw className="size-4" />
+              )}
+            </Button>
+          </div>
         </div>
       </div>
       {feishuError ? (

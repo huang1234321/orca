@@ -20,6 +20,8 @@ export type FeishuTaskListModel = {
   setLoading: (loading: boolean) => void
   setError: (error: string | null) => void
   searchInput: string
+  /** Preset chip state; overrides any is:open/is:closed token from the search text. */
+  stateOverride?: 'open' | 'closed' | null
   refreshNonce: number
 }
 
@@ -27,7 +29,8 @@ export type FeishuTaskListModel = {
 export function useFeishuTaskList(model: FeishuTaskListModel): void {
   const { binding, connected, setItems, setLoading, setError } = model
   const parsed = useMemo(() => parseTaskQuery(model.searchInput), [model.searchInput])
-  const state = parsed.state === 'open' || parsed.state === 'closed' ? parsed.state : null
+  const parsedState = parsed.state === 'open' || parsed.state === 'closed' ? parsed.state : null
+  const state = model.stateOverride ?? parsedState
   const freeText = parsed.freeText || null
   const labels = parsed.labels
 
