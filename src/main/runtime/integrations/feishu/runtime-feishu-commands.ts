@@ -8,7 +8,11 @@ import {
   updateFeishuRecordState,
   verifyFeishuCredentials
 } from '../../../feishu/feishu-client'
-import { addFeishuComment, listFeishuComments } from '../../../feishu/feishu-comments'
+import {
+  addFeishuComment,
+  findFeishuCommentTable,
+  listFeishuComments
+} from '../../../feishu/feishu-comments'
 import {
   forgetFeishuCredentials,
   readFeishuApp,
@@ -56,7 +60,13 @@ export class RuntimeFeishuCommands {
         error: 'No fields readable; check the app scopes and table access.'
       }
     }
-    return { ok: true as const, fields, mapping: inferFeishuTableMapping(fields) }
+    const mapping = inferFeishuTableMapping(fields)
+    const commentTable = await findFeishuCommentTable(appToken, tableId)
+    return {
+      ok: true as const,
+      fields,
+      mapping: commentTable ? { ...mapping, comments: commentTable } : mapping
+    }
   }
 
   async feishuListRecords(

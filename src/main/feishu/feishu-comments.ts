@@ -98,3 +98,68 @@ export async function addFeishuComment(
     createdAt: new Date().toISOString()
   }
 }
+
+type RawTable = { table_id?: unknown; name?: unknown }
+type RawFieldWithProperty = {
+  field_name?: unknown
+  type?: unknown
+  ui_type?: unknown
+  property?: unknown
+}
+
+export type FeishuCommentTableRef = {
+  tableId: string
+  linkField: string
+  bodyField: string
+}
+
+/**
+ * Locate a subtable linked into the main table through a one-way link field
+ * (type 18 pointing at mainTableId): the comment-subtable pattern.
+ */
+export async function findFeishuCommentTable(
+  appToken: string,
+  mainTableId: string
+): Promise<FeishuCommentTableRef | null> {
+  const tables = await feishuRequest<{ items?: RawTable[] }>(
+    `/open-apis/bitable/v1/apps/${encodeURIComponent(appToken)}/tables?page_size=50`
+  )
+  if (!tables.ok) {
+    return null
+  }
+  for (const table of tables.data.items ?? []) {
+    const tableId = typeof table.table_id === 'string' ? table.table_id : null
+    if (!tableId || tableId === mainTableId) {
+      continue
+    }
+    const fields = await feishuRequest<{ items?: RawFieldWithProperty[] }>(
+      `/open-apis/bitable/v1/apps/${encodeURIComponent(appToken)}/tables/${encodeURIComponent(tableId)}/fields?page_size=100`
+    )
+    if (!fields.ok) {
+      continue
+    }
+    const items = fields.data.items ?? []
+    const link = items.find(
+      (f) =>
+        f.type === 18 &&
+        isRecord(f.property) &&
+        f.property.table_id === mainTableId &&
+        typeof f.field_name === 'string'
+    )
+    const body = items.find(
+      (f) =>
+        typeof f.ui_type === 'string' &&
+        f.ui_type.toLowerCase() === 'text' &&
+        typeof f.field_name === 'string'
+    )
+    if (
+      link &&
+      body &&
+      typeof link.field_name === 'string' &&
+      typeof body.field_name === 'string'
+    ) {
+      return { tableId, linkField: link.field_name, bodyField: body.field_name }
+    }
+  }
+  return null
+}
