@@ -33,6 +33,7 @@ function requireMapping(value: unknown): FeishuTableMapping | null {
     assigneeField: typeof raw.assigneeField === 'string' ? raw.assigneeField : null,
     numberField: typeof raw.numberField === 'string' ? raw.numberField : null,
     repoField: typeof raw.repoField === 'string' ? raw.repoField : null,
+    docField: typeof raw.docField === 'string' ? raw.docField : null,
     comments: isRecord(raw.comments)
       ? {
           tableId: String(raw.comments.tableId ?? ''),
