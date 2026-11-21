@@ -32,9 +32,11 @@ export function TaskPageGitHubModeControls({
     selectedGitHubRepoExternalLink,
     handleSelectGithubTaskKind
   } = model
-  return taskSource === 'github' ? (
+  // Feishu shares the project filter combobox; mode buttons and the GitHub link stay GitHub-only.
+  const githubOnly = taskSource === 'github'
+  return githubOnly || taskSource === 'feishu' ? (
     <div className="flex min-w-0 flex-wrap items-center gap-2">
-      {projectModeVisible ? (
+      {githubOnly && projectModeVisible ? (
         <div className="flex items-center gap-1 text-xs">
           {githubModeButtons.map((mode) => {
             const active =
@@ -103,41 +105,43 @@ export function TaskPageGitHubModeControls({
           triggerClassName="h-8 w-auto max-w-[220px] rounded-md border border-border/50 bg-muted/50 px-2 text-xs font-medium shadow-sm transition hover:bg-muted/50 focus:ring-2 focus:ring-ring/20 focus:outline-none"
         />
       </div>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button
-            type="button"
-            variant="outline"
-            size="icon-sm"
-            onClick={(event) => {
-              if (!selectedGitHubRepoExternalLink?.url) {
-                return
+      {githubOnly ? (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              type="button"
+              variant="outline"
+              size="icon-sm"
+              onClick={(event) => {
+                if (!selectedGitHubRepoExternalLink?.url) {
+                  return
+                }
+                openAppHttpLink(selectedGitHubRepoExternalLink.url, { event })
+              }}
+              aria-label={
+                selectedGitHubRepoExternalLink
+                  ? t('auto.components.TaskPage.8d1e17a3ef', 'Open {{value0}} in GitHub', {
+                      value0: selectedGitHubRepoExternalLink.label
+                    })
+                  : t(
+                      'auto.components.TaskPage.d1132848f8',
+                      'Select one GitHub project to open in GitHub'
+                    )
               }
-              openAppHttpLink(selectedGitHubRepoExternalLink.url, { event })
-            }}
-            aria-label={
-              selectedGitHubRepoExternalLink
-                ? t('auto.components.TaskPage.8d1e17a3ef', 'Open {{value0}} in GitHub', {
-                    value0: selectedGitHubRepoExternalLink.label
-                  })
-                : t(
-                    'auto.components.TaskPage.d1132848f8',
-                    'Select one GitHub project to open in GitHub'
-                  )
-            }
-            className="h-8 w-8 rounded-md border-border/50 bg-muted/50 text-foreground shadow-sm transition hover:bg-muted/50"
-          >
-            <ExternalLink className="size-3.5" />
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent side="bottom" sideOffset={6}>
-          {selectedGitHubRepoExternalLink
-            ? t('auto.components.TaskPage.8d1e17a3ef', 'Open {{value0}} in GitHub', {
-                value0: selectedGitHubRepoExternalLink.label
-              })
-            : t('auto.components.TaskPage.bc46d8204e', 'Select one project to open in GitHub')}
-        </TooltipContent>
-      </Tooltip>
+              className="h-8 w-8 rounded-md border-border/50 bg-muted/50 text-foreground shadow-sm transition hover:bg-muted/50"
+            >
+              <ExternalLink className="size-3.5" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent side="bottom" sideOffset={6}>
+            {selectedGitHubRepoExternalLink
+              ? t('auto.components.TaskPage.8d1e17a3ef', 'Open {{value0}} in GitHub', {
+                  value0: selectedGitHubRepoExternalLink.label
+                })
+              : t('auto.components.TaskPage.bc46d8204e', 'Select one project to open in GitHub')}
+          </TooltipContent>
+        </Tooltip>
+      ) : null}
     </div>
   ) : null
 }

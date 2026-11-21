@@ -99,6 +99,7 @@ export function normalizeFeishuRepoUrl(url: string): string {
     .trim()
     .toLowerCase()
     .replace(/^[a-z]+:\/\//, '')
+    .replace(/^[^/@]+@/, '')
     .replace(/\/+$/, '')
     .replace(/\.git$/, '')
 }
@@ -111,6 +112,13 @@ function scopeItemsToRepoFilter(
   if (!filter || filter.length === 0) {
     return items
   }
-  const allowed = new Set(filter)
-  return items.filter((item) => !item.repoUrl || allowed.has(normalizeFeishuRepoUrl(item.repoUrl)))
+  const allowed = new Set(filter.map(repoUrlPath))
+  return items.filter((item) => !item.repoUrl || allowed.has(repoUrlPath(item.repoUrl)))
+}
+
+/** Path-only so web links match clone remotes regardless of host spelling. */
+function repoUrlPath(url: string): string {
+  const normalized = normalizeFeishuRepoUrl(url)
+  const slash = normalized.indexOf('/')
+  return slash === -1 ? normalized : normalized.slice(slash)
 }
