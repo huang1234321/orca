@@ -24456,7 +24456,12 @@
       "send": "发送",
       "sending": "发送中…",
       "state": "状态",
-      "unknownAuthor": "应用"
+      "unknownAuthor": "应用",
+      "bodySaveFailed": "描述保存失败",
+      "docContent": "详情文档",
+      "docLoadFailed": "文档加载失败",
+      "launch": "启动工作区",
+      "openDoc": "文档"
     },
     "empty": {
       "title": "连接飞书并绑定表格",
@@ -24468,9 +24473,15 @@
       "emptyTitle": "没有匹配的记录",
       "emptyBody": "换个搜索词或状态过滤试试。",
       "openInBrowser": "在飞书中打开",
-      "refresh": "刷新",
-      "searchPlaceholder": "搜索或过滤,如 is:open label:bug",
-      "title": "飞书记录"
+      "refresh": "刷新飞书任务",
+      "searchPlaceholder": "搜索飞书任务…",
+      "title": "飞书记录",
+      "clearSearch": "清除搜索",
+      "colAssignees": "负责人",
+      "colId": "ID",
+      "colStatus": "状态",
+      "colTitle": "标题 / 上下文",
+      "colUpdated": "最后更新"
     },
     "mapping": {
       "title": "标题",
@@ -24479,7 +24490,8 @@
       "assignee": "负责人",
       "body": "描述",
       "number": "编号",
-      "repo": "仓库链接"
+      "repo": "仓库链接",
+      "doc": "详情文档"
     },
     "setup": {
       "appIdLabel": "应用 ID",
@@ -24500,24 +24512,6 @@
       "appIdPlaceholder": "cli_xxxxxxxxxxxxxxxx",
       "bindingPlaceholder": "https://xxx.feishu.cn/base/bascn…?table=tbl…&view=…"
     },
-    "bodySaveFailed": "描述保存失败",
-    "docContent": "详情文档",
-    "docLoadFailed": "文档加载失败",
-    "launch": "启动工作区",
-    "openDoc": "文档",
-    "repoUnmatched": "未在 Orca 中匹配到仓库;请添加仓库或修正行内链接后重试",
-    "clearSearch": "清除搜索",
-    "colAssignees": "负责人",
-    "colId": "ID",
-    "colStatus": "状态",
-    "colTitle": "标题 / 上下文",
-    "colUpdated": "最后更新",
-    "doc": "详情文档",
-    "all": "全部",
-    "done": "已完成",
-    "open": "打开",
-    "searchPlaceholder": "搜索飞书任务…",
-    "refresh": "刷新飞书任务",
     "row": {
       "start": "启动",
       "more": "更多操作",
@@ -24526,6 +24520,14 @@
     },
     "mode": {
       "issues": "议题"
+    },
+    "launch": {
+      "repoUnmatched": "未在 Orca 中匹配到仓库;请添加仓库或修正行内链接后重试"
+    },
+    "preset": {
+      "all": "全部",
+      "done": "已完成",
+      "open": "打开"
     }
   },
   "updates": {

@@ -22291,7 +22291,12 @@
       "send": "傳送",
       "sending": "傳送中…",
       "state": "狀態",
-      "unknownAuthor": "應用"
+      "unknownAuthor": "應用",
+      "bodySaveFailed": "描述儲存失敗",
+      "docContent": "詳情文件",
+      "docLoadFailed": "文件載入失敗",
+      "launch": "啟動工作區",
+      "openDoc": "文件"
     },
     "empty": {
       "title": "連接飛書並綁定表格",
@@ -22303,9 +22308,15 @@
       "emptyTitle": "沒有符合的記錄",
       "emptyBody": "換個搜尋詞或狀態篩選試試。",
       "openInBrowser": "在飛書中開啟",
-      "refresh": "重新整理",
-      "searchPlaceholder": "搜尋或篩選,如 is:open label:bug",
-      "title": "飛書記錄"
+      "refresh": "重新整理飛書任務",
+      "searchPlaceholder": "搜尋飛書任務…",
+      "title": "飛書記錄",
+      "clearSearch": "清除搜尋",
+      "colAssignees": "負責人",
+      "colId": "ID",
+      "colStatus": "狀態",
+      "colTitle": "標題 / 上下文",
+      "colUpdated": "最後更新"
     },
     "mapping": {
       "title": "標題",
@@ -22314,7 +22325,8 @@
       "assignee": "負責人",
       "body": "描述",
       "number": "編號",
-      "repo": "倉庫連結"
+      "repo": "倉庫連結",
+      "doc": "詳情文件"
     },
     "setup": {
       "appIdLabel": "應用 ID",
@@ -22335,24 +22347,6 @@
       "appIdPlaceholder": "cli_xxxxxxxxxxxxxxxx",
       "bindingPlaceholder": "https://xxx.feishu.cn/base/bascn…?table=tbl…&view=…"
     },
-    "bodySaveFailed": "描述儲存失敗",
-    "docContent": "詳情文件",
-    "docLoadFailed": "文件載入失敗",
-    "launch": "啟動工作區",
-    "openDoc": "文件",
-    "repoUnmatched": "未在 Orca 中匹配到倉庫;請添加倉庫或修正行內連結後重試",
-    "clearSearch": "清除搜尋",
-    "colAssignees": "負責人",
-    "colId": "ID",
-    "colStatus": "狀態",
-    "colTitle": "標題 / 上下文",
-    "colUpdated": "最後更新",
-    "doc": "詳情文件",
-    "all": "全部",
-    "done": "已完成",
-    "open": "開啟",
-    "searchPlaceholder": "搜尋飛書任務…",
-    "refresh": "重新整理飛書任務",
     "row": {
       "start": "啟動",
       "more": "更多操作",
@@ -22361,6 +22355,14 @@
     },
     "mode": {
       "issues": "議題"
+    },
+    "launch": {
+      "repoUnmatched": "未在 Orca 中匹配到倉庫;請添加倉庫或修正行內連結後重試"
+    },
+    "preset": {
+      "all": "全部",
+      "done": "已完成",
+      "open": "開啟"
     }
   },
   "workspaceSpace": {

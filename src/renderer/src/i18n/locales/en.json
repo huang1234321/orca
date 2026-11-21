@@ -25663,7 +25663,12 @@
       "send": "Send",
       "sending": "Sending…",
       "state": "State",
-      "unknownAuthor": "App"
+      "unknownAuthor": "App",
+      "bodySaveFailed": "Description save failed",
+      "docContent": "Detail doc",
+      "docLoadFailed": "Doc load failed",
+      "launch": "Start workspace",
+      "openDoc": "Doc"
     },
     "empty": {
       "title": "Connect Feishu and bind a table",
@@ -25675,9 +25680,15 @@
       "emptyTitle": "No matching records",
       "emptyBody": "Try different search terms or state filters.",
       "openInBrowser": "Open in Feishu",
-      "refresh": "Refresh",
-      "searchPlaceholder": "Search or filter, e.g. is:open label:bug",
-      "title": "Feishu records"
+      "refresh": "Refresh Feishu tasks",
+      "searchPlaceholder": "Search Feishu tasks...",
+      "title": "Feishu records",
+      "clearSearch": "Clear search",
+      "colAssignees": "Assignees",
+      "colId": "ID",
+      "colStatus": "Status",
+      "colTitle": "Title / Context",
+      "colUpdated": "Updated"
     },
     "mapping": {
       "title": "Title",
@@ -25686,7 +25697,8 @@
       "assignee": "Assignee",
       "body": "Description",
       "number": "Number",
-      "repo": "Repository link"
+      "repo": "Repository link",
+      "doc": "Detail doc"
     },
     "setup": {
       "appIdLabel": "App ID",
@@ -25707,24 +25719,6 @@
       "appIdPlaceholder": "cli_xxxxxxxxxxxxxxxx",
       "bindingPlaceholder": "https://xxx.feishu.cn/base/bascn…?table=tbl…&view=…"
     },
-    "bodySaveFailed": "Description save failed",
-    "docContent": "Detail doc",
-    "docLoadFailed": "Doc load failed",
-    "launch": "Start workspace",
-    "openDoc": "Doc",
-    "repoUnmatched": "Repository not matched in Orca; add the repo or fix the row link, then retry",
-    "clearSearch": "Clear search",
-    "colAssignees": "Assignees",
-    "colId": "ID",
-    "colStatus": "Status",
-    "colTitle": "Title / Context",
-    "colUpdated": "Updated",
-    "doc": "Detail doc",
-    "all": "All",
-    "done": "Done",
-    "open": "Open",
-    "searchPlaceholder": "Search Feishu tasks...",
-    "refresh": "Refresh Feishu tasks",
     "row": {
       "start": "Start",
       "more": "More actions",
@@ -25733,6 +25727,14 @@
     },
     "mode": {
       "issues": "Issues"
+    },
+    "launch": {
+      "repoUnmatched": "Repository not matched in Orca; add the repo or fix the row link, then retry"
+    },
+    "preset": {
+      "all": "All",
+      "done": "Done",
+      "open": "Open"
     }
   },
   "workspaceSpace": {
