@@ -8,6 +8,7 @@ import { categorizeState } from '../../shared/feishu/feishu-field-mapping'
 import { feishuRecordUrl } from '../../shared/feishu/feishu-types'
 import { readFeishuApp } from './feishu-credential-store'
 import {
+  resolveFeishuAppToken,
   isRecord,
   feishuRequest,
   forgetFeishuTenantToken,
@@ -82,6 +83,7 @@ export async function listFeishuFields(
   appToken: string,
   tableId: string
 ): Promise<FeishuFieldSchema[]> {
+  appToken = await resolveFeishuAppToken(appToken)
   const result = await feishuRequest<{ items?: RawField[] }>(
     `/open-apis/bitable/v1/apps/${encodeURIComponent(appToken)}/tables/${encodeURIComponent(tableId)}/fields?page_size=100`
   )
@@ -167,6 +169,7 @@ export async function searchFeishuRecords(
   | { ok: true; items: FeishuWorkItem[]; hasMore: boolean; pageToken: string | null }
   | { ok: false; error: string }
 > {
+  appToken = await resolveFeishuAppToken(appToken)
   const conditions = buildFilterConditions(mapping, filters)
   const body = {
     field_names: [
@@ -214,6 +217,7 @@ export async function getFeishuRecord(
   recordId: string,
   mapping: FeishuTableMapping
 ): Promise<FeishuWorkItem | null> {
+  appToken = await resolveFeishuAppToken(appToken)
   const result = await feishuRequest<{ record?: RawRecord }>(
     `/open-apis/bitable/v1/apps/${encodeURIComponent(appToken)}/tables/${encodeURIComponent(tableId)}/records/${encodeURIComponent(recordId)}`
   )
@@ -230,6 +234,7 @@ export async function updateFeishuRecordState(
   mapping: FeishuTableMapping,
   stateOption: string
 ): Promise<boolean> {
+  appToken = await resolveFeishuAppToken(appToken)
   if (!mapping.stateField) {
     return false
   }

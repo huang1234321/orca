@@ -16,7 +16,9 @@ import {
 } from '@/runtime/feishu/runtime-feishu-client'
 import { getConnectStepState, type ConnectStepProps } from './task-source-setup-state'
 
-const BITABLE_URL_RE = /base\/([A-Za-z0-9]+).*[?&]table=([A-Za-z0-9]+)/
+// Base URLs carry the app_token directly; wiki URLs carry the wiki node token,
+// which the main process resolves to the underlying bitable obj_token.
+const BITABLE_URL_RE = /(?:base|wiki)\/([A-Za-z0-9]+).*[?&]table=([A-Za-z0-9]+)/
 
 function parseBitableBinding(value: string): { appToken: string; tableId: string } | null {
   const match = BITABLE_URL_RE.exec(value.trim())

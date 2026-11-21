@@ -113,3 +113,25 @@ export function toIsoTimestamp(value: unknown): string | null {
 }
 
 export type FeishuRequest = typeof feishuRequest
+
+const appTokenCache = new Map<string, string>()
+
+/**
+ * Wiki URLs carry the wiki node token, but Bitable APIs need the node's obj_token.
+ * Resolve once per token; non-wiki (base) tokens pass through unchanged.
+ */
+export async function resolveFeishuAppToken(appToken: string): Promise<string> {
+  const cached = appTokenCache.get(appToken)
+  if (cached) {
+    return cached
+  }
+  const resolved = await feishuRequest<{
+    node?: { obj_type?: unknown; obj_token?: unknown }
+  }>(`/open-apis/wiki/v2/spaces/get_node?token=${encodeURIComponent(appToken)}`)
+  const node = resolved.ok ? resolved.data.node : undefined
+  const objToken =
+    node?.obj_type === 'bitable' && typeof node.obj_token === 'string' ? node.obj_token : null
+  const finalToken = objToken ?? appToken
+  appTokenCache.set(appToken, finalToken)
+  return finalToken
+}

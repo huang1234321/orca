@@ -1,5 +1,11 @@
 import type { FeishuComment, FeishuTableMapping } from '../../shared/feishu/feishu-types'
-import { isRecord, feishuRequest, joinTextSegments, toIsoTimestamp } from './feishu-request'
+import {
+  feishuRequest,
+  isRecord,
+  joinTextSegments,
+  resolveFeishuAppToken,
+  toIsoTimestamp
+} from './feishu-request'
 
 const RECORD_PAGE_SIZE = 50
 
@@ -18,6 +24,7 @@ export async function listFeishuComments(
   mapping: FeishuTableMapping,
   recordId: string
 ): Promise<FeishuComment[]> {
+  appToken = await resolveFeishuAppToken(appToken)
   const comments = mapping.comments
   if (!comments) {
     return []
@@ -63,6 +70,7 @@ export async function addFeishuComment(
   recordId: string,
   body: string
 ): Promise<FeishuComment | null> {
+  appToken = await resolveFeishuAppToken(appToken)
   const comments = mapping.comments
   if (!comments || !body.trim()) {
     return null
